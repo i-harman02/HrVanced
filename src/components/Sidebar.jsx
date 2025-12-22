@@ -1,76 +1,86 @@
 import { Link } from "react-router-dom";
-import logo from "../assets/vanced-logo.png";
+import { IoMdHome } from "react-icons/io";
+import { FaUser } from "react-icons/fa";
+import { PiUsersFourFill } from "react-icons/pi";
+import { FaDiagramProject } from "react-icons/fa6";
+import { FaRupeeSign } from "react-icons/fa";
+import { GiNotebook } from "react-icons/gi";
+import { MdOutlineSystemSecurityUpdateGood } from "react-icons/md";
+import { IoIosMail } from "react-icons/io";
 
 const Sidebar = () => {
   return (
     <>
-      <aside className="w-[250px] bg-white border-r border-gray-200 flex flex-col fixed left-0 top-0 h-screen overflow-y-auto">
-        <div className="px-5 py-[22px] border-b border-bordergray">
-          <div className="logo">
-            <a href="#">
-              <img src={logo} alt="logo" className="h-8 w-auto" />
-            </a>
-          </div>
+      <aside className="w-[250px] bg-white border-r border border-gray-200 flex flex-col h-screen overflow-y-auto">
+        <div className="px-5 py-[22px] border-b border-gray-200 ">
+          <img src="./assets/vanced-logo.png" alt="" />
         </div>
-        <nav className="flex-1 p-5">
+        <nav className="flex-1 p-5 ">
           <Link
             to="/"
             className="flex items-center gap-2.5 p-2.5 rounded-sm text-primary bg-[#F9FAFB]"
           >
-            <i className="fas fa-home text-base" />
+            <IoMdHome className="text-base" />
             <span className="text-sm font-medium">Dashboard</span>
+          </Link>
+          <Link
+            to="/me"
+            className="flex items-center gap-2.5 p-2.5 rounded-sm text-heading hover:bg-[#F9FAFB]"
+          >
+            <FaUser className="text-base" />
+            <span className="text-sm font-medium">ME</span>
+          </Link>{" "}
+          <Link
+            to="/myteam"
+            className="flex items-center gap-2.5 p-2.5 rounded-sm text-heading hover:bg-[#F9FAFB]"
+          >
+            <PiUsersFourFill className="text-base" />
+            <span className="text-sm font-medium">My Team</span>
+          </Link>
+          <Link
+            to="/projects"
+            className="flex items-center gap-2.5 p-2.5 rounded-sm text-heading hover:bg-[#F9FAFB]"
+          >
+            <FaDiagramProject className="text-base" />
+            <span className="text-sm font-medium">Project</span>
+          </Link>
+          <Link
+            to="/myfinaces"
+            className="flex items-center gap-2.5 p-2.5 rounded-sm text-heading hover:bg-[#F9FAFB]"
+          >
+            <FaRupeeSign className="text-base" />
+            <span className="text-sm font-medium">My Finances</span>
+          </Link>
+          <Link
+            to="/resignation"
+            className="flex items-center gap-2.5 p-2.5 rounded-sm text-heading hover:bg-[#F9FAFB]"
+          >
+            <GiNotebook className="text-base" />
+            <span className="text-sm font-medium">Resignation</span>
+          </Link>
+          <Link
+            to="/privacy"
+            className="flex items-center gap-2.5 p-2.5 rounded-sm text-heading hover:bg-[#F9FAFB]"
+          >
+            <MdOutlineSystemSecurityUpdateGood className="text-base" />
+            <span className="text-sm font-medium">Privacy policy</span>
           </Link>
           <Link
             to="/mail"
             className="flex items-center gap-2.5 p-2.5 rounded-sm text-heading hover:bg-[#F9FAFB]"
           >
-            <i className="fa-solid fa-envelope text-base" />
-            <span className="text-sm font-medium">Inbox</span>
-          </Link>{" "}
+            <IoIosMail />
+            <span className="text-sm font-medium">Mail</span>
+          </Link>
           <Link
             to="/message"
             className="flex items-center gap-2.5 p-2.5 rounded-sm text-heading hover:bg-[#F9FAFB]"
           >
-            <i className="fa-solid fa-address-book text-base" />
-            <span className="text-sm font-medium">Contacts</span>
-          </Link>
-          <Link
-            to="#"
-            className="flex items-center gap-2.5 p-2.5 rounded-sm text-heading hover:bg-[#F9FAFB]"
-          >
-            <i className="fa-solid fa-user text-base" />
-            <span className="text-sm font-medium">Leads</span>
-          </Link>
-          <Link
-            to="#"
-            className="flex items-center gap-2.5 p-2.5 rounded-sm text-heading hover:bg-[#F9FAFB]"
-          >
-            <i className="fa-solid fa-chart-column text-base" />
-            <span className="text-sm font-medium">Pipeline</span>
-          </Link>
-          <Link
-            to="#"
-            className="flex items-center gap-2.5 p-2.5 rounded-sm text-heading hover:bg-[#F9FAFB]"
-          >
-            <i className="fa-solid fa-bullseye text-base" />
-            <span className="text-sm font-medium">Campaigns</span>
-          </Link>
-          <Link
-            to="#"
-            className="flex items-center gap-2.5 p-2.5 rounded-sm text-heading hover:bg-[#F9FAFB]"
-          >
-            <i className="fa-solid fa-toolbox text-base" />
-            <span className="text-sm font-medium">Toolbox</span>
-          </Link>
-          <Link
-            to=""
-            className="flex items-center gap-2.5 p-2.5 rounded-sm text-heading hover:bg-[#F9FAFB]"
-          >
             <i className="fas fa-cog text-base" />
-            <span className="text-sm font-medium">Settings</span>
+            <span className="text-sm font-medium">Message</span>
           </Link>
         </nav>
-        <div className="border-t border-bordergray p-5 mt-auto">
+        <div className="border-t  border-gray-200 p-5 mt-auto">
           <button className="flex items-center gap-2 w-full">
             <img
               src="https://i.pravatar.cc/40?img=12"

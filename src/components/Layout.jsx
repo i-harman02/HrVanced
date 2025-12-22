@@ -6,7 +6,7 @@ const Layout = () => {
     <div className="flex">
       <Sidebar />
 
-      <main className="ml-[250px] w-full p-6">
+      <main className=" w-full  ">
         <Outlet />
       </main>
     </div>

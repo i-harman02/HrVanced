@@ -1,13 +1,16 @@
 import { Link } from "react-router-dom";
+import logo from "../assets/vanced-logo.png";
 
 const Sidebar = () => {
   return (
     <>
-      <aside className="w-[250px] bg-white border-r border-bordergray flex flex-col fixed left-0 top-0 h-screen overflow-y-auto">
+      <aside className="w-[250px] bg-white border-r border-gray-200 flex flex-col fixed left-0 top-0 h-screen overflow-y-auto">
         <div className="px-5 py-[22px] border-b border-bordergray">
-          <h1 className="text-heading font-extrabold leading-tight">
-            Vanced Solution
-          </h1>
+          <div className="logo">
+            <a href="#">
+              <img src={logo} alt="logo" className="h-8 w-auto" />
+            </a>
+          </div>
         </div>
         <nav className="flex-1 p-5">
           <Link

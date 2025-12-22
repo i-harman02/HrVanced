@@ -67,7 +67,7 @@ const Mail = () => {
             </div>
             <div className="relative">
 
-Rahul Vanced, [22-12-2025 06:58 PM]
+    
 <span className="absolute left-2 top-1/2 -translate-y-1/2 text-sm text-[#364153]/50">
                 <svg
                   width="16"

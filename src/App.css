@@ -1,3 +1,4 @@
+
 @import "tailwindcss";
 
 :root {
@@ -23,4 +24,7 @@ body {
 }
 .border-bordergray {
   border-color: var(--bordergray) !important;
+}
+.bg-primary {
+    background-color: var(--color-primary) !important;
 }

@@ -7,13 +7,15 @@ import { FaRupeeSign } from "react-icons/fa";
 import { GiNotebook } from "react-icons/gi";
 import { MdOutlineSystemSecurityUpdateGood } from "react-icons/md";
 import { IoIosMail } from "react-icons/io";
+import logo from "../assets/vanced-logo.png";
+import { BiSolidMessageRounded } from "react-icons/bi";
 
 const Sidebar = () => {
   return (
     <>    
       <aside className="w-[250px] bg-white border-r border border-gray-200 flex flex-col h-screen overflow-y-auto">
         <div className="px-5 py-[22px] border-b border-gray-200 ">
-          <img src="./assets/vanced-logo.png" alt="" />
+          <img src={logo} alt="" />
         </div>
         <nav className="flex-1 p-5 ">
           <Link
@@ -76,7 +78,7 @@ const Sidebar = () => {
             to="/message"
             className="flex items-center gap-2.5 p-2.5 rounded-sm text-heading hover:bg-[#F9FAFB]"
           >
-            <i className="fas fa-cog text-base" />
+           <BiSolidMessageRounded />
             <span className="text-sm font-medium">Message</span>
           </Link>
         </nav>

@@ -10,6 +10,10 @@ const Layout = () => {
         <Outlet />
       </main>
     </div>
+
+
+
+
   );
 };
 

@@ -25,6 +25,9 @@ body {
 .border-bordergray {
   border-color: var(--bordergray) !important;
 }
+.border-borderprimary {
+  border-color: var(--color-primary) !important;
+}
 .bg-primary {
     background-color: var(--color-primary) !important;
 }

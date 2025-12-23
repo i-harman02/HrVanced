@@ -11,6 +11,12 @@ const MyButton = ({ className, type, children }) => {
     <button className={`${buttonType} ${className && className} bg-amber-400`}>
       {children}
     </button>
+
+
+
+
+
+
   );
 };
 

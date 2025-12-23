@@ -12,9 +12,9 @@ const SearchFilter = () => {
           </span>
           <input
             type="search"
-            name="searchLead"
-            id="searchLead"
-            placeholder="Search Lead"
+            name="search"
+            id="search"
+            placeholder="Search"
             className="w-full text-sm text-textheading font-medium leading-none placeholder-[#364153]/50 outline-none bg-transparent py-2.5 ps-8 pe-3"
           />
         </div>

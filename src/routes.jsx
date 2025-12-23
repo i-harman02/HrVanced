@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 import Privacy from "./pages/Privacy";
 import Mail from "./pages/Mail";
 import Me from "./pages/Me";
@@ -13,6 +14,8 @@ import Resignation from "./pages/Resignation";
 import LeaveManagement from "./pages/LeaveManagement"
 =======
 >>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
 import Login from "./pages/Login";
 import Protected from "./components/Protected";
 import Layout from "./components/Layout"
@@ -22,6 +25,7 @@ const Approutes = () => {
     <BrowserRouter>
       <Suspense fallback={<p>Loading...</p>}>
         <Routes>
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
           {/* Layout Route */}
           <Route path="" element={<Layout />}>
@@ -59,6 +63,25 @@ const Approutes = () => {
           {/* DEFAULT */}
           <Route path="*" element={<Login />} />
 
+=======
+
+          {/* PUBLIC ROUTE */}
+          <Route path="/login" element={<Login />} />
+
+          {/* PROTECTED ROUTE */}
+          <Route
+            path="/dashboard"
+            element={
+              <Protected>
+                <Layout />
+              </Protected>
+            }
+          />
+
+          {/* DEFAULT */}
+          <Route path="*" element={<Login />} />
+
+>>>>>>> Stashed changes
         </Routes>
       </Suspense>
     </BrowserRouter>

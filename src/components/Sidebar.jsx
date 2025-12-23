@@ -91,11 +91,9 @@ const Sidebar = () => {
             />
             <div className="flex-1 text-left">
               <div className="text-sm font-medium text-heading leading-tight mb-1.5">
-                John Smith
+                Anit Thakur
               </div>
-              <div className="text-xs text-textgray leading-tight">
-                john@example.com
-              </div>
+            
             </div>
             <i className="fas fa-chevron-down text-[10px]" />
           </button>

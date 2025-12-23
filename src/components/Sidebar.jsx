@@ -10,7 +10,7 @@ import { IoIosMail } from "react-icons/io";
 
 const Sidebar = () => {
   return (
-    <>
+    <>    
       <aside className="w-[250px] bg-white border-r border border-gray-200 flex flex-col h-screen overflow-y-auto">
         <div className="px-5 py-[22px] border-b border-gray-200 ">
           <img src="./assets/vanced-logo.png" alt="" />

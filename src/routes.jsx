@@ -10,6 +10,7 @@ import Myfinances from "./pages/Myfinances";
 import Myteam from "./pages/Myteam";
 import Projects from "./pages/Projects";
 import Resignation from "./pages/Resignation";
+import LeaveManagement from "./pages/LeaveManagement"
 
 const Approutes = () => {
   return (
@@ -27,6 +28,7 @@ const Approutes = () => {
             <Route path="/myteam" element={<Myteam />} />
             <Route path="/projects" element={<Projects />} />
             <Route path="/resignation" element={<Resignation />} />
+            <Route path="/leave-management" element={<LeaveManagement />} />
           </Route>
 
           {/* 404 */}

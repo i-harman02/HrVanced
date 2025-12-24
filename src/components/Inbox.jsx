@@ -2,7 +2,7 @@ import React from 'react'
 import GroupImg from "../assets/Group.png";
 const Inbox = () => {
   return (
-    <div>  <div className="border-r border rounded-xl border-gray-200 p-6  ">
+    <div>  <div className="border-r border rounded-xl border-gray-200 p-4 md:p-8  ">
                   <div className="flex justify-between items-start ">
                     <div>
                       <span className=" text-gray leading-none text-base font-medium">

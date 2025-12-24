@@ -19,11 +19,11 @@ const LeaveBalances = () => {
   const usedPercent = (used / total) * 100;
 
   return (
-    <div className=" bg-white border border-gray-200 rounded-lg p-8">
+    <div className=" bg-white border border-gray-200 rounded-lg p-4 md:p-6">
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-semibold text-gray-800">Leave Balances</h2>
-        <button className="px-4 py-2 bg-indigo-600 text-white rounded-md text-sm font-medium hover:bg-indigo-700 transition-colors">
+        <h2 className="md:text-xl  text-sm font-semibold text-gray-800">Leave Balances</h2>
+        <button className="md:px-4 py-2 px-2 text-[12px] bg-indigo-600 text-white  rounded-md md:text-sm font-medium hover:bg-indigo-700 transition-colors">
           Request Leaves
         </button>
       </div>

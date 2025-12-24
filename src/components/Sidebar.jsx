@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { IoMdHome } from "react-icons/io";
 import { FaUser } from "react-icons/fa";
 import { PiUsersFourFill } from "react-icons/pi";
@@ -7,96 +7,101 @@ import { FaRupeeSign } from "react-icons/fa";
 import { GiNotebook } from "react-icons/gi";
 import { MdOutlineSystemSecurityUpdateGood } from "react-icons/md";
 import { IoIosMail } from "react-icons/io";
-import logo from "../assets/vanced-logo.png";
 import { BiSolidMessageRounded } from "react-icons/bi";
+import { FiMenu, FiX } from "react-icons/fi";
+import { useState } from "react";
+import logo from "../assets/vanced-logo.png";
+
+const menuItems = [
+  { to: "/", label: "Dashboard", icon: IoMdHome },
+  { to: "/me", label: "Me", icon: FaUser },
+  { to: "/myteam", label: "My Team", icon: PiUsersFourFill },
+  { to: "/projects", label: "Projects", icon: FaDiagramProject },
+  { to: "/myfinaces", label: "My Finances", icon: FaRupeeSign },
+  { to: "/resignation", label: "Resignation", icon: GiNotebook },
+  { to: "/privacy", label: "Privacy Policy", icon: MdOutlineSystemSecurityUpdateGood },
+  { to: "/mail", label: "Mail", icon: IoIosMail },
+  { to: "/message", label: "Message", icon: BiSolidMessageRounded },
+];
 
 const Sidebar = () => {
+  const [open, setOpen] = useState(false);
+  const location = useLocation();
+
   return (
-    <>    
-      <aside className="w-[250px] bg-white border-r border border-gray-200 flex flex-col h-screen overflow-y-auto fixed top-0 left-0">
-        <div className="px-5 py-[22px] border-b border-gray-200 ">
-          <img src={logo} alt="" />
+    <>
+      {/* Mobile Top Bar */}
+      <div className="lg:hidden fixed top-0 left-0 right-0 z-40 bg-white border-b border-gray-200 px-4 h-14 flex items-center justify-between">
+        <img src={logo} alt="logo" className="h-7" />
+        <button onClick={() => setOpen(true)}>
+          <FiMenu size={22} />
+        </button>
+      </div>
+
+      {/* Overlay (Mobile) */}
+      {open && (
+        <div
+          onClick={() => setOpen(false)}
+          className="fixed inset-0 bg-black/40 z-40 lg:hidden"
+        />
+      )}
+
+      {/* Sidebar */}
+      <aside
+        className={`
+          fixed z-50 top-0 left-0 h-full bg-white border-r
+          transition-transform duration-300
+          w-65 flex flex-col justify-between
+          ${open ? "translate-x-0" : "-translate-x-full"}
+          lg:translate-x-0
+          border-gray-200
+        `}
+      >
+        {/* Header */}
+        <div>
+          <div className="px-5 py-4 border-b border-gray-200 flex items-center justify-between">
+            <img src={logo} alt="logo" className="h-8" />
+            <button className="lg:hidden" onClick={() => setOpen(false)}>
+              <FiX size={20} />
+            </button>
+          </div>
+
+          {/* Navigation */}
+          <nav className="p-4 space-y-1">
+            {menuItems.map(({ to, label, icon: Icon }) => {
+              const active = location.pathname === to;
+              return (
+                <Link
+                  key={to}
+                  to={to}
+                  onClick={() => setOpen(false)}
+                  className={`flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium
+                    ${active
+                      ? "bg-[#F9FAFB] text-primary"
+                      : "text-heading hover:bg-[#F9FAFB]"
+                    }
+                  `}
+                >
+                  <Icon className="text-base" />
+                  <span className="lg:block">{label}</span>
+                </Link>
+              );
+            })}
+          </nav>
         </div>
-        <nav className="flex-1 p-5">
-          <Link
-            to="/"
-            className="flex items-center gap-2.5 p-2.5 rounded-sm text-primary bg-[#F9FAFB]"
-          >
-            <IoMdHome className="text-base" />
-            <span className="text-sm font-medium">Dashboard</span>
-          </Link>
-          <Link
-            to="/me"
-            className="flex items-center gap-2.5 p-2.5 rounded-sm text-heading hover:bg-[#F9FAFB]"
-          >
-            <FaUser className="text-base" />
-            <span className="text-sm font-medium">ME</span>
-          </Link>{" "}
-          <Link
-            to="/myteam"
-            className="flex items-center gap-2.5 p-2.5 rounded-sm text-heading hover:bg-[#F9FAFB]"
-          >
-            <PiUsersFourFill className="text-base" />
-            <span className="text-sm font-medium">My Team</span>
-          </Link>
-          <Link
-            to="/projects"
-            className="flex items-center gap-2.5 p-2.5 rounded-sm text-heading hover:bg-[#F9FAFB]"
-          >
-            <FaDiagramProject className="text-base" />
-            <span className="text-sm font-medium">Project</span>
-          </Link>
-          <Link
-            to="/myfinaces"
-            className="flex items-center gap-2.5 p-2.5 rounded-sm text-heading hover:bg-[#F9FAFB]"
-          >
-            <FaRupeeSign className="text-base" />
-            <span className="text-sm font-medium">My Finances</span>
-          </Link>
-          <Link
-            to="/resignation"
-            className="flex items-center gap-2.5 p-2.5 rounded-sm text-heading hover:bg-[#F9FAFB]"
-          >
-            <GiNotebook className="text-base" />
-            <span className="text-sm font-medium">Resignation</span>
-          </Link>
-          <Link
-            to="/privacy"
-            className="flex items-center gap-2.5 p-2.5 rounded-sm text-heading hover:bg-[#F9FAFB]"
-          >
-            <MdOutlineSystemSecurityUpdateGood className="text-base" />
-            <span className="text-sm font-medium">Privacy policy</span>
-          </Link>
-          <Link
-            to="/mail"
-            className="flex items-center gap-2.5 p-2.5 rounded-sm text-heading hover:bg-[#F9FAFB]"
-          >
-            <IoIosMail />
-            <span className="text-sm font-medium">Mail</span>
-          </Link>
-          <Link
-            to="/message"
-            className="flex items-center gap-2.5 p-2.5 rounded-sm text-heading hover:bg-[#F9FAFB]"
-          >
-           <BiSolidMessageRounded />
-            <span className="text-sm font-medium">Message</span>
-          </Link>
-        </nav>
-        <div className="border-t  border-gray-200 p-5 mt-auto">
-          <button className="flex items-center gap-2 w-full">
+
+        {/* Profile */}
+        <div className="border-t border-gray-200 p-4 mt-auto">
+          <div className="flex items-center gap-3">
             <img
               src="https://i.pravatar.cc/40?img=12"
-              alt="User"
-              className="w-10 h-10 rounded-sm"
+              className="w-10 h-10 rounded-md"
+              alt="user"
             />
-            <div className="flex-1 text-left">
-              <div className="text-sm font-medium text-heading leading-tight mb-1.5">
-                Anit Thakur
-              </div>
-            
+            <div className="text-sm font-medium text-heading">
+              Anit Thakur
             </div>
-            <i className="fas fa-chevron-down text-[10px]" />
-          </button>
+          </div>
         </div>
       </aside>
     </>

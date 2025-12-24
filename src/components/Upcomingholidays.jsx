@@ -2,7 +2,7 @@ import React from 'react'
 import Holiday from "../assets/Rectangle 56.png";
 const Upcomingholidays = () => {
   return (
-    <div>            <div className="rounded-xl border border-gray-200 p-6 ">
+    <div>            <div className="rounded-xl border border-gray-200 p-4 md:p-6 ">
                       <div className="flex justify-between items-start mb-10">
                         <span className="text-base leading-none font-medium">
                           Upcoming Holidays

@@ -11,6 +11,8 @@ import { BiSolidMessageRounded } from "react-icons/bi";
 import { FiMenu, FiX } from "react-icons/fi";
 import { useState } from "react";
 import logo from "../assets/vanced-logo.png";
+import Userinfo from "../components/Userinfo"
+import { MdArrowDropUp } from "react-icons/md";
 
 const menuItems = [
   { to: "/", label: "Dashboard", icon: IoMdHome },
@@ -27,6 +29,7 @@ const menuItems = [
 const Sidebar = () => {
   const [open, setOpen] = useState(false);
   const location = useLocation();
+  const [userinfo, setUserinfo ] =useState(false);
 
   return (
     <>
@@ -101,7 +104,19 @@ const Sidebar = () => {
             <div className="text-sm font-medium text-heading">
               Anit Thakur
             </div>
+            
+            <button
+              onClick={() => setUserinfo(true)}
+              className="mr-3"
+            >
+              <MdArrowDropUp size={22} />
+            </button>
+
+            {/* Chat Modal */}
+            {userinfo  && <Userinfo onClose={() => setUserinfo (false)} />}
           </div>
+            
+         
         </div>
       </aside>
     </>

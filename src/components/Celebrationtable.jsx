@@ -107,7 +107,7 @@ const Celebrationtable = () => {
             <div className="space-y-4 py-6 px-6">
               <div className="">
                 <img className="m-auto" src={Year} />
-                <p className="text-base font-bold text-center mt-4">
+                <p className="text-[10px] md:text-base font-bold text-center mt-4">
                   No one is having work anniversary today
                 </p>
               </div>
@@ -144,7 +144,7 @@ const Celebrationtable = () => {
             <div className="space-y-4 py-6 px-6">
               <div className="">
                 <img className="m-auto" src={NewJoin} />
-                <p className="text-base font-bold text-center mt-4">
+                <p className="text-[10px] md:text-base  font-bold text-center mt-4">
                   No one join this week
                 </p>
               </div>

@@ -97,7 +97,7 @@ export default function LeaveTable() {
           </button>
         </div>
       </div>
-      <LeaveForm open={showForm} onClose={handleClose} />
+      <LeaveForm open={showForm} onClose={handleClose} />           
 
       {/* Table */}
       <div className="overflow-x-auto border border-gray-200 rounded-md">

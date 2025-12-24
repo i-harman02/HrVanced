@@ -53,7 +53,7 @@ const MailView = () => {
             <p>John Smith</p>
           </div>
         </div>
-        <div className="flex justify-between pt-6">
+        <div className="flex flex-wrap justify-between gap-3 pt-6">
           <button
             type="button"
             className="bg-primary text-white text-sm font-medium cursor-pointer px-4.5 py-2.25 border border-borderprimary rounded-sm leading-none flex items-center gap-1.5"

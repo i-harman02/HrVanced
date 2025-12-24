@@ -7,10 +7,10 @@ const MailTabs = () => {
   const [activeTab, setActiveTab] = useState("all");
   return (
     <>
-      <div className="flex items-center gap-8 border-t-1 border-b-1 border-bordergray -mx-8 px-8">
+      <div className="flex items-center gap-8 border-t border-b border-bordergray whitespace-nowrap -mx-4 md:-mx-6 lg:-mx-8 px-4 md:px-6 lg:px-8 overflow-auto">
         <button
           onClick={() => setActiveTab("all")}
-          className={`text-sm font-medium py-5 border-b-2 flex items-center gap-2 ${
+          className={`text-sm font-medium py-5 border-b-2 flex items-center gap-2 cursor-pointer ${
             activeTab === "all"
               ? "color-primary border-[#2C3EA1]"
               : "text-heading border-transparent"
@@ -27,7 +27,7 @@ const MailTabs = () => {
         </button>
         <button
           onClick={() => setActiveTab("unread")}
-          className={`text-sm font-medium py-5 flex items-center gap-2 border-b-2 ${
+          className={`text-sm font-medium py-5 flex items-center gap-2 border-b-2 cursor-pointer ${
             activeTab === "unread"
               ? "color-primary border-[#2C3EA1]"
               : "text-heading border-transparent"
@@ -44,7 +44,7 @@ const MailTabs = () => {
         </button>
         <button
           onClick={() => setActiveTab("starred")}
-          className={`text-sm font-medium py-5 flex items-center gap-2 border-b-2 ${
+          className={`text-sm font-medium py-5 flex items-center gap-2 border-b-2 cursor-pointer ${
             activeTab === "starred"
               ? "color-primary border-[#2C3EA1]"
               : "text-heading border-transparent"
@@ -61,7 +61,7 @@ const MailTabs = () => {
         </button>
         <button
           onClick={() => setActiveTab("replied")}
-          className={`text-sm font-medium py-5 flex items-center gap-2 border-b-2 ${
+          className={`text-sm font-medium py-5 flex items-center gap-2 border-b-2 cursor-pointer ${
             activeTab === "replied"
               ? "color-primary border-[#2C3EA1]"
               : "text-heading border-transparent"
@@ -79,7 +79,7 @@ const MailTabs = () => {
       </div>
 
       <div className="pt-8">
-        <div className="flex gap-3 mb-8">
+        <div className="flex flex-wrap gap-3 mb-8">
           <SearchFilter />
           <button
             type="button"
@@ -90,7 +90,7 @@ const MailTabs = () => {
         </div>
 
         {activeTab === "all" && (
-          <div className="grid grid-cols-[1fr_2fr] items-start gap-8">
+          <div className="grid md:grid-cols-[1fr_2fr] items-start gap-8">
             <MailList/>
             <MailView/>
           </div>

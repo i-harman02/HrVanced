@@ -3,14 +3,14 @@ import React from "react";
 const Message = () => {
   return (
     <>
-      <div className="bg-white p-8 border border-bordergray rounded-xl min-h-full">
+      <div className="p-4 md:p-6 lg:p-8 border-0 lg:border bg-white border-gray-200 lg:rounded-xl min-h-full">
         <div className="mb-6">
           <h1 className="text-2xl font-bold text-heading leading-tight">
             Message
           </h1>
         </div>
 
-        <div className="p-8 border border-bordergray rounded-xl flex flex-col md:flex-row gap-5 max-w-[758px]">
+        <div className="p-6 lg:p-8 border border-bordergray rounded-xl flex flex-col md:flex-row gap-5 max-w-[758px]">
           <div className="w-16 h-16 shrink-0 rounded-md bg-[#2C3EA1]/12 flex items-center justify-center">
             <svg
               width="42"

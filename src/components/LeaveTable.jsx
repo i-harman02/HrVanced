@@ -1,3 +1,6 @@
+import LeaveForm from "./LeaveForm";
+import { useState } from "react";
+
 export default function LeaveTable() {
   const data = [
     {
@@ -52,10 +55,19 @@ export default function LeaveTable() {
     },
   ];
 
-  const statusStyle = (status) =>
+  const statusStyle = (status) =>                       
     status === "Approved"
       ? "bg-green-50 text-green-600 border border-green-200"
       : "bg-orange-50 text-orange-600 border border-orange-200";
+
+  const[showForm, setShowForm] = useState(false);    
+    
+  const handleClick = () => {
+    setShowForm(true);
+  }
+   const handleClose = () => {
+    setShowForm(false);
+  }
 
   return (
     <div className="border border-gray-200 rounded-xl p-4 sm:p-6">
@@ -80,11 +92,12 @@ export default function LeaveTable() {
           </button>
 
           {/* CTA */}
-          <button className="bg-[#2C3EA1] rounded-md px-4 py-2 text-sm text-white hover:bg-[#24338a] w-full sm:w-auto">
+          <button className="bg-[#2C3EA1] rounded-md px-4 py-2 text-sm text-white hover:bg-[#24338a] w-full sm:w-auto" onClick ={handleClick}>
             Request Leaves
           </button>
         </div>
       </div>
+      <LeaveForm open={showForm} onClose={handleClose} />
 
       {/* Table */}
       <div className="overflow-x-auto border border-gray-200 rounded-md">

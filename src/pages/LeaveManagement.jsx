@@ -13,36 +13,37 @@ const LeaveManagement = () => {
     { key: "performance", label: "Performance" },
   ];
 
+  const tabContent = {
+    leaves: (
+      <>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+          <LeaveStats />
+          <LeaveHistory />
+        </div>
+
+        <div className="mt-6">
+          <LeaveTable />
+        </div>
+      </>
+    ),
+    performance: (
+      <div className="mt-6">
+        <h2 className="text-lg font-semibold">Performance Section</h2>
+        <Performance />
+      </div>
+    ),
+  };
+
   return (
     <div className="bg-white rounded-xl shadow-sm p-6">
 
-      {/* Tabs */}
       <Tabs
         tabs={tabs}
         activeTab={activeTab}
         onChange={setActiveTab}
       />
 
-      {/* Content */}
-      {activeTab === "leaves" && (
-        <>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
-            <LeaveStats />
-            <LeaveHistory />
-          </div>
-
-          <div className="mt-6">
-            <LeaveTable />
-          </div>
-        </>
-      )}
-
-      {activeTab === "performance" && (
-        <div className="mt-6">
-          <h2 className="text-lg font-semibold">Performance Section</h2>
-          <Performance/>
-        </div>
-      )}
+      {tabContent[activeTab]}
     </div>
   );
 };

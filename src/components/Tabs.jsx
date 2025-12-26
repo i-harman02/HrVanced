@@ -15,7 +15,7 @@ const Tabs = ({ tabs, activeTab, onChange }) => {
             }
           `}
         >
-          {tab.label}
+           {tab.label}
         </button>
       ))}
     </div>

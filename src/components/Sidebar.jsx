@@ -17,9 +17,9 @@ import { MdArrowDropUp } from "react-icons/md";
 const menuItems = [
   { to: "/dashboard", label: "Dashboard", icon: IoMdHome },
   { to: "/me", label: "Me", icon: FaUser },
-  { to: "/myteam", label: "My Team", icon: PiUsersFourFill },
+  { to: "/my-team", label: "My Team", icon: PiUsersFourFill },
   { to: "/projects", label: "Projects", icon: FaDiagramProject },
-  { to: "/myfinaces", label: "My Finances", icon: FaRupeeSign },
+  { to: "/my-finances", label: "My Finances", icon: FaRupeeSign },
   { to: "/resignation", label: "Resignation", icon: GiNotebook },
   { to: "/privacy", label: "Privacy Policy", icon: MdOutlineSystemSecurityUpdateGood },
   { to: "/mail", label: "Mail", icon: IoIosMail },

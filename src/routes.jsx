@@ -17,25 +17,68 @@ const Approutes = () => {
   return (
     <BrowserRouter>
       <Routes>
+
+        {/* Default redirect */}
         <Route path="/" element={<Navigate to="/login" />} />
 
+        {/* Public route */}
         <Route path="/login" element={<Login />} />
 
-        <Route element={<Protected />}>
-          <Route element={<Layout />}>
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/mail" element={<Mail />} />
-            <Route path="/privacy" element={<Privacy />} />
-            <Route path="/me" element={<Me />} />
-            <Route path="/message" element={<Message />} />
-            <Route path="/myfinaces" element={<Myfinances />} />
-            <Route path="/myteam" element={<Myteam />} />
-            <Route path="/projects" element={<Projects />} />
-            <Route path="/resignation" element={<Resignation />} />
-            <Route path="/leave-management" element={<LeaveManagement />} />
-          </Route>
-        </Route>
+        {/* Layout wrapper */}
+        <Route element={<Layout />}>
 
+          {/* Protected pages */}
+          <Route
+            path="/dashboard"
+            element={<Protected><Dashboard /></Protected>}
+          />
+
+          <Route
+            path="/mail"
+            element={<Protected><Mail /></Protected>}
+          />
+
+          <Route
+            path="/privacy"
+            element={<Protected><Privacy /></Protected>}
+          />
+
+          <Route
+            path="/me"
+            element={<Protected><Me /></Protected>}
+          />
+
+          <Route
+            path="/my-finances"
+            element={<Protected><Myfinances /></Protected>}
+          />
+
+          <Route
+            path="/my-team"
+            element={<Protected><Myteam /></Protected>}
+          />
+
+          <Route
+            path="/projects"
+            element={<Protected><Projects /></Protected>}
+          />
+
+          <Route
+            path="/resignation"
+            element={<Protected><Resignation /></Protected>}
+          />
+
+           <Route
+            path="/message"
+            element={<Protected><Message /></Protected>}
+          />
+
+          <Route
+            path="/leave-management"
+            element={<Protected><LeaveManagement /></Protected>}
+          />
+
+        </Route>
       </Routes>
     </BrowserRouter>
   );

@@ -15,7 +15,7 @@ import Userinfo from "../components/Userinfo"
 import { MdArrowDropUp } from "react-icons/md";
 
 const menuItems = [
-  { to: "/", label: "Dashboard", icon: IoMdHome },
+  { to: "/dashboard", label: "Dashboard", icon: IoMdHome },
   { to: "/me", label: "Me", icon: FaUser },
   { to: "/myteam", label: "My Team", icon: PiUsersFourFill },
   { to: "/projects", label: "Projects", icon: FaDiagramProject },

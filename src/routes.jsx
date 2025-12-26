@@ -1,5 +1,4 @@
-import { Suspense } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import Privacy from "./pages/Privacy";
 import Mail from "./pages/Mail";
@@ -9,21 +8,22 @@ import Myfinances from "./pages/Myfinances";
 import Myteam from "./pages/Myteam";
 import Projects from "./pages/Projects";
 import Resignation from "./pages/Resignation";
-import LeaveManagement from "./pages/LeaveManagement"
-
+import LeaveManagement from "./pages/LeaveManagement";
 import Login from "./pages/Login";
 import Protected from "./components/Protected";
-import Layout from "./components/Layout"
+import Layout from "./components/Layout";
 
 const Approutes = () => {
   return (
     <BrowserRouter>
-      <Suspense fallback={<p>Loading...</p>}>
-        <Routes>
+      <Routes>
+        <Route path="/" element={<Navigate to="/login" />} />
 
-          {/* Layout Route */}
-          <Route path="" element={<Layout />}>
-            <Route path="/" element={<Dashboard />} />
+        <Route path="/login" element={<Login />} />
+
+        <Route element={<Protected />}>
+          <Route element={<Layout />}>
+            <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/mail" element={<Mail />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/me" element={<Me />} />
@@ -34,45 +34,9 @@ const Approutes = () => {
             <Route path="/resignation" element={<Resignation />} />
             <Route path="/leave-management" element={<LeaveManagement />} />
           </Route>
+        </Route>
 
-          {/* PUBLIC ROUTE */}
-          <Route path="/login" element={<Login />} />
-
-          {/* PROTECTED ROUTE */}
-          <Route
-            path="/dashboard"
-            element={
-              <Protected>
-                <Layout />
-              </Protected>
-            }
-          />
-          {/* DEFAULT */}
-          <Route path="*" element={<Login />} />
-
-
-
-          {/* PUBLIC ROUTE */}
-          <Route path="/login" element={<Login />} />
-
-          {/* PROTECTED ROUTE */}
-          <Route
-            path="/dashboard"
-            element={
-              <Protected>
-                <Layout />
-              </Protected>
-            }
-          />
-
-          {/* DEFAULT */}
-          <Route path="*" element={<Login />} />
-
-          {/* DEFAULT */}
-          <Route path="*" element={<Login />} />
-
-        </Routes>
-      </Suspense>
+      </Routes>
     </BrowserRouter>
   );
 };

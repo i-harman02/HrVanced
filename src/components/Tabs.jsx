@@ -2,16 +2,16 @@ import React from "react";
 
 const Tabs = ({ tabs, activeTab, onChange }) => {
   return (
-    <div className="flex gap-6 text-sm font-medium">
+    <div className="flex items-center gap-8 border-t border-b border-bordergray whitespace-nowrap -mx-4 md:-mx-6 lg:-mx-8 px-4 md:px-6 lg:px-8 overflow-auto">
       {tabs.map((tab) => (
         <button
           key={tab.key}
           onClick={() => onChange(tab.key)}
-          className={`pb-2 border-b-2 transition-all
+          className={`text-sm font-medium py-5 border-b-2 cursor-pointer
             ${
               activeTab === tab.key
-                ? "border-indigo-600 text-indigo-600"
-                : "border-transparent text-gray-500 hover:text-indigo-600"
+                ? "color-primary border-[#2C3EA1]"
+                : "text-heading border-transparent"
             }
           `}
         >

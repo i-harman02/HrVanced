@@ -14,70 +14,109 @@ import Protected from "./components/Protected";
 import Layout from "./components/Layout";
 
 const Approutes = () => {
+  const isLoggedIn = localStorage.getItem("token");
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/" element={<Navigate to="/login" replace />} />
 
-        {/* Default redirect */}
-        <Route path="/" element={<Navigate to="/login" />} />
+        <Route
+          path="/login"
+          element={
+            isLoggedIn ? <Navigate to="/dashboard" replace /> : <Login />
+          }
+        />
 
-        {/* Public route */}
-        <Route path="/login" element={<Login />} />
-
-        {/* Layout wrapper */}
         <Route element={<Layout />}>
-
-          {/* Protected pages */}
           <Route
             path="/dashboard"
-            element={<Protected><Dashboard /></Protected>}
+            element={
+              <Protected>
+                <Dashboard />
+              </Protected>
+            }
           />
 
           <Route
             path="/mail"
-            element={<Protected><Mail /></Protected>}
+            element={
+              <Protected>
+                <Mail />
+              </Protected>
+            }
           />
 
           <Route
             path="/privacy"
-            element={<Protected><Privacy /></Protected>}
+            element={
+              <Protected>
+                <Privacy />
+              </Protected>
+            }
           />
 
           <Route
             path="/me"
-            element={<Protected><Me /></Protected>}
+            element={
+              <Protected>
+                <Me />
+              </Protected>
+            }
           />
 
           <Route
             path="/my-finances"
-            element={<Protected><Myfinances /></Protected>}
+            element={
+              <Protected>
+                <Myfinances />
+              </Protected>
+            }
           />
 
           <Route
             path="/my-team"
-            element={<Protected><Myteam /></Protected>}
+            element={
+              <Protected>
+                <Myteam />
+              </Protected>
+            }
           />
 
           <Route
             path="/projects"
-            element={<Protected><Projects /></Protected>}
+            element={
+              <Protected>
+                <Projects />
+              </Protected>
+            }
           />
 
           <Route
             path="/resignation"
-            element={<Protected><Resignation /></Protected>}
+            element={
+              <Protected>
+                <Resignation />
+              </Protected>
+            }
           />
 
-           <Route
+          <Route
             path="/message"
-            element={<Protected><Message /></Protected>}
+            element={
+              <Protected>
+                <Message />
+              </Protected>
+            }
           />
 
           <Route
             path="/leave-management"
-            element={<Protected><LeaveManagement /></Protected>}
+            element={
+              <Protected>
+                <LeaveManagement />
+              </Protected>
+            }
           />
-
         </Route>
       </Routes>
     </BrowserRouter>

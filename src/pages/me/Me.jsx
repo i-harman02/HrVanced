@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import Tabs from "../components/Tabs";
-import ProfileTab from "../components/ProfileTab";
-import PersonalInfoTab from "../components/PersonalInfoTab";
+import Tabs from "../../components/Tabs";
+import ProfileTab from "../../components/ProfileTab";
+import PersonalInfoTab from "../../components/PersonalInfoTab";
 
 const tabs = [
   {

@@ -1,7 +1,7 @@
 import React from "react";
-import Pagination from "../components/Pagination";
+import Pagination from "../../components/Pagination";
 import { useState } from "react";
-import ResignationModal from "../components/AddResignationModal";
+import ResignationModal from "../../components/AddResignationModal";
 
 
 const Resignation = () => {

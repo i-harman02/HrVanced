@@ -1,5 +1,5 @@
 import React from 'react';
-import FinanceTabs from '../components/FinanceTabs';
+import FinanceTabs from '../../components/FinanceTabs';
 
 const Myfinances = () => {
   return (

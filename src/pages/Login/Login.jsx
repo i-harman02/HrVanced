@@ -1,6 +1,6 @@
 import { useState } from "react"
-import { fakeUser } from "../utils/Fakeuser";
-import { generateToken } from "../utils/Faketoken";
+import { fakeUser } from "../../utils/Fakeuser";
+import { generateToken } from "../../utils/Faketoken";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
@@ -65,7 +65,7 @@ const Login = () => {
                   Email
                 </label>
                 
-               <input className="bg-white" name="email" value={formdata.email}  onChange={handlechange} type="email" />
+               <input className="bg-white p-2 rounded-[4px]" name="email" value={formdata.email}  onChange={handlechange} type="email" />
                 {/* {error && touched && (
                   <p className="text-red-500 text-sm mt-1 ">{error}</p>
                 )} */}
@@ -76,7 +76,7 @@ const Login = () => {
                   Password
                 </label>
                
-        <input className="bg-white"  name="password" value={formdata.password} onChange={handlechange} type="password" />
+        <input className="bg-white p-2 rounded-[4px]"  name="password" value={formdata.password} onChange={handlechange} type="password" />
               </div>
 
               <div className="flex gap-4 mb-8">
@@ -88,7 +88,7 @@ const Login = () => {
                 /> */}
                 <p className="text-[#71717B]">Remember me</p>{" "}
               </div>
-              <button onClick={handleSubmit}  className="bg-[#2C3EA1]  py-3 px-[145px] rounded text-amber-50 font-bold ">
+              <button onClick={handleSubmit}  className="bg-[#2C3EA1] cursor-pointer py-3 px-[145px] rounded text-amber-50 font-bold ">
                 Log In
               </button>
             </div>

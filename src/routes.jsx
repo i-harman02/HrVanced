@@ -1,15 +1,15 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import Dashboard from "./pages/Dashboard";
-import Privacy from "./pages/Privacy";
-import Mail from "./pages/Mail";
-import Me from "./pages/Me";
-import Message from "./pages/Message";
-import Myfinances from "./pages/Myfinances";
-import Myteam from "./pages/Myteam";
-import Projects from "./pages/Projects";
-import Resignation from "./pages/Resignation";
-import LeaveManagement from "./pages/LeaveManagement";
-import Login from "./pages/Login";
+import Dashboard from "./pages/dashboard/Dashboard";
+import Privacy from "./pages/privacy/Privacy";
+import Mail from "./pages/mail/Mail";
+import Me from "./pages/me/Me";
+import Message from "./pages/message/Message";
+import Myfinances from "./pages/myfinance/Myfinances";
+import Myteam from "./pages/myteam/Myteam";
+import Projects from "./pages/projects/Projects";
+import Resignation from "./pages/resignation/Resignation";
+import LeaveManagement from "./pages/leavemanagement/LeaveManagement";
+import Login from "./pages/Login/Login";
 import Protected from "./components/Protected";
 import Layout from "./components/Layout";
 

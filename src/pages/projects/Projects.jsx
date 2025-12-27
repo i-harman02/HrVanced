@@ -1,7 +1,7 @@
 import React from "react";
-import SearchFilter from "../components/Search";
-import NoProject from "../components/NoProject";
-import ProjectAssigned from "../components/ProjectAssigned";
+import SearchFilter from "../../components/Search";
+import NoProject from "../../components/NoProject";
+import ProjectAssigned from "../../components/ProjectAssigned";
 import { PiFalloutShelter } from "react-icons/pi";
 
 const Projects = () => {

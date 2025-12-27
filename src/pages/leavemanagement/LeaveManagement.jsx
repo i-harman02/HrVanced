@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import Tabs from "../components/Tabs";
-import LeaveStats from "../components/LeaveStats";
-import LeaveHistory from "../components/LeaveHistory";
-import LeaveTable from "../components/LeaveTable";
-import Performance from "../components/Performance";
+import Tabs from "../../components/Tabs";
+import LeaveStats from "../../components/LeaveStats";
+import LeaveHistory from "../../components/LeaveHistory";
+import LeaveTable from "../../components/LeaveTable";
+import Performance from "../../components/Performance";
 
 const LeaveManagement = () => {
   const [activeTab, setActiveTab] = useState("leaves");

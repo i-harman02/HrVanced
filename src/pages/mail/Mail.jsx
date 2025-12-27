@@ -1,5 +1,5 @@
 import React from "react";
-import MailTabs from "../components/MailTabs";
+import MailTabs from "../../components/MailTabs";
 
 const Mail = () => {
   return (

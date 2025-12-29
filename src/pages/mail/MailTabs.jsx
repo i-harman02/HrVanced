@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import MailList from "./MailList";
 import MailView from "./MailView";
-import SearchFilter from "./Search";
+import SearchFilter from "../../components/Search";
 
 const MailTabs = () => {
   const [activeTab, setActiveTab] = useState("all");

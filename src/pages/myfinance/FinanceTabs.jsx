@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import IndFlag from "../assets/ind-flag.png";
-import PayImg from "../assets/my-pay-img.png";
+import IndFlag from "../../assets/ind-flag.png";
+import PayImg from "../../assets/my-pay-img.png";
 
 const FinanceTabs = () => {
   const [activeTab, setActiveTab] = useState("summary");

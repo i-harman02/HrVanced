@@ -1,88 +1,148 @@
-import React from 'react';
+import { useState } from "react";
+import { PieChart, Pie, Cell } from "recharts";
+import LeaveForm from "../components/LeaveForm";
 
 const LeaveBalances = () => {
-  const leaveData = [
-    { label: 'Total Leaves', value: 12, color: 'bg-indigo-700' },
-    { label: 'Remaining Leaves', value: 5, color: 'bg-indigo-500' },
-    { label: 'Paid Leaves', value: 7, color: 'bg-indigo-400' },
-    { label: 'Unpaid Leaves', value: 0, color: 'bg-indigo-300' },
-    { label: 'Monthly Leaves', value: 5, color: 'bg-indigo-200' },
-    { label: 'Remaining Short Leaves', value: 2, color: 'bg-indigo-100' },
-    { label: 'Floater Leaves', value: 0, color: 'bg-gray-100' }
+  // ================= SINGLE SOURCE OF TRUTH =================
+  const [leaves, setLeaves] = useState({
+    total: 12,
+    remaining: 5,
+    paid: 3,
+    unpaid: 1,
+    monthly: 5,
+    shortRemaining: 2,
+    floater: 1,
+  });
+
+  const [openLeaveForm, setOpenLeaveForm] = useState(false);
+
+  // ================= 7 LEAVES (EXACT FIGMA MATCH) =================
+  const leaveTypes = [
+    {
+      label: "Total Leaves",
+      key: "total",
+      value: leaves.total,
+      color: "#4338CA",
+      bg: "bg-indigo-700",
+    },
+    {
+      label: "Remaining Leaves",
+      key: "remaining",
+      value: leaves.remaining,
+      color: "#6366F1",
+      bg: "bg-indigo-500",
+    },
+    {
+      label: "Paid Leaves",
+      key: "paid",
+      value: leaves.paid,
+      color: "#818CF8",
+      bg: "bg-indigo-400",
+    },
+    {
+      label: "Unpaid Leaves",
+      key: "unpaid",
+      value: leaves.unpaid,
+      color: "#C7D2FE",
+      bg: "bg-indigo-200",
+    },
+    {
+      label: "Monthly Leaves",
+      key: "monthly",
+      value: leaves.monthly,
+      color: "#A5B4FC",
+      bg: "bg-indigo-300",
+    },
+    {
+      label: "Remaining Short Leaves",
+      key: "shortRemaining",
+      value: leaves.shortRemaining,
+      color: "#DDD6FE",
+      bg: "bg-indigo-100",
+    },
+    {
+      label: "Floater Leaves",
+      key: "floater",
+      value: leaves.floater,
+      color: "#E5E7EB",
+      bg: "bg-gray-200",
+    },
   ];
 
+  // Chart should NOT render zero values
+  const chartData = leaveTypes.filter((item) => item.value > 0);
 
-  const total = 12;
-  const remaining = 5;
-  const used = total - remaining;
-  const remainingPercent = (remaining / total) * 100;
-  const usedPercent = (used / total) * 100;
+  // ================= APPLY LEAVE (FUNCTIONALITY) =================
+  const handleApplyLeave = (days) => {
+    setLeaves((prev) => ({
+      ...prev,
+      remaining: Math.max(prev.remaining - days, 0),
+      paid: prev.paid + days,
+    }));
+  };
 
   return (
-    <div className=" bg-white border border-gray-200 rounded-lg p-4 md:p-6">
-      {/* Header */}
+    <div className="bg-white border border-gray-200 rounded-lg p-4 md:p-6">
+      {/* ================= HEADER ================= */}
       <div className="flex justify-between items-center mb-6">
-        <h2 className="md:text-xl  text-sm font-semibold text-gray-800">Leave Balances</h2>
-        <button className="md:px-4 py-2 px-2 text-[12px] bg-indigo-600 text-white  rounded-md md:text-sm font-medium hover:bg-indigo-700 transition-colors">
+        <h2 className="md:text-xl text-sm font-semibold text-gray-800">
+          Leave Balances
+        </h2>
+
+        <button
+          onClick={() => setOpenLeaveForm(true)}
+          className="md:px-4 py-2 px-2 text-[12px] bg-indigo-600 text-white rounded-md md:text-sm font-medium hover:bg-indigo-700 transition-colors"
+          disabled={leaves.remaining === 0}
+        >
           Request Leaves
         </button>
+
+        <LeaveForm
+          open={openLeaveForm}
+          onClose={() => setOpenLeaveForm(false)}
+          onSubmitLeave={handleApplyLeave}
+        />
       </div>
 
-      {/* Donut Chart */}
+      {/* ================= DONUT CHART (7 COLORS ONLY) ================= */}
       <div className="flex justify-center mb-8">
-        <div className="relative w-48 h-48">
-          <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
-            {/* Background circle */}
-            <circle
-              cx="50"
-              cy="50"
-              r="40"
-              fill="none"
-              stroke="#E0E7FF"
-              strokeWidth="12"
-            />
-            {/* Remaining leaves arc */}
-            <circle
-              cx="50"
-              cy="50"
-              r="40"
-              fill="none"
-              stroke="#818CF8"
-              strokeWidth="12"
-              strokeDasharray={`${remainingPercent * 2.513} ${100 * 2.513}`}
-              strokeLinecap="round"
-            />
-            {/* Used leaves arc */}
-            <circle
-              cx="50"
-              cy="50"
-              r="40"
-              fill="none"
-              stroke="#3730A3"
-              strokeWidth="12"
-              strokeDasharray={`${usedPercent * 2.513} ${100 * 2.513}`}
-              strokeDashoffset={`-${remainingPercent * 2.513}`}
-              strokeLinecap="round"
-            />
-          </svg>
-          {/* Center text */}
+        <div className="relative w-56 h-56">
+          <PieChart width={220} height={220}>
+            <Pie
+              data={chartData}
+              dataKey="value"
+              innerRadius={75}
+              outerRadius={100}
+              startAngle={90}
+              endAngle={-270}
+              paddingAngle={2}
+            >
+              {chartData.map((item, index) => (
+                <Cell key={index} fill={item.color} />
+              ))}
+            </Pie>
+          </PieChart>
+
+          {/* Center */}
           <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <div className="text-3xl font-bold text-gray-800">{total}</div>
+            <div className="text-2xl font-semibold text-gray-900">
+              {leaves.total}
+            </div>
             <div className="text-sm text-gray-500">Total Leaves</div>
           </div>
         </div>
       </div>
 
-      {/* Leave Details List */}
+      {/* ================= LIST ================= */}
       <div className="space-y-3">
-        {leaveData.map((item, index) => (
-          <div key={index} className="flex items-center justify-between ">
+        {leaveTypes.map((item, index) => (
+          <div key={index} className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className={`w-4 h-4 rounded ${item.color}`}></div>
+              <div className={`w-4 h-4 rounded ${item.bg}`} />
               <span className="text-sm text-gray-700">{item.label}</span>
             </div>
             <span className="text-sm font-medium text-gray-800">
-              {item.value.toString().padStart(2, '0')}
+              {item.value.toString().padStart(2, "0")}
             </span>
           </div>
         ))}

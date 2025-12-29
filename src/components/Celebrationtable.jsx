@@ -41,11 +41,7 @@ const Celebrationtable = () => {
         <div
           className="
         
-          overflow-y-auto
-          max-h-[260px]
-          sm:max-h-[300px]
-          md:max-h-[360px]
-          lg:max-h-[420px]
+  
         "
         >
           {/* Announcements */}

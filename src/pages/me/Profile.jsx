@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const ProfileTab = () => {
+const Profile = () => {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -271,4 +271,4 @@ const ProfileTab = () => {
   );
 };
 
-export default ProfileTab;
+export default Profile;

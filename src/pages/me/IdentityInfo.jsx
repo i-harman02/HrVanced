@@ -1,0 +1,28 @@
+import React, { useState } from 'react'
+import FormRenderer from '../../components/form/FormRenderer'
+import { inputFields } from '../../configs/employeeForms/inputFields';
+
+const IdentityInfo = () => {
+  const[formData, setFormData] = useState({});
+  return (
+    <>
+    <div className='grid grid-cols-3'>
+      <div>
+          <h2 className="text-base text-heading font-bold leading-tight mb-3.5">
+            Identity Information
+          </h2>        
+        </div>
+         <div>
+    <FormRenderer
+    fields={inputFields.identityInfo}
+    formData={formData}
+    setFormData={setFormData}/>
+    </div>
+    </div>
+  
+    </>
+
+  )
+}
+
+export default IdentityInfo

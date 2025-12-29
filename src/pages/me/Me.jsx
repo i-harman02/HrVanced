@@ -1,27 +1,63 @@
 import React, { useState } from "react";
 import Tabs from "../../components/Tabs";
-import ProfileTab from "../../components/ProfileTab";
-import PersonalInfoTab from "../../components/PersonalInfoTab";
+import Profile from "./Profile";
+import PersonalInfo from "./PersonalInfo";
+import EmergencyContact from "./EmergencyContact";
+import BankInfo from "./BankInfo";
+import IdentityInfo from "./IdentityInfo";
+import Education from "./Education";
+import Experience from "./Experience"
+import Projects from "./Projects";
 
 const tabs = [
   {
     key: "profile",
     label: "Profile",
-    component: ProfileTab,
+    component: Profile,
   },
   {
     key: "personal-info",
     label: "Personal Information",
-    component: PersonalInfoTab,
+    component: PersonalInfo,
+  },
+  {
+    key: "emergency-contact",
+    label: "Emergency Contact",
+    component: EmergencyContact,
+  },
+  {
+    key: "bank-info",
+    label: "Bank Information",
+    component: BankInfo,
+  },
+  {
+    key: "identity-info",
+    label: "Identity Information",
+    component: IdentityInfo,
+  },
+  {
+    key: "education",
+    label: "Education",
+    component: Education,
+  },
+  {
+    key: "experience",
+    label: "Experience",
+    component: Experience,
+  },
+  {
+    key: "projects",
+    label: "Projects",
+    component: Projects,
   },
 ];
 
 const Me = () => {
   const [activeTab, setActiveTab] = useState("profile");
-
   const ActiveComponent = tabs.find(
     (tab) => tab.key === activeTab
   )?.component;
+
 
   return (
     <>

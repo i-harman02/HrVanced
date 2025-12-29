@@ -1,5 +1,5 @@
 import React from "react";
-import noProject from "../assets/no-projects-img.png";
+import noProject from "../../assets/no-projects-img.png";
 
 const NoProject = () => {
   return (

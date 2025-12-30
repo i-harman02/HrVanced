@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+
 import Dashboard from "./pages/dashboard/Dashboard";
 import Privacy from "./pages/privacy/Privacy";
 import Mail from "./pages/mail/Mail";
@@ -10,114 +11,45 @@ import Projects from "./pages/projects/Projects";
 import Resignation from "./pages/resignation/Resignation";
 import LeaveManagement from "./pages/leavemanagement/LeaveManagement";
 import Login from "./pages/Login/Login";
-import Protected from "./components/Protected";
+import Signup from "./pages/signup/Signup";
+
 import Layout from "./components/Layout";
+import ProtectedRoute from "./components/Protected";
+import PublicRoute from "./components/PublicRoute";
 
 const Approutes = () => {
-  const isLoggedIn = localStorage.getItem("token");
   return (
     <BrowserRouter>
       <Routes>
+
+    
         <Route path="/" element={<Navigate to="/login" replace />} />
 
-        <Route
-          path="/login"
-          element={
-            isLoggedIn ? <Navigate to="/dashboard" replace /> : <Login />
-          }
-        />
-
-        <Route element={<Layout />}>
-          <Route
-            path="/dashboard"
-            element={
-              <Protected>
-                <Dashboard />
-              </Protected>
-            }
-          />
-
-          <Route
-            path="/mail"
-            element={
-              <Protected>
-                <Mail />
-              </Protected>
-            }
-          />
-
-          <Route
-            path="/privacy"
-            element={
-              <Protected>
-                <Privacy />
-              </Protected>
-            }
-          />
-
-          <Route
-            path="/me"
-            element={
-              <Protected>
-                <Me />
-              </Protected>
-            }
-          />
-
-          <Route
-            path="/my-finances"
-            element={
-              <Protected>
-                <Myfinances />
-              </Protected>
-            }
-          />
-
-          <Route
-            path="/my-team"
-            element={
-              <Protected>
-                <Myteam />
-              </Protected>
-            }
-          />
-
-          <Route
-            path="/projects"
-            element={
-              <Protected>
-                <Projects />
-              </Protected>
-            }
-          />
-
-          <Route
-            path="/resignation"
-            element={
-              <Protected>
-                <Resignation />
-              </Protected>
-            }
-          />
-
-          <Route
-            path="/message"
-            element={
-              <Protected>
-                <Message />
-              </Protected>
-            }
-          />
-
-          <Route
-            path="/leave-management"
-            element={
-              <Protected>
-                <LeaveManagement />
-              </Protected>
-            }
-          />
+      
+        <Route element={<PublicRoute />}>
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
         </Route>
+
+       
+        <Route element={<ProtectedRoute />}>
+          <Route element={<Layout />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/mail" element={<Mail />} />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/me" element={<Me />} />
+            <Route path="/my-finances" element={<Myfinances />} />
+            <Route path="/my-team" element={<Myteam />} />
+            <Route path="/projects" element={<Projects />} />
+            <Route path="/resignation" element={<Resignation />} />
+            <Route path="/message" element={<Message />} />
+            <Route path="/leave-management" element={<LeaveManagement />} />
+          </Route>
+        </Route>
+
+        {/* Fallback */}
+        <Route path="*" element={<Navigate to="/login" replace />} />
+
       </Routes>
     </BrowserRouter>
   );

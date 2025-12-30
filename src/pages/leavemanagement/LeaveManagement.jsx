@@ -16,7 +16,7 @@ const LeaveManagement = () => {
   const tabContent = {
     leaves: (
       <>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 mt-6">
           <LeaveStats />
           <LeaveHistory />
         </div>
@@ -27,15 +27,15 @@ const LeaveManagement = () => {
       </>
     ),
     performance: (
-      <div className="mt-6">
-        <h2 className="text-lg font-semibold">Performance Section</h2>
+      <div className="mt-6 h-[80vh]">
+        
         <Performance />
       </div>
     ),
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-sm p-6">
+    <div className="bg-white rounded-xl shadow-sm p-6 h-full">
 
       <Tabs
         tabs={tabs}

@@ -6,20 +6,45 @@ export default function Performance(){
         date:'12-Dec-2025',
         addedBy: "Project Manager"
         },
+           {employeeName: "RahulJi",
+        projectName: "Web Developer",
+        comments: "Client feedback incorporated into latest build",
+        date:'12-Dec-2025',
+        addedBy: "Project Manager"
+        },
+             {employeeName: "RahulJi",
+        projectName: "Web Developer",
+        comments: "Client feedback incorporated into latest build",
+        date:'12-Dec-2025',
+        addedBy: "Project Manager"
+        },
+             {employeeName: "RahulJi",
+        projectName: "Web Developer",
+        comments: "Client feedback incorporated into latest build",
+        date:'12-Dec-2025',
+        addedBy: "Project Manager"
+        },
+             {employeeName: "RahulJi",
+        projectName: "Web Developer",
+        comments: "Client feedback incorporated into latest build",
+        date:'12-Dec-2025',
+        addedBy: "Project Manager"
+        },
     ];
     return(
-        <div className="border border-gray-200 rounded-xl p-4 sm:p-6">
+        <div className="border border-gray-200 rounded-xl p-4 sm:p-6 h-full">
+          <h2 className="text-lg font-semibold mb-4">Performance </h2>
               {/* Table */}
-              <div className="overflow-x-auto border border-gray-200 rounded-md">
-                <table className="min-w-[900px] w-full text-xs">
-                  <thead className="border-b text-gray-500">
+              <div className="overflow-x-auto border border-gray-200 rounded-md h-[calc(100%-76px)] p-2">
+                <table className="min-w-225 w-full text-xs">
+                  <thead className="border-b border-gray-200  text-gray-500">
                     <tr>
-                      <th className="text-left py-4 px-4">Employee Name</th>
-                      <th className="text-left px-4">Project Name</th>
-                      <th className="text-left px-4">Comments</th>
-                      <th className="text-left px-4">Date</th>
-                      <th className="text-left px-4">Added By</th>
-                      <th className="text-left px-4">Actions</th>
+                      <th className="text-left py-4 px-4 text-gray-800">Employee Name</th>
+                      <th className="text-left px-4 text-gray-800">Project Name</th>
+                      <th className="text-left px-4 text-gray-800">Comments</th>
+                      <th className="text-left px-4 text-gray-800">Date</th>
+                      <th className="text-left px-4 text-gray-800">Added By</th>
+                      <th className="text-left px-4 text-gray-800">Actions</th>
                     </tr>
                   </thead>
         
@@ -27,7 +52,7 @@ export default function Performance(){
                     {data.map((item, i) => (
                       <tr
                         key={i}
-                        className="border-b last:border-b-0 text-gray-700"
+                        className="border-b border-gray-200   text-gray-700"
                       >
                         <td className="py-4 px-4">{item.employeeName}</td>
                         <td className="px-4">{item.projectName}</td>
@@ -40,6 +65,7 @@ export default function Performance(){
                           </button>
                         </td>
                       </tr>
+                      
                     ))}
                   </tbody>
                 </table>

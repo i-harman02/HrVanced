@@ -55,14 +55,16 @@ const Approutes = () => {
             }
           />
 
-          <Route
+  <Route
             path="/me"
             element={
               <Protected>
-                <Me />
+                <LeaveManagement />
               </Protected>
             }
           />
+
+       
 
           <Route
             path="/my-finances"
@@ -109,16 +111,17 @@ const Approutes = () => {
             }
           />
 
-          <Route
-            path="/leave-management"
+           <Route
+            path="/my-profile"
             element={
               <Protected>
-                <LeaveManagement />
+                <Me />
               </Protected>
             }
           />
+
         </Route>
-      </Routes>
+ </Routes>
     </BrowserRouter>
   );
 };

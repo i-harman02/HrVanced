@@ -3,7 +3,7 @@ import { PieChart, Pie, Cell } from "recharts";
 import LeaveForm from "../components/LeaveForm";
 
 const LeaveBalances = () => {
-  // ================= SINGLE SOURCE OF TRUTH =================
+
   const [leaves, setLeaves] = useState({
     total: 12,
     remaining: 5,
@@ -16,7 +16,7 @@ const LeaveBalances = () => {
 
   const [openLeaveForm, setOpenLeaveForm] = useState(false);
 
-  // ================= 7 LEAVES (EXACT FIGMA MATCH) =================
+
   const leaveTypes = [
     {
       label: "Total Leaves",
@@ -69,10 +69,10 @@ const LeaveBalances = () => {
     },
   ];
 
-  // Chart should NOT render zero values
+  
   const chartData = leaveTypes.filter((item) => item.value > 0);
 
-  // ================= APPLY LEAVE (FUNCTIONALITY) =================
+
   const handleApplyLeave = (days) => {
     setLeaves((prev) => ({
       ...prev,
@@ -83,7 +83,7 @@ const LeaveBalances = () => {
 
   return (
     <div className="bg-white border border-gray-200 rounded-lg p-4 md:p-6">
-      {/* ================= HEADER ================= */}
+
       <div className="flex justify-between items-center mb-6">
         <h2 className="md:text-xl text-sm font-semibold text-gray-800">
           Leave Balances
@@ -104,7 +104,6 @@ const LeaveBalances = () => {
         />
       </div>
 
-      {/* ================= DONUT CHART (7 COLORS ONLY) ================= */}
       <div className="flex justify-center mb-8">
         <div className="relative w-56 h-56">
           <PieChart width={220} height={220}>
@@ -133,7 +132,7 @@ const LeaveBalances = () => {
         </div>
       </div>
 
-      {/* ================= LIST ================= */}
+
       <div className="space-y-3">
         {leaveTypes.map((item, index) => (
           <div key={index} className="flex items-center justify-between">

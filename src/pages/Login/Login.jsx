@@ -2,7 +2,7 @@ import { useState } from "react";
 import { fakeUser } from "../../utils/Fakeuser";
 import { generateToken } from "../../utils/Faketoken";
 import { useNavigate } from "react-router-dom";
-
+import vsLogo from "../../assets/vanced-logo.png"
 import HomeImg from "../../assets/Group 3475 (1).png";
 import { toast } from "react-toastify";
 import Toaster from "../../components/Toaster";
@@ -89,7 +89,7 @@ const Login = () => {
         <div className="bg-white p-4">
           <div className="flex items-center justify-center h-full">
             <div>
-              <img className="mb-10" src="./Images/logo.png" alt="" />
+              <img className="mb-10" src={vsLogo} alt="" />
               <h1 className="text-2xl font-bold mb-3">WELCOME BACK !!</h1>
               <p className="text-[#71717B] mb-10">
                 Please login to your account.

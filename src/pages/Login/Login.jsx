@@ -1,13 +1,20 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import vsLogo from "../../assets/vanced-logo.png"
+
+import HomeImg from "../../assets/Group 3475 (1).png";
 import { toast } from "react-toastify";
 import Toaster from "../../components/Toaster";
-import HomeImg from "../../assets/Group 3475 (1).png";
+;
 import logo from "../../assets/vanced-logo.png";
-import { apicall } from "../../components/commonAPI/CallAPI";
+
+import { useDispatch } from "react-redux";
+import { loginUser } from "../../slices/userSlice";
+
 
 const Login = () => {
+  const dispatch = useDispatch();
+
+
   const navigate = useNavigate();
 
   const [formdata, setFormdata] = useState({
@@ -48,24 +55,20 @@ const Login = () => {
     formdata.email && formdata.password && !errors.email && !errors.password;
 
   // 🔥 BACKEND LOGIN USING FETCH
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!isFormValid) return;
-    try {
-      const data = await apicall("/login", "POST", formdata);
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  if (!isFormValid) return;
 
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user));
+  // eslint-disable-next-line no-undef
+  const res = await dispatch(loginUser(formdata));
 
-      toast.success("Login successful 🎉");
-
-      setTimeout(() => {
-        navigate("/dashboard", { replace: true });
-      }, 1500);
-    } catch (error) {
-      toast.error(error.message);
-    }
-  };
+  if (res.meta.requestStatus === "fulfilled") {
+    toast.success("Login successful 🎉");
+    setTimeout(() => navigate("/dashboard"), 1500);
+  } else {
+    toast.error(res.payload);
+  }
+};
 
   return (
     <>
@@ -73,7 +76,7 @@ const Login = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 min-h-screen">
         <div className="bg-white p-4 flex items-center justify-center">
           <div>
-            <img className="mb-8" src={vsLogo} alt="" />
+            <img className="mb-8" src={logo} alt="" />
             <h1 className="text-2xl font-bold mb-3">WELCOME BACK !!</h1>
             <p className=" mb-10">Please login to your account.</p>
 

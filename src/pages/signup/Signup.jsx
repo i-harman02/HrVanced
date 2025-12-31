@@ -1,10 +1,16 @@
+
+
 import { useState } from "react";
-import { apicall } from "../../components/commonAPI/CallAPI";
-import { Link, useNavigate } from "react-router-dom";
+
+import { useNavigate } from "react-router-dom";
 import HomeImg from "../../assets/Group 3475 (1).png";
 import logo from "../../assets/vanced-logo.png";
+import { useDispatch, } from "react-redux";
+import { signupUser } from "../../slices/userSlice";
+
 const Signup = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [formdata, setFormdata] = useState({
     name: "",
@@ -51,7 +57,7 @@ const Signup = () => {
     }));
      validateField(name, value);
 
-    // console.log("Form Data:", formdata);
+
   };
 
 const isFormValid =
@@ -62,41 +68,36 @@ const isFormValid =
     !errors.email &&
     !errors.password;
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  
    
-    if (!formdata.name || !formdata.email || !formdata.password) {
-      alert("All fields are required");
-      return;
-    }
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+  if (!isFormValid) return;
 
-    try {
-      const res = await apicall("/register", "POST", formdata);
-      if (res?.data) {
-        navigate("/login");
-        alert("Signup successful 🎉");
-      } else {
-        alert(res?.message || "Signup failed");
-      }
-    } catch (err) {
-      console.error(err);
-      alert("Something went wrong");
-    }
-  };
+  const res = await dispatch(signupUser(formdata));
+
+  if (res.meta.requestStatus === "fulfilled") {
+    alert("Signup successful 🎉");
+    navigate("/login");
+  } else {
+    alert(res.payload);
+  }
+};
+
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 min-h-screen">
       <div className="bg-white p-4 flex items-center justify-center">
         <form onSubmit={handleSubmit} className="p-6 min-w-75  ">
           <img className="mb-8" src={logo} alt="" />
-          <h2 className="text-xl font-semibold mb-4  text-start">
+          <h2 className="text-xl font-semibold mb-4  text-center">
             Create your new account
           </h2>
 
           <div className="flex flex-col mb-4">
             <label className="block mb-1 font-medium ">Name</label>
             <input
-              className="p-2 border"
+              className="w-full p-2 border rounded-sm border-gray-400"
               name="name"
               value={formdata.name}
               onChange={handlechange}
@@ -109,7 +110,7 @@ const isFormValid =
           <div className="flex flex-col mb-4">
             <label className="block mb-1 font-medium ">Email</label>
             <input
-              className="p-2 border"
+              className="w-full p-2 border rounded-sm border-gray-400"
               name="email"
               value={formdata.email}
               onChange={handlechange}
@@ -122,7 +123,7 @@ const isFormValid =
           <div className="flex flex-col mb-4">
             <label className="block mb-1 font-medium">Password</label>
             <input
-              className="p-2 border"
+              className="w-full p-2 border rounded-sm border-gray-400"
               name="password"
               value={formdata.password}
               onChange={handlechange}
@@ -131,24 +132,19 @@ const isFormValid =
             />
              <p className="text-red-500 text-sm">{errors.password}</p>
           </div>
-<div className="flex flex-col">
+
               <button
             type="submit"
             disabled={!isFormValid}
-            className="bg-[#2C3EA1] py-3 px-36 rounded text-white font-bold cursor-pointer"
+            className={`w-full py-2 rounded text-white transition
+              ${
+                isFormValid
+                  ? "bg-blue-600 hover:bg-blue-700"
+                  : "bg-gray-400 cursor-not-allowed"
+              }`}
           >
             Sign Up
           </button>
-           <p className="text-[12px] mt-2 flex  gap-1">
-                Already have account{" "}
-                <Link
-                  to="/login"
-                  className="text-blue-800 cursor-pointer underline font-semibold"
-                >
-                  LogIn
-                </Link>
-              </p>
-              </div>
         </form>
       </div>
       <div className="bg-[#2C3EA1] flex items-center justify-center">

@@ -1,209 +1,157 @@
-import React from 'react';
-import Pagination from '../../components/Pagination';
+import React from "react";
+import Pagination from "../../components/Pagination";
+
+const projects = [
+  {
+    name: "Trimax",
+    start: "Mar 18, 2022",
+    end: "Mar 11, 2040",
+    members: [3, 14],
+    progress: 80,
+    progressColor: "#75B51D",
+    link: "https://beta.trimax.datavanced.com/",
+    reason: "-",
+    status: "Completed",
+    statusColor: "#75B51D",
+  },
+  {
+    name: "Hatzalah",
+    start: "May 17, 2020",
+    end: "Jan 16, 2045",
+    members: [12, 13, 14],
+    progress: 50,
+    progressColor: "#FBA300",
+    link: "https://hatzalah.org/",
+    reason: "Lorem ipsum dolor sit amet,",
+    status: "Pending",
+    statusColor: "#FBA300",
+  },
+  {
+    name: "Nineyard",
+    start: "Feb 21, 2021",
+    end: "Jun 10, 2035",
+    members: [3, 12, 13, 14],
+    progress: 80,
+    progressColor: "#75B51D",
+    link: "https://app.nineyard.com/shipyard/create-shipments",
+    reason: "-",
+    status: "Completed",
+    statusColor: "#75B51D",
+  },
+];
+
+const ProjectRow = ({ project }) => {
+  return (
+    <tr className="hover:bg-gray-50">
+      <td className="py-3 text-sm text-textgray">{project.name}</td>
+      <td className="py-3 text-sm text-textgray">{project.start}</td>
+      <td className="py-3 text-sm text-textgray">{project.end}</td>
+
+      {/* Team Members */}
+      <td className="py-3">
+        <div className="flex">
+          {project.members.map((id, index) => (
+            <img
+              key={index}
+              className={`w-7.5 h-7.5 rounded-md ${
+                index !== 0 ? "-ms-2.5" : ""
+              }`}
+              src={`https://i.pravatar.cc/40?img=${id}`}
+              alt="Team Member"
+            />
+          ))}
+        </div>
+      </td>
+
+      <td className="py-3 pe-4 min-w-30">
+        <div className="flex items-center gap-2">
+          <div className="bg-gray-200 h-2 rounded-lg relative flex-1">
+            <div
+              className="h-full rounded-lg absolute left-0 top-0"
+              style={{
+                width: `${project.progress}%`,
+                backgroundColor: project.progressColor,
+              }}
+            />
+          </div>
+          <span className="text-sm">{project.progress}%</span>
+        </div>
+      </td>
+
+      {/* Links */}
+      <td className="py-3 ">
+        <a
+          href={project.link}
+          target="_blank"
+          rel="noreferrer"
+          className="text-[#65C9FF] block max-w-27.5 truncate"
+        >
+          {project.link}
+        </a>
+      </td>
+
+      {/* Reason */}
+      <td className="py-3 text-sm text-textgray max-w-27.5 truncate">
+        {project.reason}
+      </td>
+
+      {/* Status */}
+      <td className="py-3">
+        <span
+          className="inline-block text-xs rounded-sm py-0.75 px-2 leading-none"
+          style={{
+            color: project.statusColor,
+            border: `0.5px solid ${project.statusColor}`,
+            backgroundColor: `${project.statusColor}10`,
+          }}
+        >
+          {project.status}
+        </span>
+      </td>
+    </tr>
+  );
+};
 
 const ProjectAssigned = () => {
+  const headers = [
+    "Project Name",
+    "Start Date",
+    "End Date",
+    "Team Members",
+    "Progress",
+    "Links",
+    "Reason (if project going late)",
+    "Status",
+  ];
+
   return (
     <>
-        <div className="bg-white border border-bordergray rounded-lg px-6 pt-6 pb-3.5 overflow-x-auto mb-8">
-          <table className="w-full min-w-250">
-            <thead>
-              <tr className="border-b border-bordergray">
-                <th className="pb-4 text-left text-sm font-bold text-heading min-w-27.5">
-                  Project Name
+      <div className="bg-white border border-bordergray rounded-lg px-6 pt-6 pb-3.5 overflow-x-auto mb-8">
+        <table className="w-full min-w-250">
+          <thead>
+            <tr className="border-b border-bordergray">
+              {headers.map((header) => (
+                <th
+                  key={header}
+                  className="pb-4 text-left text-sm font-bold text-heading"
+                >
+                  {header}
                 </th>
-                <th className="pb-4 text-left text-sm font-bold text-heading min-w-27.5">
-                  Start Date
-                </th>
-                <th className="pb-4 text-left text-sm font-bold text-heading min-w-27.5">
-                  End Date
-                </th>
-                <th className="pb-4 text-left text-sm font-bold text-heading min-w-27.5">
-                  Team Members
-                </th>
-                <th className="pb-4 text-left text-sm font-bold text-heading min-w-37.5">
-                  Progress
-                </th>
-                <th class="pb-4 text-left text-sm font-bold text-heading">
-                  Links
-                </th>
-                <th className="pb-4 text-left text-sm font-bold text-heading">
-                  Reason{" "}
-                  <span className="font-normal">(if project going late)</span>
-                </th>
-                <th className="pb-4 text-left text-sm font-bold text-heading">
-                  Status
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200">
-              <tr className="hover:bg-gray-50">
-                <td className="py-3 text-sm text-textgray leading-none">
-                  Trimax
-                </td>
-                <td className="py-3 text-sm text-textgray leading-none">
-                  Jan 01, 2023
-                </td>
-                <td className="py-3 text-sm text-textgray leading-none">
-                  Jan 01, 2025
-                </td>
-                <td className="py-3 text-sm text-textgray leading-none">
-                  <div className="flex">
-                    <img
-                      className="w-7.5 h-7.5 rounded-md"
-                      src="https://i.pravatar.cc/150?img=3"
-                      alt="Team Member"
-                    />
-                    <img
-                      className="w-7.5 h-7.5 rounded-md -ms-2.5"
-                      src="https://i.pravatar.cc/40?img=14"
-                      alt="Team Member"
-                    />
-                  </div>
-                </td>
-                <td className="py-3 text-sm text-textgray leading-none pe-4">
-                  <div className="flex items-center gap-2">
-                    <div className="bg-gray-200 h-2 rounded-lg relative flex-1">
-                      <div className="bg-[#75B51D] h-full rounded-lg absolute left-0 top-0 w-4/5"></div>
-                    </div>
-                    <span>80%</span>
-                  </div>
-                </td>
-                <td className="py-3 text-sm text-textgray leading-none">
-                  <a
-                    className="text-[#65C9FF] block max-w-27.5 truncate"
-                    href="https://app.nineyard.com/shipyard/create-shipments"
-                    target="_blank"
-                  >
-                    https://app.nineyard.com/shipyard/create-shipments
-                  </a>
-                </td>
-                <td className="py-3 text-sm text-textgray leading-none">-</td>
-                <td className="py-3 text-sm text-textgray leading-none">
-                  <span className="inline-block text-xs text-[#75B51D] border-[0.5px] border-[#75B51D] rounded-sm py-0.75 px-2 leading-none bg-[#75B51D]/5">
-                    Completed
-                  </span>
-                </td>
-              </tr>
-              <tr className="hover:bg-gray-50">
-                <td className="py-3 text-sm text-textgray leading-none">
-                  Hatzalah
-                </td>
-                <td className="py-3 text-sm text-textgray leading-none">
-                  Jan 01, 2023
-                </td>
-                <td className="py-3 text-sm text-textgray leading-none">
-                  Jan 01, 2025
-                </td>
-                <td className="py-3 text-sm text-textgray leading-none">
-                  <div className="flex">
-                    <img
-                      className="w-7.5 h-7.5 rounded-md"
-                      src="https://i.pravatar.cc/40?img=12"
-                      alt="Team Member"
-                    />
-                    <img
-                      className="w-7.5 h-7.5 rounded-md -ms-2.5"
-                      src="https://i.pravatar.cc/40?img=13"
-                      alt="Team Member"
-                    />
-                    <img
-                      className="w-7.5 h-7.5 rounded-md -ms-2.5"
-                      src="https://i.pravatar.cc/40?img=14"
-                      alt="Team Member"
-                    />
-                  </div>
-                </td>
-                <td className="py-3 text-sm text-textgray leading-none pe-4">
-                  <div className="flex items-center gap-2">
-                    <div className="bg-gray-200 h-2 rounded-lg relative flex-1">
-                      <div className="bg-[#FBA300] h-full rounded-lg absolute left-0 top-0 w-1/2"></div>
-                    </div>
-                    <span>50%</span>
-                  </div>
-                </td>
-                <td className="py-3 text-sm text-textgray leading-none">
-                  <a
-                    className="text-[#65C9FF] block max-w-27.5 truncate"
-                    href="https://app.nineyard.com/shipyard/create-shipments"
-                    target="_blank"
-                  >
-                    https://app.nineyard.com/shipyard/create-shipments
-                  </a>
-                </td>
-                <td className="py-3 text-sm text-textgray leading-none">
-                    <p className="max-w-27.5 truncate">Lorem ipsum dolor sit amet,</p>
-                </td>
-                <td className="py-3 text-sm text-textgray leading-none">
-                  <span className="inline-block text-xs text-[#FBA300] border-[0.5px] border-[#FBA300] rounded-sm py-0.75 px-2 leading-none bg-[#B5801D]/5">
-                    Pending
-                  </span>
-                </td>
-              </tr>
-              <tr className="hover:bg-gray-50">
-                <td className="py-3 text-sm text-textgray leading-none">
-                  Nineyard
-                </td>
-                <td className="py-3 text-sm text-textgray leading-none">
-                  Jan 01, 2023
-                </td>
-                <td className="py-3 text-sm text-textgray leading-none">
-                  Jan 01, 2025
-                </td>
-                <td className="py-3 text-sm text-textgray leading-none">
-                  <div className="flex">
-                    <img
-                      className="w-7.5 h-7.5 rounded-md"
-                      src="https://i.pravatar.cc/150?img=3"
-                      alt="Team Member"
-                    />
-                    <img
-                      className="w-7.5 h-7.5 rounded-md -ms-2.5"
-                      src="https://i.pravatar.cc/40?img=12"
-                      alt="Team Member"
-                    />
-                    <img
-                      className="w-7.5 h-7.5 rounded-md -ms-2.5"
-                      src="https://i.pravatar.cc/40?img=13"
-                      alt="Team Member"
-                    />
-                    <img
-                      className="w-7.5 h-7.5 rounded-md -ms-2.5"
-                      src="https://i.pravatar.cc/40?img=14"
-                      alt="Team Member"
-                    />
-                  </div>
-                </td>
-                <td className="py-3 text-sm text-textgray leading-none pe-4">
-                  <div className="flex items-center gap-2">
-                    <div className="bg-gray-200 h-2 rounded-lg relative flex-1">
-                      <div className="bg-[#75B51D] h-full rounded-lg absolute left-0 top-0 w-4/5"></div>
-                    </div>
-                    <span>80%</span>
-                  </div>
-                </td>
-                <td className="py-3 text-sm text-textgray leading-none">
-                  <a
-                    className="text-[#65C9FF] block max-w-27.5 truncate"
-                    href="https://app.nineyard.com/shipyard/create-shipments"
-                    target="_blank"
-                  >
-                    https://app.nineyard.com/shipyard/create-shipments
-                  </a>
-                </td>
-                <td className="py-3 text-sm text-textgray leading-none">-</td>
-                <td className="py-3 text-sm text-textgray leading-none">
-                  <span className="inline-block text-xs text-[#75B51D] border-[0.5px] border-[#75B51D] rounded-sm py-0.75 px-2 leading-none bg-[#75B51D]/5">
-                    Completed
-                  </span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+              ))}
+            </tr>
+          </thead>
 
-        <Pagination/>
+          <tbody className="divide-y divide-gray-200">
+            {projects.map((project, index) => (
+              <ProjectRow key={index} project={project} />
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <Pagination />
     </>
-  )
-}
+  );
+};
 
 export default ProjectAssigned;

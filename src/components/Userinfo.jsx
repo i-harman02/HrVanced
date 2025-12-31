@@ -7,7 +7,7 @@ const ChatModal = ({ onClose }) => {
   return (
     <>
       {/* Overlay (click anywhere outside = close) */}
-      <div onClick={onClose} className="fixed inset-0 bg-black/30 z-40" />
+      <div onClick={onClose} className="fixed inset-0  z-40" />
 
       {/* Modal */}
       <div

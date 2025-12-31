@@ -260,7 +260,7 @@ const Profile = () => {
               type="submit"
               className="bg-primary text-white text-sm font-medium cursor-pointer px-3.5 py-2.5 border border-borderprimary rounded-sm leading-none"
             >
-              Send
+              Save
             </button>
           </div>
         </div>

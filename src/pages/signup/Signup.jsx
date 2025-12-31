@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { apicall } from "../../components/commonAPI/CallAPI";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import HomeImg from "../../assets/Group 3475 (1).png";
 import logo from "../../assets/vanced-logo.png";
 const Signup = () => {
@@ -89,14 +89,14 @@ const isFormValid =
       <div className="bg-white p-4 flex items-center justify-center">
         <form onSubmit={handleSubmit} className="p-6 min-w-75  ">
           <img className="mb-8" src={logo} alt="" />
-          <h2 className="text-xl font-semibold mb-4  text-center">
+          <h2 className="text-xl font-semibold mb-4  text-start">
             Create your new account
           </h2>
 
           <div className="flex flex-col mb-4">
             <label className="block mb-1 font-medium ">Name</label>
             <input
-              className="w-full p-2 border rounded-sm border-gray-400"
+              className="p-2 border"
               name="name"
               value={formdata.name}
               onChange={handlechange}
@@ -109,7 +109,7 @@ const isFormValid =
           <div className="flex flex-col mb-4">
             <label className="block mb-1 font-medium ">Email</label>
             <input
-              className="w-full p-2 border rounded-sm border-gray-400"
+              className="p-2 border"
               name="email"
               value={formdata.email}
               onChange={handlechange}
@@ -122,7 +122,7 @@ const isFormValid =
           <div className="flex flex-col mb-4">
             <label className="block mb-1 font-medium">Password</label>
             <input
-              className="w-full p-2 border rounded-sm border-gray-400"
+              className="p-2 border"
               name="password"
               value={formdata.password}
               onChange={handlechange}
@@ -131,19 +131,24 @@ const isFormValid =
             />
              <p className="text-red-500 text-sm">{errors.password}</p>
           </div>
-
+<div className="flex flex-col">
               <button
             type="submit"
             disabled={!isFormValid}
-            className={`w-full py-2 rounded text-white transition
-              ${
-                isFormValid
-                  ? "bg-blue-600 hover:bg-blue-700"
-                  : "bg-gray-400 cursor-not-allowed"
-              }`}
+            className="bg-[#2C3EA1] py-3 px-36 rounded text-white font-bold cursor-pointer"
           >
             Sign Up
           </button>
+           <p className="text-[12px] mt-2 flex  gap-1">
+                Already have account{" "}
+                <Link
+                  to="/login"
+                  className="text-blue-800 cursor-pointer underline font-semibold"
+                >
+                  LogIn
+                </Link>
+              </p>
+              </div>
         </form>
       </div>
       <div className="bg-[#2C3EA1] flex items-center justify-center">

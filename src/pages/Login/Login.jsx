@@ -1,10 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { fakeUser } from "../../utils/Fakeuser";
-import { generateToken } from "../../utils/Faketoken";
-import { useNavigate } from "react-router-dom";
 import vsLogo from "../../assets/vanced-logo.png"
-import HomeImg from "../../assets/Group 3475 (1).png";
 import { toast } from "react-toastify";
 import Toaster from "../../components/Toaster";
 import HomeImg from "../../assets/Group 3475 (1).png";
@@ -77,7 +73,7 @@ const Login = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 min-h-screen">
         <div className="bg-white p-4 flex items-center justify-center">
           <div>
-            <img className="mb-8" src={logo} alt="" />
+            <img className="mb-8" src={vsLogo} alt="" />
             <h1 className="text-2xl font-bold mb-3">WELCOME BACK !!</h1>
             <p className=" mb-10">Please login to your account.</p>
 

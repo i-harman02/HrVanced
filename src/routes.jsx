@@ -37,17 +37,17 @@ const Approutes = () => {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/mail" element={<Mail />} />
             <Route path="/privacy" element={<Privacy />} />
-            <Route path="/me" element={<Me />} />
+            <Route path="/my-profile" element={<Me />} />
             <Route path="/my-finances" element={<Myfinances />} />
             <Route path="/my-team" element={<Myteam />} />
             <Route path="/projects" element={<Projects />} />
             <Route path="/resignation" element={<Resignation />} />
             <Route path="/message" element={<Message />} />
-            <Route path="/leave-management" element={<LeaveManagement />} />
+            <Route path="/me" element={<LeaveManagement />} />
           </Route>
         </Route>
 
-        {/* Fallback */}
+       
         <Route path="*" element={<Navigate to="/login" replace />} />
 
       </Routes>

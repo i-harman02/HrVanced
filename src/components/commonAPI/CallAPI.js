@@ -16,7 +16,7 @@ export const apicall = async (endpoint, method = "GET", data) => {
 
   if (!res.ok) {
     console.error("API Error:", result);
-    throw result; // 👈 VERY IMPORTANT
+    throw result;
   }
 
   return result;

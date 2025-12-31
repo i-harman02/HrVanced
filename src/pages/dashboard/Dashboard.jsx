@@ -3,7 +3,6 @@ import Celebrationtable from "../../components/Celebrationtable.jsx";
 import Upcomingholidays from "../../components/Upcomingholidays.jsx";
 import TodayLeave from "../../components/TodayLeave.jsx";
 import { IoChatbubbles } from "react-icons/io5";
-// import { IoChatbubbles } from "react-icons/io5";
 import { useState } from "react";
 import ChatModal from "../../components/Chatmodal.jsx";
 import Inbox from "../../components/Inbox.jsx";

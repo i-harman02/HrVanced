@@ -1,7 +1,9 @@
 import { IoClose } from "react-icons/io5";
 import { IoSend } from "react-icons/io5";
 import User3 from "../assets/Group 3489.png";
+import { useSelector } from "react-redux";
 const ChatModal = ({ onClose }) => {
+   const user = useSelector((state) => state.user.user);
   return (
     <>
       <div onClick={onClose} className="fixed inset-0 bg-black/30 z-40" />
@@ -11,7 +13,7 @@ const ChatModal = ({ onClose }) => {
         <div className="flex items-center justify-between p-4 border-b border-gray-200">
           <div className="flex items-center gap-3">
             <img src={User3} alt="user" className="w-8 h-8 rounded-full" />
-            <span className="text-sm font-semibold">Anit</span>
+            <span className="text-sm font-semibold">{user?.name}</span>
           </div>
           <button onClick={onClose}>
             <IoClose size={20} />

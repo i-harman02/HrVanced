@@ -13,6 +13,7 @@ import { useState } from "react";
 import logo from "../assets/vanced-logo.png";
 import Userinfo from "../components/Userinfo"
 import { MdArrowDropUp } from "react-icons/md";
+import { useSelector } from "react-redux";
 
 const menuItems = [
   { to: "/dashboard", label: "Dashboard", icon: IoMdHome },
@@ -27,6 +28,7 @@ const menuItems = [
 ];
 
 const Sidebar = () => {
+   const user = useSelector((state) => state.user.user);
   const [open, setOpen] = useState(false);
   const location = useLocation();
   const [userinfo, setUserinfo ] =useState(false);
@@ -102,7 +104,7 @@ const Sidebar = () => {
               alt="user"
             />
             <div className="text-sm font-medium text-heading">
-              Anit Thakur
+              {user?.name }
             </div>
             
             <button

@@ -31,3 +31,6 @@ body {
 .bg-primary {
     background-color: var(--color-primary) !important;
 }
+.ag-cell-focus{
+  ;
+}

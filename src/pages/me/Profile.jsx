@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 
+import { useSelector } from "react-redux";
 const Profile = () => {
+  const user = useSelector((state) => state.user.user);
+ 
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -60,7 +63,7 @@ const Profile = () => {
       <div className="grid sm:grid-cols-[1fr_2fr] xl:grid-cols-[1.3fr_2fr_1fr] gap-6 lg:gap-8">
         <div>
           <h2 className="text-base text-heading font-bold leading-tight mb-3.5">
-            Organization Name
+            Organization Name 
           </h2>
           <p className="text-sm text-textgray leading-tight sm:max-w-56.25">
             Use a permanent address where you can receive mail.
@@ -117,6 +120,7 @@ const Profile = () => {
                 name="firstName"
                 value={formData.firstName}
                 onChange={handleChange}
+                placeholder={user.name}
                 className="w-full px-2.5 py-2 border border-bordergray rounded-sm focus:outline-none focus:ring-2 focus:ring-[#2C3EA1]/15 text-sm leading-[1.3]"
               />
             </div>

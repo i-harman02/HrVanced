@@ -1,58 +1,13 @@
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Pagination from "../../components/Pagination";
-
-const teamData = [
-  {
-    name: "Anamika",
-    avatar: 44,
-    email: "anamika@gmail.com",
-    phone: "7836373933",
-    tl: { name: "Deepak Kumar", avatar: 7 },
-    manager: { name: "Udyam Kumar", avatar: 8 },
-    createdAt: "Jul 21, 2023",
-  },
-  {
-    name: "Anit Thakur",
-    avatar: 14,
-    email: "anit@gmail.com",
-    phone: "7836373933",
-    tl: { name: "Deepak Kumar", avatar: 7 },
-    manager: { name: "Udyam Kumar", avatar: 8 },
-    createdAt: "Jul 21, 2023",
-  },
-  {
-    name: "Harman Singh",
-    avatar: 12,
-    email: "harman@gmail.com",
-    phone: "7836373933",
-    tl: { name: "Deepak Kumar", avatar: 7 },
-    manager: { name: "Udyam Kumar", avatar: 8 },
-    createdAt: "Jul 21, 2023",
-  },
-  {
-    name: "Rahul Kumar",
-    avatar: 56,
-    email: "rahul@gmail.com",
-    phone: "7836373933",
-    tl: { name: "Deepak Kumar", avatar: 7 },
-    manager: { name: "Udyam Kumar", avatar: 8 },
-    createdAt: "Jul 21, 2023",
-  },
-  {
-    name: "Abhishek",
-    avatar: 68,
-    email: "abhishek@gmail.com",
-    phone: "7836373933",
-    tl: { name: "Deepak Kumar", avatar: 7 },
-    manager: { name: "Udyam Kumar", avatar: 8 },
-    createdAt: "Jul 21, 2023",
-  },
-];
+import { fetchEmployees } from "../../slices/employeeSlice";
 
 const AvatarWithName = ({ avatar, name }) => (
   <div className="flex items-center gap-2.5">
     <img
       className="w-7.5 h-7.5 rounded-md"
-      src={`https://i.pravatar.cc/150?img=${avatar}`}
+      src={`https://i.pravatar.cc/150?img=${avatar || 1}`}
       alt={name}
     />
     <span>{name}</span>
@@ -67,16 +22,31 @@ const TeamRow = ({ user }) => (
     <td className="py-3 text-sm text-textgray">{user.email}</td>
     <td className="py-3 text-sm text-textgray">{user.phone}</td>
     <td className="py-3 text-sm text-textgray">
-      <AvatarWithName avatar={user.tl.avatar} name={user.tl.name} />
+      <AvatarWithName avatar={user.tl?.avatar} name={user.tl?.name} />
     </td>
     <td className="py-3 text-sm text-textgray">
-      <AvatarWithName avatar={user.manager.avatar} name={user.manager.name} />
+      <AvatarWithName
+        avatar={user.manager?.avatar}
+        name={user.manager?.name}
+      />
     </td>
-    <td className="py-3 text-sm text-textgray">{user.createdAt}</td>
+    <td className="py-3 text-sm text-textgray">
+      {user.createdAt}
+    </td>
   </tr>
 );
 
 const Myteam = () => {
+  const dispatch = useDispatch();
+
+  const { employees: teamData } = useSelector(
+    (state) => state.employee
+  );
+
+  useEffect(() => {
+    dispatch(fetchEmployees());
+  }, [dispatch]);
+
   const headers = [
     "Employee Name",
     "Mail",
@@ -89,7 +59,9 @@ const Myteam = () => {
   return (
     <div className="p-4 md:p-6 lg:p-8 border-0 lg:border bg-white border-gray-200 lg:rounded-xl min-h-full flex flex-col">
       <div className="mb-6 flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-heading">My Team</h1>
+        <h1 className="text-2xl font-bold text-heading">
+          My Team
+        </h1>
       </div>
 
       <div className="bg-white border border-bordergray rounded-lg px-6 pt-6 pb-2 overflow-x-auto mb-8">
@@ -121,3 +93,4 @@ const Myteam = () => {
 };
 
 export default Myteam;
+        

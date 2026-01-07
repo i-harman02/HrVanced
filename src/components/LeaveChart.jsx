@@ -5,8 +5,8 @@ import LeaveForm from "../components/LeaveForm";
 const LeaveBalances = () => {
 
   const [leaves, setLeaves] = useState({
-    total: 12,
-    remaining: 5,
+    total: 0,
+    remaining: 0,
     paid: 3,
     unpaid: 1,
     monthly: 5,

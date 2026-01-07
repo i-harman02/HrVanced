@@ -1,28 +1,26 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { apicall } from "../components/commonAPI/CallAPI";
-
+import api from "../api/axios";
 
 export const loginUser = createAsyncThunk(
   "auth/login",
   async (payload, { rejectWithValue }) => {
     try {
-      const res = await apicall("/login", "POST", payload);
-      return res;
+      const res = await api.post("/auth/login", payload);
+      return res.data;
     } catch (err) {
-      return rejectWithValue(err.message);
+      return rejectWithValue(err.response?.data?.message || "Login failed");
     }
   }
 );
-
 
 export const signupUser = createAsyncThunk(
   "auth/signup",
   async (payload, { rejectWithValue }) => {
     try {
-      const res = await apicall("/register", "POST", payload);
-      return res;
+      const res = await api.post("/auth/signup", payload);
+      return res.data;
     } catch (err) {
-      return rejectWithValue(err.message);
+      return rejectWithValue(err.response?.data?.message || "Signup failed");
     }
   }
 );
@@ -36,19 +34,16 @@ const userSlice = createSlice({
     error: null,
   },
 
-reducers: {
-  logout: (state) => {
-    state.user = null;
-    state.token = null;
-    localStorage.clear();
+  reducers: {
+    logout: (state) => {
+      state.user = null;
+      state.token = null;
+      localStorage.clear();
+    },
   },
-
- 
-},
 
   extraReducers: (builder) => {
     builder
-      // LOGIN
       .addCase(loginUser.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -66,7 +61,6 @@ reducers: {
         state.error = action.payload;
       })
 
-      // SIGNUP
       .addCase(signupUser.pending, (state) => {
         state.loading = true;
       })
@@ -80,6 +74,5 @@ reducers: {
   },
 });
 
-export const { logout} = userSlice.actions;
-
+export const { logout } = userSlice.actions;
 export default userSlice.reducer;

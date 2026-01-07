@@ -1,9 +1,9 @@
-const BASE_URL = "http://localhost:9090/api/auth";
+import api from "../../api/axios";
 
 export const apicall = async (endpoint, method = "GET", data) => {
   const token = localStorage.getItem("token");
 
-  const res = await fetch(`${BASE_URL}${endpoint}`, {
+  const res = await fetch(`${api}/auth${endpoint}`, {
     method,
     headers: {
       "Content-Type": "application/json",

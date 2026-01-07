@@ -1,24 +1,37 @@
 import Input from "./Input";
+import AvatarInput from "./AvatarInput";
 
 const FormRenderer = ({ fields, formData, setFormData }) => {
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  return (                                                                              
+  const handleFileChange = (name, file) => {
+    setFormData((prev) => ({ ...prev, [name]: file }));
+  };
+
+  return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       {fields.map((field) => (
-        <Input
+        <div
           key={field.name}
-          label={field.label}
-          name={field.name}
-          type={field.type}
-          value={formData[field.name] || ""}
-          onChange={handleChange}
-        />
+          className={field.colSpan === 2 ? "md:col-span-2" : ""}
+        >
+          {field.type === "avatar" ? (
+            <AvatarInput
+              {...field}
+              value={formData[field.name]}
+              onChange={handleFileChange}
+            />
+          ) : (
+            <Input
+              {...field}
+              value={formData[field.name] || ""}
+              onChange={handleChange}
+            />
+          )}
+        </div>
       ))}
     </div>
   );

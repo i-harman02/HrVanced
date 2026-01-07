@@ -1,7 +1,7 @@
 const Input = ({ label, type = "text", name, value, onChange }) => {
   return (
     <>
-      <div className="flex flex-col gap-1 mb-4">
+      <div className="flex flex-col gap-10 mb-4">
         <label className="text-sm font-medium">{label}</label>
         <input
           type={type}

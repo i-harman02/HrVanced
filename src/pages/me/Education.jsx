@@ -1,8 +1,8 @@
 import React from 'react'
 import { useState } from 'react';
 import FormRenderer from '../../components/form/FormRenderer'
-import { inputFields } from '../../configs/employeeForms/inputFields';
-
+import { formSections } from '../../configs/employeeForms/formSections';
+import Button from '../../components/form/Button';
 
 const Education = () => {
   const[formData, setFormData] = useState({});
@@ -17,10 +17,11 @@ const Education = () => {
         </div>
         <div>
           <FormRenderer
-          fields={inputFields.educationInfo}
+          fields={formSections.educationInfo}
           formData={formData}
           setFormData={setFormData}
           />
+          <Button/>
         </div>
     </div>
     </>

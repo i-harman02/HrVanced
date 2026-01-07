@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import FormRenderer from '../../components/form/FormRenderer';
-import { inputFields } from '../../configs/employeeForms/inputFields';
+import { formSections } from '../../configs/employeeForms/formSections';
+import Button from '../../components/form/Button';
 
 const BankInfo = () => {
   const[formData, setFormData] = useState({});
@@ -15,10 +16,11 @@ const BankInfo = () => {
         </div>
         <div>
           <FormRenderer
-          fields={inputFields.bankInfo}
+          fields={formSections.bankInfo}
           formData={formData}
           setFormData={setFormData}
           />
+          <Button/>
         </div>
     </div>
     </>

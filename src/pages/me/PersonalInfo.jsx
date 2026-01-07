@@ -3,6 +3,8 @@ import FormRenderer from '../../components/form/FormRenderer';
 import { inputFields } from '../../configs/employeeForms/inputFields';
 import { useState } from 'react';
 import FormButtons from '../../components/FormButtons';
+import { formSections } from '../../configs/employeeForms/formSections';
+import Button from '../../components/form/Button';
 
 const PersonalInfo = () => {
   const [formData, setFormData] = useState({});
@@ -19,10 +21,11 @@ const PersonalInfo = () => {
         </div>
       <div>
         <FormRenderer
-          fields ={inputFields.nameInfo}
+          fields={formSections.personalInfo}
           formData={formData}
           setFormData={setFormData}
           />
+          <Button/>
       </div>
     </div>
     

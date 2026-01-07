@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import FormRenderer from '../../components/form/FormRenderer'
-import { inputFields } from '../../configs/employeeForms/inputFields';
-
+import { formSections } from '../../configs/employeeForms/formSections';
+import Button from '../../components/form/Button';
 const Experience = () => {
   const[formData, setFormData] = useState({});
   return (
@@ -15,9 +15,10 @@ const Experience = () => {
         </div>
         <div>
           <FormRenderer
-          fields={inputFields.jobInfo}
+          fields={formSections.jobInfo}
           formData={formData}
           setFormData={setFormData}/>
+          <Button/>
         </div>
     </div>
     </>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import FormRenderer from '../../components/form/FormRenderer'
-import { inputFields } from '../../configs/employeeForms/inputFields';
+import { formSections } from '../../configs/employeeForms/formSections';
+import Button from '../../components/form/Button';
 
 const IdentityInfo = () => {
   const[formData, setFormData] = useState({});
@@ -14,9 +15,10 @@ const IdentityInfo = () => {
         </div>
          <div>
     <FormRenderer
-    fields={inputFields.identityInfo}
+    fields={formSections.identityInfo}
     formData={formData}
     setFormData={setFormData}/>
+    <Button/>
     </div>
     </div>
   

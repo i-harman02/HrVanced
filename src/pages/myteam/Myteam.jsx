@@ -20,7 +20,7 @@ const TeamRow = ({ user }) => (
       <AvatarWithName avatar={user.avatar} name={user.name} />
     </td>
     <td className="py-3 text-sm text-textgray">{user.email}</td>
-    <td className="py-3 text-sm text-textgray">{user.phone}</td>
+    <td className="py-3 text-sm text-textgray">{user.assignRole}</td>
     <td className="py-3 text-sm text-textgray">
       <AvatarWithName avatar={user.tl?.avatar} name={user.tl?.name} />
     </td>
@@ -31,7 +31,9 @@ const TeamRow = ({ user }) => (
       />
     </td>
     <td className="py-3 text-sm text-textgray">
-      {user.createdAt}
+      {user?.dateOfJoining
+    ? new Date(user.dateOfJoining).toLocaleDateString()
+    : "-"}
     </td>
   </tr>
 );
@@ -50,10 +52,10 @@ const Myteam = () => {
   const headers = [
     "Employee Name",
     "Mail",
-    "Mobile No.",
+    "Assign Role.",
     "Employee TL",
     "Employee Manager",
-    "Created At",
+    "Date Of Joining",
   ];
 
   return (

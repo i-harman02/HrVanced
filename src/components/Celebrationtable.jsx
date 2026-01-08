@@ -1,39 +1,47 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
 import Birthday from "../assets/Group 3486.png";
 import User1 from "../assets/Group 3487.png";
-import { useDispatch, useSelector } from "react-redux";
-import User3 from "../assets/Group 3489.png";
 import Announcement from "../assets/Group 3486 (1).png";
 import Year from "../assets/WWW.png";
 import NewJoin from "../assets/OBJECTS (1).png";
+
 import { fetchBirthdayDetails } from "../slices/birthdaySlice";
+import { fetchWorkAnniversary } from "../slices/anniversarySlice";
+
 import WishModal from "./WishModal";
-import BirthdayFeed from "./BirthdayFeed";
+import BirthdayPost from "./BirthdayPost";
 
 const Celebrationtable = () => {
   const dispatch = useDispatch();
+
   const { todayBirthdays, upcomingBirthDays } = useSelector(
     (state) => state.birthday
   );
+const { todayWorkAnniversary,  } = useSelector(
+  (state) => state.anniversary
+);
 
   const tabs = [
     { id: "announcements", label: "Announcements" },
     { id: "birthdays", label: "Birthdays" },
     { id: "anniversary", label: "Work Anniversary" },
-    { id: "newJoinee", label: "New Joinee" },
+    { id: "newJoinee", label: "New Joinee" }
   ];
 
   const [activeTab, setActiveTab] = useState("announcements");
   const [isWishModalOpen, setIsWishModalOpen] = useState(false);
-  const [wishType, setWishType] = useState("Birthday");
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [birthdayPosts, setBirthdayPosts] = useState([]);
 
   useEffect(() => {
     dispatch(fetchBirthdayDetails());
+    dispatch(fetchWorkAnniversary());
   }, [dispatch]);
 
   const handleWishSent = (wishData) => {
-    setBirthdayPosts([
+    setBirthdayPosts((prev) => [
       {
         id: Date.now(),
         author: "You",
@@ -41,92 +49,147 @@ const Celebrationtable = () => {
         date: new Date().toDateString(),
         message: wishData.message,
         image: wishData.image,
+        employeeId: selectedEmployee?._id,
         comments: []
       },
-      ...birthdayPosts
+      ...prev
     ]);
   };
 
   return (
-    <div>
-      <div className="bg-white border border-gray-200 rounded-lg">
-        <div className="flex border-b overflow-x-auto whitespace-nowrap scrollbar-none border-gray-200 px-6 justify-between">
-          {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`py-4 mr-8 text-sm font-medium relative ${
-                activeTab === tab.id
-                  ? "text-[#2C3EA1] border-b-2 border-[#2C3EA1]"
-                  : "text-gray-500 hover:text-gray-700"
-              }`}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </div>
-
-        <div>
-          {activeTab === "announcements" && (
-            <div className="space-y-4 py-6 px-6">
-              <img className="m-auto" src={Announcement} />
-            </div>
-          )}
-
-          {activeTab === "birthdays" && (
-            <div className="space-y-4 py-6 px-6">
-              {/* <img className="m-auto" src={Birthday} /> */}
-              <BirthdayFeed
-                employee={{ name: "Arundeep Singh", date: "Jan 9, 2026" }}
-                posts={birthdayPosts}
-                onSendWishes={() => {
-                  setWishType("Birthday");
-                  setIsWishModalOpen(true);
-                }}
-              />
-
-              <div className="pt-6 border-t border-gray-200">
-                <p className="text-sm font-medium text-textgray mb-6">
-                  Next seven days
-                </p>
-
-                {upcomingBirthDays?.map((emp) => (
-                  <div key={emp._id} className="flex gap-2 items-center mb-6">
-                    <img className="h-12 w-12" src={User1} alt="" />
-                    <div>
-                      <p className="text-sm font-medium">
-                        {emp.firstName} {emp.lastName}
-                      </p>
-                      <p className="text-[12px] text-gray-500">
-                        {new Date(emp.birthday.thisYear).toDateString()}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {activeTab === "anniversary" && (
-            <div className="space-y-4 py-6 px-6">
-              <img className="m-auto" src={Year} />
-            </div>
-          )}
-
-
-          {activeTab === "newJoinee" && (
-            <div className="space-y-4 py-6 px-6">
-              <img className="m-auto" src={NewJoin} />
-            </div>
-          )}
-        </div>
+    <div className="bg-white border border-gray-200 rounded-lg">
+      {/* Tabs */}
+      <div className="flex border-b border-bordergray px-6 justify-between">
+        {tabs.map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id)}
+            className={`py-4 mr-8 text-sm font-medium ${
+              activeTab === tab.id
+                ? "text-[#2C3EA1] border-b-2 border-[#2C3EA1]"
+                : "text-gray-500"
+            }`}
+          >
+            {tab.label}
+          </button>
+        ))}
       </div>
 
+      {/* ---------------- Announcements ---------------- */}
+      {activeTab === "announcements" && (
+        <div className="py-6 px-6">
+          <img className="m-auto" src={Announcement} alt="" />
+        </div>
+      )}
+
+      {/* ---------------- Birthdays ---------------- */}
+      {activeTab === "birthdays" && (
+        <div className="py-6 px-6 space-y-6">
+          {todayBirthdays?.length === 0 && (
+            <img className="m-auto mb-2" src={Birthday} alt="" />
+          )}
+
+          {todayBirthdays?.map((emp) => (
+            <div key={emp._id}>
+              {/* Header */}
+              <div className="flex items-end justify-between mb-4">
+                <div className="flex gap-4 items-center">
+                  <img src={User1} className="h-16 w-16 rounded-md" alt="" />
+                  <div>
+                    <p className="font-medium text-sm">
+                      {emp.name} {emp.lastName}
+                    </p>
+                    <p className="text-xs text-gray-500">🎂 Today</p>
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => {
+                    setSelectedEmployee(emp);
+                    setIsWishModalOpen(true);
+                  }}
+                  className="text-sm text-[#2C3EA1] underline"
+                >
+                  Send Wishes
+                </button>
+              </div>
+
+              {/* Posts for this employee */}
+              {birthdayPosts
+                .filter((p) => p.employeeId === emp._id)
+                .map((post) => (
+                  <BirthdayPost key={post.id} post={post} />
+                ))}
+            </div>
+          ))}
+
+          {/* Next 7 Days */}
+          <div className="pt-6 border-t border-bordergray">
+            <p className="text-sm text-gray-500 mb-4">Next seven days</p>
+
+            {upcomingBirthDays?.length > 0 ? (
+              upcomingBirthDays.map((emp) => (
+                <div key={emp._id} className="flex gap-3 mb-4 items-center">
+                  <img src={User1} className="h-12 w-12" alt="" />
+                  <div>
+                    <p className="text-sm font-medium">
+                      {emp.name} {emp.lastName}
+                    </p>
+                    <p className="text-xs text-gray-500">
+                      {new Date(emp.birthday.thisYear).toLocaleDateString(
+                        "en-GB",
+                        { day: "2-digit", month: "short" }
+                      )}
+                    </p>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p className="text-sm text-gray-500">
+                No birthdays in next 7 days
+              </p>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* ---------------- Work Anniversary ---------------- */}
+      {activeTab === "anniversary" && (
+        <div className="py-6 px-6">
+          {todayWorkAnniversary?.length === 0 && (
+            <img className="m-auto" src={Year} alt="" />
+          )}
+
+          {todayWorkAnniversary?.map((emp) => (
+            <div key={emp._id} className="flex gap-3 mb-4">
+              <img src={User1} className="h-12 w-12" alt="" />
+              <div>
+                <p className="text-sm font-medium">
+                  {emp.name} {emp.lastName}
+                </p>
+                <p className="text-xs text-gray-500">
+                  🎊 {emp.yearsCompleted} Years Completed
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* ---------------- New Joinee ---------------- */}
+      {activeTab === "newJoinee" && (
+        <div className="py-6 px-6 text-center">
+          <img className="m-auto" src={NewJoin} alt="" />
+          <p className="text-sm font-bold mt-4">No one joined this week</p>
+        </div>
+      )}
+
+      {/* Wish Modal */}
       <WishModal
         isOpen={isWishModalOpen}
         onClose={() => setIsWishModalOpen(false)}
-        title={`Send ${wishType} Wishes`}
-        employeeName="Arundeep Singh"
+        title="Send Birthday Wishes"
+        employeeName={`${selectedEmployee?.name || ""}`}
         onWishSent={handleWishSent}
       />
     </div>

@@ -6,7 +6,7 @@ import { FaSmile } from "react-icons/fa";
 import { AiOutlineLink } from "react-icons/ai";
 import { FaImage } from "react-icons/fa6";
 
-// EmojiPicker Component
+
 const EmojiPicker = ({ onSelect, onClose }) => {
   const emojis = ["😊", "🎉", "🎂", "🎈", "🎁", "💐", "🌟", "❤️", "👏", "🥳", "🎊", "✨"];
   
@@ -78,9 +78,9 @@ const WishModal = ({ isOpen, onClose, title, employeeName, onWishSent }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
-      {/* Modal Box */}
+      
       <div className="bg-white w-full max-w-173.5 border border-bordergray shadow-lg">
-        {/* Header */}
+        
         <div className="flex items-center justify-between p-8 border-b border-bordergray">
           <h2 className="text-2xl font-bold text-heading leading-tight">{title}</h2>
           <button onClick={onClose} className="text-black text-3xl">

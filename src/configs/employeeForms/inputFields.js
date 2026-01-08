@@ -1,11 +1,11 @@
-// fields/baseFields.js
+
 export const inputFields = {
 
   avatar:{  label: "Profile Photo",
     name: "avatar",
-    type: "avatar", // 👈 custom type
+    type: "avatar", 
     accept: "image/png, image/jpeg, image/gif",
-    maxSize: 1024 * 1024, // 1MB
+    maxSize: 1024 * 1024,
      },
   firstName: { label: "First Name", name: "firstName", type: "text" },
   lastName: { label: "Last Name", name: "lastName", type: "text" },

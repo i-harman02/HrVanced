@@ -4,13 +4,16 @@ import LeaveStats from "../../components/LeaveStats";
 import LeaveHistory from "../../components/LeaveHistory";
 import LeaveTable from "../../components/LeaveTable";
 import Performance from "../../components/Performance";
-
+import EmployeeAttendance from "../../components/EmployeeAttendance";
+import Holidaydetails from "../../components/Holidays";
 const LeaveManagement = () => {
   const [activeTab, setActiveTab] = useState("leaves");
 
   const tabs = [
     { key: "leaves", label: "Leaves" },
     { key: "performance", label: "Performance" },
+      { key: "holidays", label: "Holidays" },
+    { key: "attendance", label: "Attendance" },
   ];
 
   const tabContent = {
@@ -27,11 +30,23 @@ const LeaveManagement = () => {
       </>
     ),
     performance: (
-      <div className="mt-6 h-[80vh]">
+      <div className="mt-6 ">
         
         <Performance />
       </div>
     ),
+    holidays:(
+        <div className="mt-6 ">
+        
+        <Holidaydetails />
+      </div>
+    ),
+    attendance:(
+        <div className="mt-6 ">
+        
+        <EmployeeAttendance />
+      </div>
+    )
   };
 
   return (

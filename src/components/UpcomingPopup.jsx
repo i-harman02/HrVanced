@@ -33,7 +33,7 @@ const UpcomingPopup = ({ onClose, year = 2026 }) => {
             No holidays found
           </p>
         ) : (
-          <div className="border lg:border-gray-200 lg:rounded-xl">
+          <div className="mb-4">
             {/* Header */}
             <div className="grid grid-cols-2 p-4 font-bold text-sm border-b border-gray-300">
               <div>Holiday</div>

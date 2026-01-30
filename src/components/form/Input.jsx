@@ -1,17 +1,19 @@
-const Input = ({ label, type = "text", name, value, onChange }) => {
+const Input = ({ label, name, type, value, onChange, readOnly, disabled }) => {
   return (
-    <>
-      <div className="flex flex-col gap-10 mb-4">
-        <label className="text-sm font-medium">{label}</label>
-        <input
-          type={type}
-          name={name}
-          value={value}
-          onChange={onChange}
-          className="px-3 py-2  border border-bordergray rounded-sm"
-        />
-      </div>
-    </>
+    <div>
+      <label className="block text-sm font-medium mb-1">{label}</label>
+      <input
+        name={name}
+        type={type}
+        value={value}
+        onChange={onChange}
+        readOnly={readOnly}
+        disabled={disabled}
+        className={`w-full px-3 py-2 border rounded-md
+          ${disabled ? "bg-gray-100 cursor-not-allowed" : ""}
+        `}
+      />
+    </div>
   );
 };
 

@@ -1,5 +1,15 @@
-const AvatarInput = ({ label, name, accept, maxSize, value, onChange }) => {
+const AvatarInput = ({
+  label,
+  name,
+  accept,
+  maxSize,
+  value,
+  onChange,
+  disabled = false,   
+}) => {
   const handleFile = (e) => {
+    if (disabled) return; 
+
     const file = e.target.files[0];
     if (!file) return;
 
@@ -12,23 +22,36 @@ const AvatarInput = ({ label, name, accept, maxSize, value, onChange }) => {
   };
 
   return (
-    <div className="flex items-center gap-4">
+    <div
+      className={`flex items-center gap-4 ${
+        disabled ? "opacity-60" : ""
+      }`}
+    >
       <img
-        src="https://i.pravatar.cc/150?img=32"
+        src={value || "https://i.pravatar.cc/150?img=32"}
         alt="avatar"
         className="w-24 h-24 rounded-md object-cover"
       />
 
       <div>
-        <label className="block font-medium mb-1"></label>
+     
 
-        <label className="cursor-pointer text-xs font-medium text-black border border-[#E5E7EB] rounded-[4px] px-[8px] py-[12px] ">
+        <label
+          className={`text-xs font-medium border rounded-[4px] px-[8px] py-[12px]
+            ${
+              disabled
+                ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                : "cursor-pointer text-black border-[#E5E7EB]"
+            }
+          `}
+        >
           Change Avatar
           <input
             type="file"
             accept={accept}
             onChange={handleFile}
             className="hidden"
+            disabled={disabled}  
           />
         </label>
 

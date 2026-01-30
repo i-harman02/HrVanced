@@ -1,13 +1,15 @@
 import Input from "./Input";
 import AvatarInput from "./AvatarInput";
 
-const FormRenderer = ({ fields, formData, setFormData }) => {
+const FormRenderer = ({ fields, formData, setFormData, readOnly = false }) => {
   const handleChange = (e) => {
+    if (readOnly) return; // ⛔ block edits
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleFileChange = (name, file) => {
+    if (readOnly) return; // ⛔ block avatar change
     setFormData((prev) => ({ ...prev, [name]: file }));
   };
 
@@ -23,12 +25,15 @@ const FormRenderer = ({ fields, formData, setFormData }) => {
               {...field}
               value={formData[field.name]}
               onChange={handleFileChange}
+              disabled={readOnly}          // ✅ pass down
             />
           ) : (
             <Input
               {...field}
               value={formData[field.name] || ""}
               onChange={handleChange}
+              readOnly={readOnly}          // ✅ pass down
+              disabled={readOnly}          // ✅ pass down
             />
           )}
         </div>

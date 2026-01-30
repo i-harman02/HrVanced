@@ -1,4 +1,7 @@
 import React from "react";
+import { FaChevronUp, FaChevronDown } from "react-icons/fa";
+import { LuPencilLine } from "react-icons/lu";
+import Pagination from "./Pagination";
 
 const logs = [
   {
@@ -42,29 +45,34 @@ const AttendanceLogs = () => {
   return (
     <div className="bg-white rounded-2xl border border-gray-200 p-6">
       {/* Header */}
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-sm font-semibold text-gray-900">
-          Attendance Logs
-        </h2>
+      <div className="flex items-center justify-between mb-4.5">
+        <h2 className="text-base font-medium text-black">Attendance Logs</h2>
 
-        <select className="border border-gray-200 rounded-md px-3 py-1.5 text-sm text-gray-600 focus:outline-none">
-          <option>Last Week</option>
-          <option>This Week</option>
-          <option>Last Month</option>
-        </select>
+        <div className="relative w-38">
+          <select className="w-full appearance-none border border-bordergray rounded px-2.5 py-1.75 text-sm text-textgray font-medium bg-[#F9FAFB] focus:outline-none focus:ring-0">
+            <option>Last Week</option>
+            <option>This Week</option>
+            <option>Last Month</option>
+          </select>
+
+          <div className="pointer-events-none absolute inset-y-0 right-2.5 flex flex-col items-center justify-center text-textgray">
+            <FaChevronUp size={10} />
+            <FaChevronDown size={10} />
+          </div>
+        </div>
       </div>
 
       {/* Table */}
-      <div className="border  border-gray-200 rounded-xl overflow-auto">
-        <table className="w-full text-sm ">
+      <div className="border border-bordergray rounded-xl overflow-auto p-6 mb-6">
+        <table className="w-full text-sm">
           <thead className="bg-white border-b border-gray-200">
-            <tr className="text-left text-gray-900 font-semibold">
-              <th className="px-4 py-3">Date</th>
-              <th className="px-4 py-3">Attendance Visual</th>
-              <th className="px-4 py-3">Effective Hours</th>
-              <th className="px-4 py-3">Gross Hours</th>
-              <th className="px-4 py-3">Arrival</th>
-              <th className="px-4 py-3 text-center">Actions</th>
+            <tr className="text-left text-black font-bold">
+              <th className="pb-5 pe-3">Date</th>
+              <th className="pb-5 pe-3">Attendance Visual</th>
+              <th className="pb-5 pe-3">Effective Hours</th>
+              <th className="pb-5 pe-3">Gross Hours</th>
+              <th className="pb-5 pe-3">Arrival</th>
+              <th className="pb-5 text-center">Actions</th>
             </tr>
           </thead>
 
@@ -72,16 +80,20 @@ const AttendanceLogs = () => {
             {logs.map((log, index) => (
               <tr
                 key={index}
-                className="border-b border-gray-200  last:border-none text-gray-700"
+                className="border-b border-gray-200 text-textgray"
               >
-                <td className="px-4 text-gray-400 py-3 min-w-29.5">{log.date}</td>
-                <td className="px-4 py-3 text-gray-400 ">{log.status}</td>
-                <td className="px-4 py-3 text-gray-400  min-w-41.5">{log.effective}</td>
-                <td className="px-4 py-3 text-gray-400 ">{log.gross}</td>
-                <td className="px-4 py-3 text-gray-400 ">{log.arrival}</td>
-                <td className="px-4 py-3 text-center text-gray-400 ">
-                  <button className="text-gray-400 hover:text-indigo-600">
-                    ✏️
+                <td className="py-4 pe-3 text-textgray leading-none min-w-29.5">
+                  {log.date}
+                </td>
+                <td className="py-4 pe-3 text-textgray leading-none">{log.status}</td>
+                <td className="py-4 pe-3 text-textgray leading-none min-w-41.5">
+                  {log.effective}
+                </td>
+                <td className="py-4 pe-3 text-textgray leading-none">{log.gross}</td>
+                <td className="py-4 pe-3 text-textgray leading-none">{log.arrival}</td>
+                <td className="py-4 text-textgray leading-none text-center">
+                  <button className="text-zinc-500 hover:text-indigo-800 cursor-pointer">
+                    <LuPencilLine />
                   </button>
                 </td>
               </tr>
@@ -91,18 +103,7 @@ const AttendanceLogs = () => {
       </div>
 
       {/* Footer */}
-      <div className="flex items-center justify-between mt-4 text-sm text-gray-600">
-        <span>Showing 1 to 05 of 20 results</span>
-
-        <div className="flex gap-2">
-          <button className="px-3 py-1.5 border rounded-md hover:bg-gray-50">
-            Previous
-          </button>
-          <button className="px-3 py-1.5 border rounded-md hover:bg-gray-50">
-            Next
-          </button>
-        </div>
-      </div>
+      <Pagination />
     </div>
   );
 };

@@ -50,7 +50,7 @@ const LeaveManagement = () => {
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-sm p-6 h-full">
+    <div className="bg-white rounded-xl shadow-sm p-4 md:p-6 lg:p-8 h-full">
 
       <Tabs
         tabs={tabs}

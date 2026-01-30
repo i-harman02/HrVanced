@@ -1,26 +1,29 @@
-import React from "react";
+import React, { useState } from "react";
+import AttendancePolicyModal from "./AttendancePolicyModal";
 
 const days = ["M", "T", "W", "T", "F", "S", "S"];
 
 const TimingsActions = () => {
+  const [open, setOpen] = useState(false);
+
   return (
-    <div className="bg-white rounded-2xl border border-gray-200 grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] overflow-hidden">
+    <div className="bg-white rounded-xl border border-bordergray grid grid-cols-1 xl:grid-cols-[1.5fr_1fr] overflow-hidden">
      
       <div className="p-6">
-        <h3 className="text-sm font-semibold text-gray-900 mb-4">
+        <h3 className="text-base font-medium text-black mb-6">
           Timings
         </h3>
 
         {/* Days */}
-        <div className="flex gap-2 mb-4">
+        <div className="flex flex-wrap gap-3 mb-8">
           {days.map((day, index) => (
             <div
               key={index}
-              className={`h-8 w-8 flex items-center bg-gray-100 justify-center rounded-md border text-xs font-medium
+              className={`h-9 w-9 flex items-center bg-[#F9FAFB] justify-center rounded border border-bordergray text-sm font-medium
                 ${
                   index === 0
-                    ? "bg-indigo-600 text-white border-indigo-600"
-                    : "text-gray-500"
+                    ? "bg-primary text-white border-borderprimary"
+                    : "text-textgray"
                 }`}
             >
               {day}
@@ -29,47 +32,54 @@ const TimingsActions = () => {
         </div>
 
         {/* Today */}
-        <p className="text-sm text-gray-900 mb-3">
-          <span className="font-semibold">Today</span>{" "}
-          <span className="text-gray-500">
+        <p className="text-sm text-black font-medium mb-6">
+          <span>Today</span>{" "}
+          <span className="text-textgray">
             (09:30 AM – 07:00 PM)
           </span>
         </p>
 
         {/* Details */}
-        <ul className="text-sm text-gray-600 space-y-1 list-disc list-inside">
+        <ul className="text-sm font-medium text-black space-y-1 list-disc list-inside">
           <li>
-            Duration: <span className="text-gray-900">9h 0m</span>
+            Duration: <span className="text-textgray">9h 0m</span>
           </li>
           <li>
-            Break: <span className="text-gray-900">45 min</span>
+            Break: <span className="text-textgray">45 min</span>
           </li>
         </ul>
       </div>
 
       {/* RIGHT — Actions */}
-      <div className="bg-gray-50 p-6 border-l border-gray-200 rounded-tl-xl rounded-bl-xl   ">
-        <h3 className="text-sm font-semibold text-gray-900 mb-4">
+      <div className="bg-gray-50 p-6 border-t xl:border-l xl:border-t-0 border-bordergray rounded-xl">
+        <h3 className="text-base font-medium text-black mb-6">
           Actions
         </h3>
 
         {/* Time */}
-        <div className="flex items-center gap-3 mb-3">
-          <div className="px-3 py-1.5 rounded-md border border-gray-400 bg-white text-sm text-gray-700">
+        <div className="flex items-center flex-wrap gap-3.5 mb-6">
+          <div className="px-5 py-2.5 rounded border border-bordergray bg-white text-sm text-textgray leading-none">
             05:30 PM
           </div>
-          <span className="text-sm text-gray-500">
+          <span className="text-sm text-textgray font-medium">
             Tue, 30 Dec
           </span>
         </div>
 
-      
-        <a
-          href="#"
-          className="text-sm text-indigo-600 font-medium hover:underline"
-        >
-          Attendance Policy
-        </a>
+      <a
+        href="#"
+        onClick={(e) => {
+          e.preventDefault();
+          setOpen(true);
+        }}
+        className="text-sm color-primary font-medium underline"
+      >
+        Attendance Policy
+      </a>
+
+      {open && (
+        <AttendancePolicyModal onClose={() => setOpen(false)} />
+      )}
       </div>
     </div>
   );

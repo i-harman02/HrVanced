@@ -73,7 +73,14 @@ const Sidebar = () => {
 
           {/* Navigation */}
           <nav className="p-4 space-y-1">
-            {menuItems.map(({ to, label, icon: Icon }) => {
+            {menuItems.map((item) => {
+              let { to, label, icon: Icon } = item;
+
+              // Dynamic Menu Label
+              if (label === "My Team" && (user?.role === "admin" || user?.role === "superadmin")) {
+                label = "All Employees";
+              }
+
               const active = location.pathname === to;
               return (
                 <Link

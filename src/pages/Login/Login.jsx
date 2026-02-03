@@ -110,15 +110,7 @@ const handleSubmit = async (e) => {
               >
                 Log In
               </button>
-              <p className="text-[12px] mt-2 flex  gap-1">
-                Create your new account{" "}
-                <Link
-                  to="/signup"
-                  className="text-blue-800 cursor-pointer underline font-semibold"
-                >
-                  signup
-                </Link>
-              </p>
+
             </div>
           </div>
         </div>

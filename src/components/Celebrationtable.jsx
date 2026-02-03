@@ -19,9 +19,14 @@ const Celebrationtable = () => {
   const { todayBirthdays, upcomingBirthDays } = useSelector(
     (state) => state.birthday
   );
-const { todayWorkAnniversary, upcomingWorkAnniversary  } = useSelector(
-  (state) => state.anniversary
-);
+const { todayWorkAnniversary, upcomingWorkAnniversary } = useSelector(
+    (state) => state.anniversary
+  );
+
+  const actualTodayAnniversaries = todayWorkAnniversary?.filter(emp => emp.yearsCompleted > 0) || [];
+  const actualUpcomingAnniversaries = upcomingWorkAnniversary?.filter(emp => emp.yearsCompleted > 0) || [];
+  const todayNewJoinees = todayWorkAnniversary?.filter(emp => emp.yearsCompleted === 0) || [];
+  const upcomingNewJoinees = upcomingWorkAnniversary?.filter(emp => emp.yearsCompleted === 0) || [];
 
   const tabs = [
     { id: "announcements", label: "Announcements" },
@@ -37,7 +42,7 @@ const [birthdayPosts, setBirthdayPosts] = useState([]);
 const [anniversaryPosts, setAnniversaryPosts] = useState([]);
 
 
-const [wishType, setWishType] = useState(null); // "birthday" | "anniversary"
+const [wishType, setWishType] = useState(null); 
 
   useEffect(() => {
     dispatch(fetchBirthdayDetails());
@@ -134,7 +139,7 @@ const [wishType, setWishType] = useState(null); // "birthday" | "anniversary"
             </div>
           ))}
 
-          {/* Next 7 Days */}
+      
           <div className="pt-6 border-t border-bordergray">
             <p className="text-sm text-gray-500 mb-4">Next seven days</p>
 
@@ -156,7 +161,7 @@ const [wishType, setWishType] = useState(null); // "birthday" | "anniversary"
                 </div>
               ))
             ) : (
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-gray-500 text-center">
                 No birthdays in next 7 days
               </p>
             )}
@@ -169,11 +174,11 @@ const [wishType, setWishType] = useState(null); // "birthday" | "anniversary"
   <div className="py-6 px-6 space-y-6">
 
     {/* Today */}
-    {todayWorkAnniversary?.length === 0 && (
+    {actualTodayAnniversaries.length === 0 && (
       <img className="m-auto mb-2" src={Year} alt="" />
     )}
 
-    {todayWorkAnniversary?.map((emp) => (
+    {actualTodayAnniversaries.map((emp) => (
   <div key={emp._id}>
     {/* Header */}
     <div className="flex items-end justify-between mb-4">
@@ -211,12 +216,11 @@ const [wishType, setWishType] = useState(null); // "birthday" | "anniversary"
 ))}
 
 
-    {/* Upcoming */}
     <div className="pt-6 border-t border-bordergray">
       <p className="text-sm text-gray-500 mb-4">Next Seven Days</p>
 
-      {upcomingWorkAnniversary?.length > 0 ? (
-        upcomingWorkAnniversary.map((emp) => (
+      {actualUpcomingAnniversaries.length > 0 ? (
+        actualUpcomingAnniversaries.map((emp) => (
           <div key={emp._id} className="flex gap-3 items-center mb-4">
             <img src={User1} className="h-12 w-12" alt="" />
             <div>
@@ -233,7 +237,7 @@ const [wishType, setWishType] = useState(null); // "birthday" | "anniversary"
           </div>
         ))
       ) : (
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-gray-500 text-center">
           No upcoming work anniversaries
         </p>
       )}
@@ -243,9 +247,53 @@ const [wishType, setWishType] = useState(null); // "birthday" | "anniversary"
 
      
       {activeTab === "newJoinee" && (
-        <div className="py-6 px-6 text-center">
-          <img className="m-auto" src={NewJoin} alt="" />
-          <p className="text-sm font-bold mt-4">No one joined this week</p>
+        <div className="py-6 px-6 space-y-6">
+          {todayNewJoinees.length === 0 && upcomingNewJoinees.length === 0 ? (
+            <div className="text-center">
+              <img className="m-auto" src={NewJoin} alt="" />
+              <p className="text-sm font-bold mt-4">No one joined this week</p>
+            </div>
+          ) : (
+            <>
+              {todayNewJoinees.map((emp) => (
+                <div key={emp._id} className="flex items-end justify-between mb-4">
+                  <div className="flex gap-3 items-center">
+                    <img src={User1} className="h-12 w-12" alt="" />
+                    <div>
+                      <p className="text-sm font-medium">
+                        {emp.name} {emp.lastName}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        🆕 Joined Today
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+
+              {upcomingNewJoinees.length > 0 && (
+                <div className="pt-6 border-t border-bordergray">
+                  <p className="text-sm text-gray-500 mb-4">Upcoming Joiners</p>
+                  {upcomingNewJoinees.map((emp) => (
+                    <div key={emp._id} className="flex gap-3 items-center mb-4">
+                      <img src={User1} className="h-12 w-12" alt="" />
+                      <div>
+                        <p className="text-sm font-medium">
+                          {emp.name} {emp.lastName}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          📅 Joining on {new Date(emp.dateOfJoining).toLocaleDateString("en-GB", {
+                            day: "2-digit",
+                            month: "short"
+                          })}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </>
+          )}
         </div>
       )}
 

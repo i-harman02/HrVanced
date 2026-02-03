@@ -28,12 +28,12 @@ const Approutes = () => {
       
         <Route element={<PublicRoute />}>
           <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
         </Route>
 
        
         <Route element={<ProtectedRoute />}>
           <Route element={<Layout />}>
+            <Route path="/signup" element={<Signup />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/mail" element={<Mail />} />
             <Route path="/privacy" element={<Privacy />} />

@@ -41,7 +41,7 @@ const logs = [
   },
 ];
 
-const AttendanceLogs = () => {
+const AttendanceLogs = () => {  
   return (
     <div className="bg-white rounded-2xl border border-gray-200 p-6">
       {/* Header */}
@@ -62,7 +62,7 @@ const AttendanceLogs = () => {
         </div>
       </div>
 
-      {/* Table */}
+ 
       <div className="border border-bordergray rounded-xl overflow-auto p-6 mb-6">
         <table className="w-full text-sm">
           <thead className="bg-white border-b border-gray-200">

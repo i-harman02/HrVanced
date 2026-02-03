@@ -10,7 +10,7 @@ const AttendancePolicyModal = ({ onClose }) => {
       />
 
       <div className="fixed inset-0 z-60 flex items-center justify-center px-4">
-        <div className="bg-white w-full max-w-173.5 rounded-lg shadow-xl">
+        <div className="bg-white w-full max-w-173.5">
           {/* Header */}
           <div className="flex items-center justify-between p-6 md:p-8 border-b border-bordergray">
             <h2 className="text-2xl font-bold text-black leading-tight">

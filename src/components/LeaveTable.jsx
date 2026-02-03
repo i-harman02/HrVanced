@@ -1,8 +1,13 @@
 import LeaveForm from "./LeaveForm";
 import { useState } from "react";
 import SearchFilter from "./Search";
+import Pagination from "./Pagination";
+import LeaveReasonModal from "./LeaveReasonModal";
+import { FiEye } from "react-icons/fi";
+import { LuPencilLine } from "react-icons/lu";
 
 export default function LeaveTable() {
+  const [open, setOpen] = useState(false);
   const data = [
     {
       type: "Full Day Leave",
@@ -90,8 +95,8 @@ export default function LeaveTable() {
       <LeaveForm open={showForm} onClose={handleClose} />
 
       {/* Table */}
-      <div className="overflow-x-auto border border-gray-200 rounded-md">
-        <table className="min-w-225 w-full text-xs">
+      <div className="overflow-x-auto border border-gray-200 rounded-md mb-6">
+        <table className="min-w-225 w-full text-[14px]">
           <thead className="border-b border-gray-200  text-gray-500">
             <tr>
               <th className="text-left py-4 px-4 text-gray-800">Leave Type</th>
@@ -120,9 +125,18 @@ export default function LeaveTable() {
                 <td className="px-4 max-w-xs">
                   <div className="flex items-center gap-2">
                     <span className="truncate">{item.reason}</span>
-                    <button className="text-indigo-500 hover:text-indigo-600">
-                      👁
+                    <button onClick={(e) => {
+                      e.preventDefault();
+                      setOpen(true);
+                    }}
+                     className="text-[#2C3EA1] hover:text-indigo-600 cursor-pointer">
+                      <FiEye />
                     </button>
+
+                    {open && (
+                      <LeaveReasonModal onClose={() => setOpen(false)} />
+                    )}
+
                   </div>
                 </td>
 
@@ -131,7 +145,7 @@ export default function LeaveTable() {
 
                 <td className="px-4">
                   <span
-                    className={`text-[10px] px-2 py-0.5 rounded-full ${statusStyle(
+                    className={`text-xs px-2 py-0.5 rounded ${statusStyle(
                       item.status
                     )}`}
                   >
@@ -140,8 +154,8 @@ export default function LeaveTable() {
                 </td>
 
                 <td className="px-4">
-                  <button className="text-gray-400 hover:text-gray-600">
-                    ✎
+                  <button className="text-gray-400 hover:text-gray-600 cursor-pointer">
+                    <LuPencilLine />
                   </button>
                 </td>
               </tr>
@@ -150,17 +164,7 @@ export default function LeaveTable() {
         </table>
       </div>
 
-      <div className="flex flex-col gap-2 sm:flex-row sm:justify-between sm:items-center px-2 pt-3 text-xs text-gray-500">
-        <span>Showing 1 to 05 of 20 results</span>
-        <div className="flex gap-2">
-          <button className="border rounded px-3 py-1 hover:bg-gray-50">
-            Previous
-          </button>
-          <button className="border rounded px-3 py-1 hover:bg-gray-50">
-            Next
-          </button>
-        </div>
-      </div>
+      <Pagination />
     </div>
   );
 }

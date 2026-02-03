@@ -8,6 +8,7 @@ import {
   Tooltip,
   CartesianGrid,
 } from "recharts";
+import { FaChevronUp, FaChevronDown } from "react-icons/fa";
 
 const DATA = [
   { month: "Jan", value: 8 },
@@ -42,9 +43,18 @@ export default function MyLeaveStats() {
      
       <div className="flex justify-between items-center mb-4">
         <h3 className="text-sm font-semibold">My Leave Stats</h3>
-        <select className="text-xs border border-gray-200 rounded-md px-4 py-1 text-gray-600 bg-[#F9FAFB]">
-          <option>This Year</option>
-        </select>
+        <div className="relative w-38">
+          <select className="w-full appearance-none border border-bordergray rounded px-2.5 py-1.75 text-sm text-textgray font-medium bg-[#F9FAFB] focus:outline-none focus:ring-0">
+            <option>This Year</option>
+            <option>This Month</option>
+            <option>This Week</option>
+          </select>
+
+          <div className="pointer-events-none absolute inset-y-0 right-2.5 flex flex-col items-center justify-center text-textgray">
+            <FaChevronUp size={10} />
+            <FaChevronDown size={10} />
+          </div>
+        </div>
       </div>
 
     

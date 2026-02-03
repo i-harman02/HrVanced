@@ -44,7 +44,7 @@ const ManagerComments = () => {
             
             {/* Indicator */}
             <div className="mt-1">
-              <span className="w-3 h-3 rounded-full border-2 border-indigo-600 block" />
+              <span className="w-3 h-3 rounded-full border-2 border-borderprimary block" />
             </div>
 
             {/* Content */}
@@ -55,7 +55,7 @@ const ManagerComments = () => {
             </div>
 
             {/* Time */}
-            <span className="text-xs text-indigo-600 whitespace-nowrap">
+            <span className="text-xs color-primary whitespace-nowrap">
               {item.time}
             </span>
           </div>

@@ -162,9 +162,9 @@ const Signup = ({ onClose }) => { // Accept onClose prop
   if (onClose) {
      return (
         <form onSubmit={handleSubmit} className="p-6">
-           {/* Form content same as before but without Logo/Title header if preferred, or keep simplified */}
+        
            
-          {/* --- Account Information --- */}
+         
           <div className="mb-8">
              <h3 className="text-lg font-semibold text-blue-600 mb-4 border-b pb-2">Account Details</h3>
              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -200,9 +200,9 @@ const Signup = ({ onClose }) => { // Accept onClose prop
           </div>
 
 
-          {/* --- Personal Information --- */}
+       
           <div className="mb-8">
-             {/* ... Reuse same sections ... */}
+       
             <h3 className="text-lg font-semibold text-blue-600 mb-4 border-b pb-2">Personal Information</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                <InputGroup label="Date of Birth" type="date" name="birthday" value={formdata.birthday} onChange={handleChange} />

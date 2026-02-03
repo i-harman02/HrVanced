@@ -32,6 +32,7 @@ const Sidebar = () => {
   const [open, setOpen] = useState(false);
   const location = useLocation();
   const [userinfo, setUserinfo ] =useState(false);
+  const [isAllEmployeesOpen, setIsAllEmployeesOpen] = useState(false);
 
   return (
     <>
@@ -62,7 +63,7 @@ const Sidebar = () => {
           border-gray-200
         `}
       >
-        {/* Header */}
+     
         <div>
           <div className="px-5 py-4 border-b border-gray-200 flex items-center justify-between">
             <img src={logo} alt="logo" className="h-8" />
@@ -71,16 +72,71 @@ const Sidebar = () => {
             </button>
           </div>
 
-          {/* Navigation */}
+       
           <nav className="p-4 space-y-1">
             {menuItems.map((item) => {
-              let { to, label, icon: Icon } = item;
+              const { to, label, icon: Icon } = item;
+              const isAdmin = user?.role === "admin" || user?.role === "superadmin";
 
-              // Dynamic Menu Label
-              if (label === "My Team" && (user?.role === "admin" || user?.role === "superadmin")) {
-                label = "All Employees";
+              // Special handling for "All Employees" dropdown for Admins
+              if (label === "My Team" && isAdmin) {
+                const subItems = [
+                  { label: "All Employees", to: "/all-employees/list" },
+                  { label: "Attendance Overview", to: "/all-employees/attendance" },
+                  { label: "Roles & Designation", to: "/all-employees/roles" },
+                  { label: "Shift Management", to: "/all-employees/shift" },
+                  { label: "Performance", to: "/all-employees/performance" },
+                  { label: "Appraisal Cycles", to: "/all-employees/appraisal" },
+                  { label: "Review Forms", to: "/all-employees/review-forms" },
+                  { label: "Manager Feedback", to: "/all-employees/feedback" },
+                  { label: "All Team Leaders", to: "/all-employees/team-leaders" },
+                  { label: "All Managers", to: "/all-employees/managers" },
+                ];
+
+                const isActiveParent = subItems.some(sub => location.pathname === sub.to);
+
+                return (
+                  <div key="all-employees-menu">
+                    <button
+                      onClick={() => setIsAllEmployeesOpen(!isAllEmployeesOpen)}
+                      className={`w-full flex items-center justify-between px-3 py-2 rounded-md text-sm font-medium transition-colors
+                        ${isActiveParent || isAllEmployeesOpen ? "bg-[#F9FAFB] text-primary" : "text-heading hover:bg-[#F9FAFB]"}
+                      `}
+                    >
+                      <div className="flex items-center gap-3">
+                        <Icon className="text-base" />
+                        <span className="lg:block">All Employees</span>
+                      </div>
+                      <MdArrowDropUp 
+                        size={20} 
+                        className={`transition-transform duration-200 ${isAllEmployeesOpen ? "rotate-180" : ""}`} 
+                      />
+                    </button>
+
+                    {/* Submenu */}
+                    {isAllEmployeesOpen && (
+                      <div className="pl-9 mt-1 space-y-1">
+                        {subItems.map((sub) => (
+                          <Link
+                            key={sub.to}
+                            to={sub.to}
+                            onClick={() => setOpen(false)}
+                            className={`block px-3 py-2 rounded-md text-sm transition-colors
+                              ${location.pathname === sub.to 
+                                ? "text-primary font-medium bg-[#F0F2FF]" 
+                                : "text-gray-500 hover:text-heading hover:bg-gray-50"}
+                            `}
+                          >
+                           • {sub.label}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                );
               }
 
+              // Standard Menu Item
               const active = location.pathname === to;
               return (
                 <Link

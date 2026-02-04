@@ -24,6 +24,7 @@ import ManagerFeedback from "./pages/AllEmployees/Manager-Feedback";
 import AllTeamLeaders from "./pages/AllEmployees/All-Team-Leaders";
 import AllManagers from "./pages/AllEmployees/All-Managers";
 import AllEmployee from "./pages/AllEmployees/All-Employee";
+import EmployeeDetail from "./pages/AllEmployees/Employee-detail";
 
 import Layout from "./components/Layout";
 import ProtectedRoute from "./components/Protected";
@@ -68,6 +69,7 @@ const Approutes = () => {
             <Route path="/all-employees/team-leaders" element={<AllTeamLeaders />} />
             <Route path="/all-employees/managers" element={<AllManagers />} />
             <Route path="/all-employees/list" element={<AllEmployee />} />
+            <Route path="/all-employees/detail/:id" element={<EmployeeDetail />} />
           </Route>
         </Route>
 

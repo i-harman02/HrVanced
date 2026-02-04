@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Pagination from "../../components/Pagination";
 import { fetchEmployees, deleteEmployee } from "../../slices/employeeSlice";
 import Signup from "../../pages/signup/Signup";
-import { IoMdClose } from "react-icons/io";
+import { IoMdClose, IoMdEye } from "react-icons/io";
 import { CiEdit } from "react-icons/ci";
 import { RiDeleteBin5Line } from "react-icons/ri";
 
@@ -20,7 +20,7 @@ const AvatarWithName = ({ avatar, name }) => (
   </div>
 );
 
-const TeamRow = ({ user, onEdit, onDelete }) => {
+const TeamRow = ({ user, onEdit, onDelete, onView }) => {
   const calculateExperience = (joiningDate) => {
     if (!joiningDate) return "-";
     
@@ -82,6 +82,13 @@ const TeamRow = ({ user, onEdit, onDelete }) => {
             title="Edit"
           >
             <CiEdit size={20} />
+          </button>
+          <button 
+            onClick={() => onView(user._id)}
+            className=" hover:text-green-700 transition-colors" 
+            title="View Details"
+          >
+            <IoMdEye size={20} />
           </button>
           <button 
             onClick={() => onDelete(user._id)}
@@ -175,6 +182,7 @@ const AllEmployee = () => {
                 user={user} 
                 onEdit={handleEdit}
                 onDelete={handleDelete}
+                onView={(id) => navigate(`/all-employees/detail/${id}`)}
               />
             ))}
           </tbody>

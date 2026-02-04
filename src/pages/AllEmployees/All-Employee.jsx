@@ -2,9 +2,12 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Pagination from "../../components/Pagination";
-import { fetchEmployees } from "../../slices/employeeSlice";
+import { fetchEmployees, deleteEmployee } from "../../slices/employeeSlice";
 import Signup from "../../pages/signup/Signup";
 import { IoMdClose } from "react-icons/io";
+import { CiEdit } from "react-icons/ci";
+import { RiDeleteBin5Line } from "react-icons/ri";
+
 
 const AvatarWithName = ({ avatar, name }) => (
   <div className="flex items-center gap-2.5">
@@ -17,34 +20,87 @@ const AvatarWithName = ({ avatar, name }) => (
   </div>
 );
 
-const TeamRow = ({ user }) => (
-  <tr className="hover:bg-gray-50">
-    <td className="py-3 text-sm text-textgray">
-      <AvatarWithName avatar={user.avatar} name={user.name} />
-    </td>
-    <td className="py-3 text-sm text-textgray">{user.email}</td>
-    <td className="py-3 text-sm text-textgray">{user.assignRole}</td>
-    <td className="py-3 text-sm text-textgray">
-      <AvatarWithName avatar={user.tl?.avatar} name={user.tl?.name} />
-    </td>
-    <td className="py-3 text-sm text-textgray">
-      <AvatarWithName
-        avatar={user.manager?.avatar}
-        name={user.manager?.name}
-      />
-    </td>
-    <td className="py-3 text-sm text-textgray">
-      {user?.dateOfJoining
-    ? new Date(user.dateOfJoining).toLocaleDateString()
-    : "-"}
-    </td>
-  </tr>
-);
+const TeamRow = ({ user, onEdit, onDelete }) => {
+  const calculateExperience = (joiningDate) => {
+    if (!joiningDate) return "-";
+    
+    const start = new Date(joiningDate);
+    const end = new Date();
+    
+    let years = end.getFullYear() - start.getFullYear();
+    let months = end.getMonth() - start.getMonth();
+    
+    if (months < 0) {
+      years--;
+      months += 12;
+    }
+
+    if (years === 0 && months === 0) return "Fresher";
+    
+    let result = "";
+    if (years > 0) result += `0${years} years `;
+    if (months > 0) result += `${months} months`;
+    return result.trim();
+  };
+
+  return (
+    <tr className="hover:bg-gray-50 border-b border-gray-100">
+      <td className="py-3 text-sm text-textgray">
+        <AvatarWithName avatar={user.avatar} name={user.name} />
+      </td>
+      <td className="py-3 text-sm text-textgray">{user.email}</td>
+      <td className="py-3 text-sm text-textgray">
+        {user.personalInformation?.telephones?.[0] || "-"}
+      </td>
+      <td className="py-3 text-sm text-textgray">
+        <AvatarWithName avatar={user.tl?.avatar} name={user.tl?.name} />
+      </td>
+      <td className="py-3 text-sm text-textgray">
+        <AvatarWithName
+          avatar={user.manager?.avatar}
+          name={user.manager?.name}
+        />
+      </td>
+      <td className="py-3 text-sm text-textgray whitespace-nowrap">
+        {calculateExperience(user.dateOfJoining)}
+      </td>
+      <td className="py-3 text-sm text-textgray">{user.designation || "-"}</td>
+      <td className="py-3 text-sm text-textgray">
+        <span className={`text-xs px-2 py-0.5 rounded  ${
+          user.status === "Active" 
+            ? "bg-green-100 text-green-800 border border-green-200" 
+            : "bg-red-100 text-red-800 border border-red-200"
+        }`}>
+          {user.status || "Active"}
+        </span>
+      </td>
+      <td className="py-3 text-sm text-textgray">
+        <div className="flex items-center gap-3">
+          <button 
+            onClick={() => onEdit(user)}
+            className=" hover:text-blue-700 transition-colors" 
+            title="Edit"
+          >
+            <CiEdit size={20} />
+          </button>
+          <button 
+            onClick={() => onDelete(user._id)}
+            className=" hover:text-red-700 transition-colors" 
+            title="Delete"
+          >
+            <RiDeleteBin5Line size={20} />
+          </button>
+        </div>
+      </td>
+    </tr>
+  );
+};
 
 const AllEmployee = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [showAddEmployeeModal, setShowAddEmployeeModal] = useState(false);
+  const [editingEmployee, setEditingEmployee] = useState(null);
 
   const { employees: teamData } = useSelector((state) => state.employee);
   const { user } = useSelector((state) => state.user);
@@ -53,13 +109,32 @@ const AllEmployee = () => {
     dispatch(fetchEmployees());
   }, [dispatch]);
 
+  const handleEdit = (employee) => {
+    setEditingEmployee(employee);
+    setShowAddEmployeeModal(true);
+  };
+
+  const handleDelete = (id) => {
+    if (window.confirm("Are you sure you want to delete this employee?")) {
+      dispatch(deleteEmployee(id));
+    }
+  };
+
+  const handleCloseModal = () => {
+    setShowAddEmployeeModal(false);
+    setEditingEmployee(null);
+  };
+
   const headers = [
     "Employee Name",
     "Mail",
-    "Assign Role.",
+    "Mobile Number",
     "Employee TL",
     "Employee Manager",
-    "Date Of Joining",
+    "Experience",
+    "Designation",
+    "Status",
+    "Action"
   ];
 
   return (
@@ -92,8 +167,15 @@ const AllEmployee = () => {
           </thead>
 
           <tbody className="divide-y divide-gray-200">
-            {teamData.map((user, index) => (
-              <TeamRow key={index} user={user} />
+            {teamData
+              .filter((emp) => emp._id !== user?._id) // Filter out the current logged-in admin
+              .map((user, index) => (
+              <TeamRow 
+                key={index} 
+                user={user} 
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+              />
             ))}
           </tbody>
         </table>
@@ -101,10 +183,10 @@ const AllEmployee = () => {
 
       <Pagination />
 
-        {/* Add Employee Drawer */}
+     
         {showAddEmployeeModal && (
             <div className="fixed inset-0 z-50 flex justify-end">
-                {/* Overlay */}
+            
                 <div 
                     className="absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity" 
                     onClick={() => setShowAddEmployeeModal(false)}
@@ -112,14 +194,19 @@ const AllEmployee = () => {
                 
                 <div className="relative w-full max-w-2xl bg-white h-screen shadow-2xl overflow-y-auto transform transition-transform duration-300 ease-in-out">
                     <div className="sticky top-0 bg-white z-10 px-6 py-4 border-b border-gray-200 flex justify-between items-center">
-                        <h2 className="text-xl font-bold text-gray-800">Add Employees</h2>
-                        <button onClick={() => setShowAddEmployeeModal(false)} className="text-gray-500 hover:text-gray-700 p-1 rounded-full hover:bg-gray-100 transition-colors">
+                        <h2 className="text-xl font-bold text-gray-800">
+                          {editingEmployee ? "Edit Employee" : "Add Employees"}
+                        </h2>
+                        <button onClick={handleCloseModal} className="text-gray-500 hover:text-gray-700 p-1 rounded-full hover:bg-gray-100 transition-colors">
                             <IoMdClose size={24} />
                         </button>
                     </div>
                     
                     
-                    <Signup onClose={() => setShowAddEmployeeModal(false)} />
+                    <Signup 
+                      onClose={handleCloseModal} 
+                      editingEmployee={editingEmployee} 
+                    />
                 </div>
             </div>
         )}

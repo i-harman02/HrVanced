@@ -1,15 +1,16 @@
 
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { signupUser } from "../../slices/userSlice";
+import { updateEmployee } from "../../slices/employeeSlice";
 import HomeImg from "../../assets/Group 3475 (1).png";
 import logo from "../../assets/vanced-logo.png";
-import { FaPlus, FaTrash } from "react-icons/fa";
+import { FaPlus, FaTrash, FaEye, FaEyeSlash } from "react-icons/fa";
 
 
-const Signup = ({ onClose }) => { // Accept onClose prop
+const Signup = ({ onClose, editingEmployee }) => { // Accept onClose and editingEmployee props
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
@@ -21,7 +22,7 @@ const Signup = ({ onClose }) => { // Accept onClose prop
     password: "",
     role: "",
     superAdmin: false,
-    assignRole: "",
+    assignRole: "Employee",
     designation: "",
     address: "",
     gender: "",
@@ -74,14 +75,99 @@ const Signup = ({ onClose }) => { // Accept onClose prop
     ],
   });
 
+  useEffect(() => {
+    if (editingEmployee) {
+      // Helper to format dates for input type="date" (YYYY-MM-DD)
+      const formatDate = (dateString) => {
+        if (!dateString) return "";
+        const date = new Date(dateString);
+        return date.toISOString().split('T')[0];
+      };
+
+      setFormdata({
+        ...editingEmployee,
+        // Ensure strings are handled correctly even if null/undefined in DB
+        name: editingEmployee.name || "",
+        lastName: editingEmployee.lastName || "",
+        email: editingEmployee.email || "",
+        role: editingEmployee.role || "",
+        assignRole: editingEmployee.assignRole || "Employee",
+        designation: editingEmployee.designation || "",
+        employeeId: editingEmployee.employeeId || "",
+        status: editingEmployee.status || "Active",
+        
+        // Format dates for display
+        dateOfJoining: formatDate(editingEmployee.dateOfJoining),
+        birthday: formatDate(editingEmployee.birthday),
+        appraisalDate: formatDate(editingEmployee.appraisalDate),
+
+        // Ensure nested structures exist with fallbacks
+        personalInformation: {
+          telephones: editingEmployee.personalInformation?.telephones || [""],
+          nationality: editingEmployee.personalInformation?.nationality || "",
+          maritalStatus: editingEmployee.personalInformation?.maritalStatus || "",
+          bloodGroup: editingEmployee.personalInformation?.bloodGroup || "",
+        },
+        emergencyContact: {
+          primary: { 
+            name: editingEmployee.emergencyContact?.primary?.name || "", 
+            relationship: editingEmployee.emergencyContact?.primary?.relationship || "", 
+            phone: editingEmployee.emergencyContact?.primary?.phone || [""] 
+          },
+          secondary: { 
+            name: editingEmployee.emergencyContact?.secondary?.name || "", 
+            relationship: editingEmployee.emergencyContact?.secondary?.relationship || "", 
+            phone: editingEmployee.emergencyContact?.secondary?.phone || [""] 
+          },
+        },
+        bankInformation: {
+          bankName: editingEmployee.bankInformation?.bankName || "",
+          bankAccountNumber: editingEmployee.bankInformation?.bankAccountNumber || "",
+          ifscCode: editingEmployee.bankInformation?.ifscCode || "",
+          bankAccountName: editingEmployee.bankInformation?.bankAccountName || "",
+        },
+        identityInformation: {
+          panNo: editingEmployee.identityInformation?.panNo || "",
+          panName: editingEmployee.identityInformation?.panName || "",
+          panAddress: editingEmployee.identityInformation?.panAddress || "",
+          fatherName: editingEmployee.identityInformation?.fatherName || "",
+        },
+        education: editingEmployee.education && editingEmployee.education.length > 0 
+          ? editingEmployee.education 
+          : [{ institution: "", degree: "", fieldOfStudy: "", startYear: "", endYear: "" }],
+        experience: editingEmployee.experience && editingEmployee.experience.length > 0
+          ? editingEmployee.experience.map(exp => ({
+              ...exp,
+              startDate: formatDate(exp.startDate),
+              endDate: formatDate(exp.endDate)
+            }))
+          : [{ jobTitle: "", companyName: "", startDate: "", endDate: "" }],
+      });
+    }
+  }, [editingEmployee]);
+
   const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormdata((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
+    
+    // Auto-generate Employee ID when name is entered (only if not in edit mode)
+    if (name === 'name' && value.trim() && !editingEmployee) {
+      const namePrefix = value.trim().substring(0, 3).toUpperCase().padEnd(3, 'X');
+      const randomNum = Math.floor(1000 + Math.random() * 9000); // 4-digit random number
+      const generatedId = `EMP${namePrefix}${randomNum}`;
+      
+      setFormdata((prev) => ({
+        ...prev,
+        [name]: type === "checkbox" ? checked : value,
+        employeeId: generatedId,
+      }));
+    } else {
+      setFormdata((prev) => ({
+        ...prev,
+        [name]: type === "checkbox" ? checked : value,
+      }));
+    }
   };
 
   const handleNestedChange = (section, field, value) => {
@@ -130,7 +216,17 @@ const Signup = ({ onClose }) => { // Accept onClose prop
   };
 
 
-  const isFormValid = formdata.name && formdata.email && formdata.password;
+  const isFormValid = editingEmployee 
+    ? (formdata.name && formdata.email)
+    : (formdata.name && 
+       formdata.lastName && 
+       formdata.email && 
+       formdata.password && 
+       formdata.role && 
+       formdata.assignRole && 
+       formdata.designation && 
+       formdata.employeeId && 
+       formdata.status);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -140,10 +236,12 @@ const Signup = ({ onClose }) => { // Accept onClose prop
         ...formdata,
     };
 
-    const res = await dispatch(signupUser(payload));
+    const res = editingEmployee 
+      ? await dispatch(updateEmployee({ id: editingEmployee._id, data: payload }))
+      : await dispatch(signupUser(payload));
 
     if (res.meta.requestStatus === "fulfilled") {
-      alert("Employee Added Successfully 🎉");
+      alert(editingEmployee ? "Employee Updated Successfully 🎉" : "Employee Added Successfully 🎉");
       if (onClose) {
         onClose(); // Close modal on success
       } else {
@@ -154,7 +252,8 @@ const Signup = ({ onClose }) => { // Accept onClose prop
         }
       }
     } else {
-      alert(res.payload || "Signup failed");
+      const errorMsg = res.payload?.message || res.payload?.msg || res.payload || (editingEmployee ? "Update failed" : "Signup failed");
+      alert(typeof errorMsg === 'string' ? errorMsg : JSON.stringify(errorMsg));
     }
   };
 
@@ -169,33 +268,59 @@ const Signup = ({ onClose }) => { // Accept onClose prop
              <h3 className="text-lg font-semibold text-blue-600 mb-4 border-b pb-2">Account Details</h3>
              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <InputGroup label="First Name *" name="name" value={formdata.name} onChange={handleChange} />
-                <InputGroup label="Last Name" name="lastName" value={formdata.lastName} onChange={handleChange} />
-                <InputGroup label="Email *" type="email" name="email" value={formdata.email} onChange={handleChange} />
-                <InputGroup label="Password *" type="password" name="password" value={formdata.password} onChange={handleChange} />
+                <InputGroup label={`Last Name ${editingEmployee ? '' : '*'}`} name="lastName" value={formdata.lastName} onChange={handleChange} />
+                <InputGroup label="Email *" type="email" name="email" value={formdata.email} onChange={handleChange} autoComplete="new-password" />
+                <InputGroup label={`Password ${editingEmployee ? '' : '*'}`} type="password" name="password" value={formdata.password} onChange={handleChange} autoComplete="new-password" placeholder={editingEmployee ? "Leave empty to keep current" : ""} />
                 
                 <div className="flex flex-col">
-                  <label className="mb-1 font-medium text-gray-700">Role</label>
+                  <label className="mb-1 font-medium text-gray-700">{`Role ${editingEmployee ? '' : '*'}`}</label>
                   <select name="role" value={formdata.role} onChange={handleChange} className="p-2 border rounded border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none">
                     <option value="">Select Role</option>
                     <option value="Admin">Admin</option>
                     <option value="Employee">Employee</option>
-                    <option value="HR">HR</option>
-                    <option value="Manager">Manager</option>
                   </select>
                 </div>
                 
                  <div className="flex flex-col">
-                  <label className="mb-1 font-medium text-gray-700">Assign Role</label>
-                   <input className="p-2 border rounded border-gray-300" name="assignRole" value={formdata.assignRole} onChange={handleChange} placeholder="e.g. Developer" />
+                  <label className="mb-1 font-medium text-gray-700 text-sm">{`Assign Role ${editingEmployee ? '' : '*'}`}</label>
+                  <select
+                    name="assignRole"
+                    value={formdata.assignRole}
+                    onChange={handleChange}
+                    className="p-2.5 border rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all bg-white"
+                  >
+                    <option value="">Select Role</option>
+                    <option value="Employee">Employee</option>
+                    <option value="HR Manager">HR Manager</option>
+                    <option value="Manager">Manager</option>
+                    <option value="TL">TL</option>
+                    <option value="Intern">Intern</option>
+                  </select>
                 </div>
-                 <InputGroup label="Designation" name="designation" value={formdata.designation} onChange={handleChange} />
-                 <InputGroup label="Employee ID" name="employeeId" value={formdata.employeeId} onChange={handleChange} />
-                 <InputGroup label="Status" name="status" value={formdata.status} onChange={handleChange} />
-                 
-                 <div className="flex items-center mt-6">
-                    <input type="checkbox" name="superAdmin" checked={formdata.superAdmin} onChange={handleChange} className="w-4 h-4 text-blue-600" />
-                    <label className="ml-2 text-gray-700 font-medium">Super Admin</label>
+                 <div className="flex flex-col">
+                  <label className="mb-1 font-medium text-gray-700 text-sm">{`Designation ${editingEmployee ? '' : '*'}`}</label>
+                  <select
+                    name="designation"
+                    value={formdata.designation}
+                    onChange={handleChange}
+                    className="p-2.5 border rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all bg-white"
+                  >
+                    <option value="">Select Designation</option>
+                    <option value="UI/UX Designer">UI/UX Designer</option>
+                    <option value="BDE">BDE</option>
+                    <option value="Angular Developer">Angular Developer</option>
+                    <option value="Full Stack Developer">Full Stack Developer</option>
+                    <option value=".NET">.NET</option>
+                    <option value="Frontend Developer (React)">Frontend Developer (React)</option>
+                    <option value="Web Designer">Web Designer</option>
+                    <option value="HR">HR</option>
+                    <option value="MERN Stack">MERN Stack</option>
+                  </select>
                  </div>
+                 <InputGroup label={`Employee ID ${editingEmployee ? '' : '*'}`} name="employeeId" value={formdata.employeeId} onChange={handleChange} disabled={true} />
+                 <InputGroup label={`Status ${editingEmployee ? '' : '*'}`} name="status" value={formdata.status} onChange={handleChange} />
+                 
+
              </div>
           </div>
 
@@ -369,33 +494,59 @@ const Signup = ({ onClose }) => { // Accept onClose prop
              <h3 className="text-lg font-semibold text-blue-600 mb-4 border-b pb-2">Account Details</h3>
              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <InputGroup label="First Name *" name="name" value={formdata.name} onChange={handleChange} />
-                <InputGroup label="Last Name" name="lastName" value={formdata.lastName} onChange={handleChange} />
-                <InputGroup label="Email *" type="email" name="email" value={formdata.email} onChange={handleChange} />
-                <InputGroup label="Password *" type="password" name="password" value={formdata.password} onChange={handleChange} />
+                <InputGroup label={`Last Name ${editingEmployee ? '' : '*'}`} name="lastName" value={formdata.lastName} onChange={handleChange} />
+                <InputGroup label="Email *" type="email" name="email" value={formdata.email} onChange={handleChange} autoComplete="new-password" />
+                <InputGroup label={`Password ${editingEmployee ? '' : '*'}`} type="password" name="password" value={formdata.password} onChange={handleChange} autoComplete="new-password" placeholder={editingEmployee ? "Leave empty to keep current" : ""} />
                 
                 <div className="flex flex-col">
-                  <label className="mb-1 font-medium text-gray-700">Role</label>
+                  <label className="mb-1 font-medium text-gray-700">{`Role ${editingEmployee ? '' : '*'}`}</label>
                   <select name="role" value={formdata.role} onChange={handleChange} className="p-2 border rounded border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none">
                     <option value="">Select Role</option>
                     <option value="Admin">Admin</option>
                     <option value="Employee">Employee</option>
-                    <option value="HR">HR</option>
-                    <option value="Manager">Manager</option>
                   </select>
                 </div>
                 
                  <div className="flex flex-col">
-                  <label className="mb-1 font-medium text-gray-700">Assign Role</label>
-                   <input className="p-2 border rounded border-gray-300" name="assignRole" value={formdata.assignRole} onChange={handleChange} placeholder="e.g. Developer" />
+                  <label className="mb-1 font-medium text-gray-700 text-sm">{`Assign Role ${editingEmployee ? '' : '*'}`}</label>
+                  <select
+                    name="assignRole"
+                    value={formdata.assignRole}
+                    onChange={handleChange}
+                    className="p-2.5 border rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all bg-white"
+                  >
+                    <option value="">Select Role</option>
+                    <option value="Employee">Employee</option>
+                    <option value="HR Manager">HR Manager</option>
+                    <option value="Manager">Manager</option>
+                    <option value="TL">TL</option>
+                    <option value="Intern">Intern</option>
+                  </select>
                 </div>
-                 <InputGroup label="Designation" name="designation" value={formdata.designation} onChange={handleChange} />
-                 <InputGroup label="Employee ID" name="employeeId" value={formdata.employeeId} onChange={handleChange} />
-                 <InputGroup label="Status" name="status" value={formdata.status} onChange={handleChange} />
-                 
-                 <div className="flex items-center mt-6">
-                    <input type="checkbox" name="superAdmin" checked={formdata.superAdmin} onChange={handleChange} className="w-4 h-4 text-blue-600" />
-                    <label className="ml-2 text-gray-700 font-medium">Super Admin</label>
+                 <div className="flex flex-col">
+                  <label className="mb-1 font-medium text-gray-700 text-sm">{`Designation ${editingEmployee ? '' : '*'}`}</label>
+                  <select
+                    name="designation"
+                    value={formdata.designation}
+                    onChange={handleChange}
+                    className="p-2.5 border rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all bg-white"
+                  >
+                    <option value="">Select Designation</option>
+                    <option value="UI/UX Designer">UI/UX Designer</option>
+                    <option value="BDE">BDE</option>
+                    <option value="Angular Developer">Angular Developer</option>
+                    <option value="Full Stack Developer">Full Stack Developer</option>
+                    <option value=".NET">.NET</option>
+                    <option value="Frontend Developer (React)">Frontend Developer (React)</option>
+                    <option value="Web Designer">Web Designer</option>
+                    <option value="HR">HR</option>
+                    <option value="MERN Stack">MERN Stack</option>
+                  </select>
                  </div>
+                 <InputGroup label={`Employee ID ${editingEmployee ? '' : '*'}`} name="employeeId" value={formdata.employeeId} onChange={handleChange} disabled={true} />
+                 <InputGroup label={`Status ${editingEmployee ? '' : '*'}`} name="status" value={formdata.status} onChange={handleChange} />
+                 
+
              </div>
           </div>
 
@@ -532,18 +683,36 @@ const Signup = ({ onClose }) => { // Accept onClose prop
   );
 };
 
-const InputGroup = ({ label, type = "text", name, value, onChange, placeholder }) => (
-  <div className="flex flex-col">
-    <label className="mb-1 font-medium text-gray-700 text-sm">{label}</label>
-    <input
-      type={type}
-      name={name}
-      value={value}
-      onChange={onChange}
-      placeholder={placeholder}
-      className="p-2.5 border rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
-    />
-  </div>
-);
+const InputGroup = ({ label, type = "text", name, value, onChange, placeholder, autoComplete, disabled }) => {
+  const [showPassword, setShowPassword] = useState(false);
+  const isPassword = type === "password";
+
+  return (
+    <div className="flex flex-col">
+      <label className="mb-1 font-medium text-gray-700 text-sm">{label}</label>
+      <div className="relative">
+        <input
+          type={isPassword ? (showPassword ? "text" : "password") : type}
+          name={name}
+          value={value}
+          onChange={onChange}
+          placeholder={placeholder}
+          autoComplete={autoComplete || "off"}
+          disabled={disabled}
+          className={`w-full p-2.5 border rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all ${disabled ? 'bg-gray-100 cursor-not-allowed text-gray-600' : ''}`}
+        />
+        {isPassword && (
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-colors"
+          >
+            {showPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
+          </button>
+        )}
+      </div>
+    </div>
+  );
+};
 
 export default Signup;

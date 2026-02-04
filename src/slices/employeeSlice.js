@@ -31,7 +31,7 @@ export const updateEmployee = createAsyncThunk(
   "employee/updateEmployee",
   async ({ id, data }, { rejectWithValue }) => {
     try {
-      await API.put(`/employee/${id}`, data);
+      await API.put(`/employee/update/${id}`, data);
       return { id, data };
     } catch (err) {
       return rejectWithValue(err.response.data);
@@ -44,7 +44,7 @@ export const deleteEmployee = createAsyncThunk(
   "employee/deleteEmployee",
   async (id, { rejectWithValue }) => {
     try {
-      await API.delete(`/employee/${id}`);
+      await API.delete(`/employee/delete/${id}`);
       return id;
     } catch (err) {
       return rejectWithValue(err.response.data);

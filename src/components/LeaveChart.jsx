@@ -91,7 +91,7 @@ const LeaveBalances = () => {
 
         <button
           onClick={() => setOpenLeaveForm(true)}
-          className="md:px-4 py-2 px-2 text-[12px] bg-indigo-600 text-white rounded-md md:text-sm font-medium hover:bg-indigo-700 transition-colors"
+          className="bg-[#2C3EA1] text-white font-bold text-sm leading-[0.86] px-6 py-3 rounded-sm cursor-pointer hover:bg-[#172677] transition-colors"
           disabled={leaves.remaining === 0}
         >
           Request Leaves

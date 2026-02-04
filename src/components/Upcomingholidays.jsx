@@ -42,7 +42,7 @@ const Upcomingholidays = () => {
 
           <button
             onClick={() => setHolidayModal(true)}
-            className="mr-3 text-sm text-blue-600 hover:underline"
+            className="text-sm text-textgray hover:underline cursor-pointer"
           >
             View All
           </button>

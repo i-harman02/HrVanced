@@ -12,6 +12,7 @@ import { fetchWorkAnniversary } from "../slices/anniversarySlice";
 
 import WishModal from "./WishModal";
 import BirthdayPost from "./BirthdayPost";
+import AnnouncementComposer from "./AnnouncementComposer";
 
 const Celebrationtable = () => {
   const dispatch = useDispatch();
@@ -40,8 +41,7 @@ const { todayWorkAnniversary, upcomingWorkAnniversary } = useSelector(
   const [selectedEmployee, setSelectedEmployee] = useState(null);
 const [birthdayPosts, setBirthdayPosts] = useState([]);
 const [anniversaryPosts, setAnniversaryPosts] = useState([]);
-
-
+const [announcements, setAnnouncements] = useState([]);
 const [wishType, setWishType] = useState(null); 
 
   useEffect(() => {
@@ -70,6 +70,10 @@ const [wishType, setWishType] = useState(null);
   }
 };
 
+const handleAnnouncementCreate = (announcement) => {
+    setAnnouncements((prev) => [announcement, ...prev]);
+  };
+
   return (
     <div className="bg-white border border-gray-200 rounded-lg">
    
@@ -92,7 +96,19 @@ const [wishType, setWishType] = useState(null);
 
       {activeTab === "announcements" && (
         <div className="py-6 px-6">
-          <img className="m-auto" src={Announcement} alt="" />
+          {/* Empty State or Posts */}
+          {announcements.length === 0 ? (
+              <img className="m-auto mb-2" src={Announcement} alt="No announcements" />
+          ) : (
+            <div className="pt-8 space-y-6">
+              {announcements.map((announcement) => (
+                <BirthdayPost key={announcement.id} post={announcement} />
+              ))}
+            </div>
+          )}
+
+          {/* Announcement Composer */}
+          <AnnouncementComposer onAnnouncementCreate={handleAnnouncementCreate} />
         </div>
       )}
 

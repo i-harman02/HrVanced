@@ -9,6 +9,7 @@ import ChatModal from "../../components/Chatmodal.jsx";
 import Inbox from "../../components/Inbox.jsx";
 import HrStatsCard from "../../components/HrStatsCard.jsx";
 import AdminAllEmployee from "../../components/AdminAllEmployee.jsx";
+import AdminAllClients from "../../components/AdminAllClients.jsx";
 
 const Dashboard = () => {
   const [open, setOpen] = useState(false);
@@ -37,8 +38,10 @@ const Dashboard = () => {
           <div className="flex flex-col gap-6 lg:gap-8">
             <TodayLeave />
             <Leavechart />
+            <AdminAllClients />
           </div>
-          <div>
+        </div>
+        <div>
             <button
               onClick={() => setOpen(true)}
               className="fixed bottom-6 right-6 bg-blue-800 text-white p-3 rounded-xl shadow-lg hover:bg-blue-900 transition z-40"
@@ -49,7 +52,6 @@ const Dashboard = () => {
             {/* Chat Modal */}
             {open && <ChatModal onClose={() => setOpen(false)} />}
           </div>
-        </div>
       </div>
     </>
   );

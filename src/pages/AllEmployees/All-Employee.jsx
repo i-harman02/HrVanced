@@ -9,11 +9,11 @@ import { CiEdit } from "react-icons/ci";
 import { RiDeleteBin5Line } from "react-icons/ri";
 
 
-const AvatarWithName = ({ avatar, name }) => (
+const AvatarWithName = ({ profileImage, name }) => (
   <div className="flex items-center gap-2.5">
     <img
-      className="w-7.5 h-7.5 rounded-md"
-      src={`https://i.pravatar.cc/150?img=${avatar || 1}`}
+      className="w-7.5 h-7.5 rounded-md object-cover"
+      src={profileImage || `https://i.pravatar.cc/150?u=${name}`}
       alt={name}
     />
     <span>{name}</span>
@@ -46,18 +46,18 @@ const TeamRow = ({ user, onEdit, onDelete, onView }) => {
   return (
     <tr className="hover:bg-gray-50 border-b border-gray-100">
       <td className="py-3 text-sm text-textgray">
-        <AvatarWithName avatar={user.avatar} name={user.name} />
+        <AvatarWithName profileImage={user.profileImage} name={user.name} />
       </td>
       <td className="py-3 text-sm text-textgray">{user.email}</td>
       <td className="py-3 text-sm text-textgray">
         {user.personalInformation?.telephones?.[0] || "-"}
       </td>
       <td className="py-3 text-sm text-textgray">
-        <AvatarWithName avatar={user.tl?.avatar} name={user.tl?.name} />
+        <AvatarWithName profileImage={user.tl?.profileImage} name={user.tl?.name} />
       </td>
       <td className="py-3 text-sm text-textgray">
         <AvatarWithName
-          avatar={user.manager?.avatar}
+          profileImage={user.manager?.profileImage}
           name={user.manager?.name}
         />
       </td>
@@ -175,7 +175,12 @@ const AllEmployee = () => {
 
           <tbody className="divide-y divide-gray-200">
             {teamData
-              .filter((emp) => emp._id !== user?._id) // Filter out the current logged-in admin
+              .filter((emp) => {
+                const isAdmin = emp._id === user?._id;
+                const isTL = emp.assignRole === "TL";
+                const isManager = emp.assignRole === "Manager" || emp.assignRole === "HR Manager";
+                return !isAdmin && !isTL && !isManager;
+              })
               .map((user, index) => (
               <TeamRow 
                 key={index} 

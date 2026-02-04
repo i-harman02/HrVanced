@@ -1,16 +1,9 @@
 import React from "react";
-import { useSelector } from "react-redux";
-
 import FormRenderer from "../../components/form/FormRenderer";
 import { formSections } from "../../configs/employeeForms/formSections";
 import Button from "../../components/form/Button";
 
-const IdentityInfo = () => {
-  const { employees, loading } = useSelector((state) => state.employee);
-
-  // for now: first employee
-  const employee = employees?.[6];
-
+const IdentityInfo = ({ employee, loading }) => {
   if (loading) return <p>Loading...</p>;
   if (!employee) return <p>No employee data</p>;
 

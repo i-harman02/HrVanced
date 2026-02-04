@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { fetchEmployees } from "../../slices/employeeSlice";
 
 import Tabs from "../../components/Tabs";
@@ -27,9 +27,16 @@ const Me = () => {
   const dispatch = useDispatch();
   const [activeTab, setActiveTab] = useState("profile");
 
+  const { user: currentUser } = useSelector((state) => state.user);
+  const { employees, loading } = useSelector((state) => state.employee);
+
   useEffect(() => {
     dispatch(fetchEmployees());
   }, [dispatch]);
+
+  const currentEmployee = employees.find(
+    (emp) => emp.email === currentUser?.email || emp._id === currentUser?._id
+  );
 
   const ActiveComponent = tabs.find(
     (tab) => tab.key === activeTab
@@ -44,7 +51,9 @@ const Me = () => {
       <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
 
       <div className="pt-8">
-        {ActiveComponent && <ActiveComponent />}
+        {ActiveComponent && (
+          <ActiveComponent employee={currentEmployee} loading={loading} />
+        )}
       </div>
     </div>
   );

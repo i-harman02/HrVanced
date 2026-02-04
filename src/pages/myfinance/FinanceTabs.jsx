@@ -1,9 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchEmployees } from "../../slices/employeeSlice";
 import IndFlag from "../../assets/ind-flag.png";
 import PayImg from "../../assets/my-pay-img.png";
 
 const FinanceTabs = () => {
   const [activeTab, setActiveTab] = useState("summary");
+  const dispatch = useDispatch();
+  const { user: currentUser } = useSelector((state) => state.user);
+  const { employees, loading } = useSelector((state) => state.employee);
+
+  useEffect(() => {
+    dispatch(fetchEmployees());
+  }, [dispatch]);
+
+  const employee = employees.find(
+    (emp) => emp.email === currentUser?.email || emp._id === currentUser?._id
+  );
+
+  if (loading) return <p>Loading...</p>;
+  if (!employee) return <p>No finance data available</p>;
+
+  const identity = employee.identityInformation || {};
+  const bank = employee.bankInformation || {};
+
   return (
     <>
       <div className="flex items-center gap-8 border-b border-bordergray whitespace-nowrap overflow-auto mb-8">
@@ -68,11 +88,11 @@ const FinanceTabs = () => {
                     </div>
                   </td>
                   <td className="py-3 text-sm text-textgray leading-none">
-                    FJLPA7867G
+                    {identity.panNo || "-"}
                   </td>
-                  <td className="py-3 text-sm text-textgray leading-none">-</td>
-                  <td className="py-3 text-sm text-textgray leading-none">-</td>
-                  <td className="py-3 text-sm text-textgray leading-none">-</td>
+                  <td className="py-3 text-sm text-textgray leading-none">{identity.panName || "-"}</td>
+                  <td className="py-3 text-sm text-textgray leading-none">{identity.fatherName || "-"}</td>
+                  <td className="py-3 text-sm text-textgray leading-none">{identity.panAddress || "-"}</td>
                 </tr>
               </tbody>
             </table>
@@ -105,14 +125,14 @@ const FinanceTabs = () => {
               <tbody className="divide-y divide-gray-200">
                 <tr className="hover:bg-gray-50">
                   <td className="py-3 text-sm text-textgray leading-none">
-                    Bank Server
+                    Bank Transfer
                   </td>
                   <td className="py-3 text-sm text-textgray leading-none">
-                    HDFC
+                    {bank.bankName || "-"}
                   </td>
-                  <td className="py-3 text-sm text-textgray leading-none">-</td>
-                  <td className="py-3 text-sm text-textgray leading-none">-</td>
-                  <td className="py-3 text-sm text-textgray leading-none">-</td>
+                  <td className="py-3 text-sm text-textgray leading-none">{bank.bankAccountNumber || "-"}</td>
+                  <td className="py-3 text-sm text-textgray leading-none">{bank.ifscCode || "-"}</td>
+                  <td className="py-3 text-sm text-textgray leading-none">{bank.bankAccountName || "-"}</td>
                 </tr>
               </tbody>
             </table>
@@ -129,7 +149,9 @@ const FinanceTabs = () => {
             <p className="text-sm text-heading font-medium mb-2.5">
               INR :
             </p>
-            <div className="p-3 border border-bordergray rounded-sm h-9 max-w-83"></div>
+            <div className="p-3 border border-bordergray rounded-sm h-9 max-w-83 flex items-center">
+              <span className="text-sm font-bold">{employee.employeeSalary || "Not specified"}</span>
+            </div>
           </div>
           <img src={PayImg} className="w-40.5" alt="Payment Image" />
         </div>

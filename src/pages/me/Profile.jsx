@@ -1,12 +1,7 @@
-import { useSelector } from "react-redux";
 import FormRenderer from "../../components/form/FormRenderer";
 import { formSections } from "../../configs/employeeForms/formSections";
 
-const Profile = () => {
-  const { employees, loading } = useSelector((state) => state.employee);
-
-  const employee = employees?.[4]; 
-
+const Profile = ({ employee, loading }) => {
   if (loading) return <p>Loading...</p>;
   if (!employee) return <p>No employee data</p>;
 

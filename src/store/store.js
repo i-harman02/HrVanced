@@ -6,6 +6,9 @@ import employeeReducer from "../slices/employeeSlice.js";
 import projectReducer from "../slices/projectSlice.js"
 import anniversaryReducer from "../slices/anniversarySlice.js"
 import announcementReducer from "../slices/announcementSlice.js"
+import dashboardReducer from "../slices/dashboardSlice.js"
+import clientReducer from "../slices/clientSlice.js"
+import leaveReducer from "../slices/leaveSlice.js"
 
 const store = configureStore({
   reducer: {
@@ -16,6 +19,9 @@ const store = configureStore({
      project: projectReducer,
      anniversary: anniversaryReducer,
      announcement: announcementReducer,
+     dashboard: dashboardReducer,
+     client: clientReducer,
+     leave: leaveReducer,
   },
 });
 

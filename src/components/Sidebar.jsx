@@ -91,6 +91,7 @@ const Sidebar = () => {
                   { label: "Manager Feedback", to: "/all-employees/feedback" },
                   { label: "All Team Leaders", to: "/all-employees/team-leaders" },
                   { label: "All Managers", to: "/all-employees/managers" },
+                  { label: "All Clients", to: "/all-employees/clients" },
                 ];
 
                 const isActiveParent = subItems.some(sub => location.pathname === sub.to);

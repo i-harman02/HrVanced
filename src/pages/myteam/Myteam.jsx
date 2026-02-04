@@ -2,11 +2,12 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Pagination from "../../components/Pagination";
 import { fetchEmployees } from "../../slices/employeeSlice";
-const AvatarWithName = ({ avatar, name }) => (
+
+const AvatarWithName = ({ avatar, name, profileImage }) => (
   <div className="flex items-center gap-2.5">
     <img
-      className="w-7.5 h-7.5 rounded-md"
-      src={`https://i.pravatar.cc/150?img=${avatar || 1}`}
+      className="w-7.5 h-7.5 rounded-md object-cover"
+      src={profileImage || avatar || `https://i.pravatar.cc/150?u=${name}`}
       alt={name}
     />
     <span>{name}</span>
@@ -16,18 +17,23 @@ const AvatarWithName = ({ avatar, name }) => (
 const TeamRow = ({ user }) => (
   <tr className="hover:bg-gray-50">
     <td className="py-3 text-sm text-textgray">
-      <AvatarWithName avatar={user.avatar} name={user.name} />
+      <AvatarWithName profileImage={user.profileImage} avatar={user.avatar} name={user.name} />
     </td>
     <td className="py-3 text-sm text-textgray">{user.email}</td>
-    <td className="py-3 text-sm text-textgray">{user.assignRole}</td>
+    <td className="py-3 text-sm text-textgray">{user.designation}</td>
     <td className="py-3 text-sm text-textgray">
-      <AvatarWithName avatar={user.tl?.avatar} name={user.tl?.name} />
+      {user.tl ? (
+        <AvatarWithName profileImage={user.tl.profileImage} avatar={user.tl.avatar} name={user.tl.name} />
+      ) : "-"}
     </td>
     <td className="py-3 text-sm text-textgray">
-      <AvatarWithName
-        avatar={user.manager?.avatar}
-        name={user.manager?.name}
-      />
+       {user.manager ? (
+        <AvatarWithName
+          profileImage={user.manager.profileImage}
+          avatar={user.manager.avatar}
+          name={user.manager.name}
+        />
+      ) : "-"}
     </td>
     <td className="py-3 text-sm text-textgray">
       {user?.dateOfJoining
@@ -39,17 +45,31 @@ const TeamRow = ({ user }) => (
 
 const Myteam = () => {
   const dispatch = useDispatch();
-
+  const { user: currentUser } = useSelector((state) => state.user);
   const { employees: teamData } = useSelector((state) => state.employee);
 
   useEffect(() => {
     dispatch(fetchEmployees());
   }, [dispatch]);
 
+ 
+  const filteredData = currentUser?.role?.toLowerCase() === "admin" 
+    ? teamData 
+    : teamData.filter(emp => {
+      
+        if (currentUser?.assignRole === "TL") {
+          return emp.tl?._id === currentUser._id || emp.tl === currentUser._id;
+        }
+     
+        const myTlId = currentUser?.tl?._id || currentUser?.tl;
+        const empTlId = emp.tl?._id || emp.tl;
+        return empTlId === myTlId && myTlId !== null && myTlId !== undefined;
+      });
+
   const headers = [
     "Employee Name",
     "Mail",
-    "Assign Role.",
+    "Designation",
     "Employee TL",
     "Employee Manager",
     "Date Of Joining",
@@ -79,7 +99,7 @@ const Myteam = () => {
           </thead>
 
           <tbody className="divide-y divide-gray-200">
-            {teamData.map((user, index) => (
+            {filteredData.map((user, index) => (
               <TeamRow key={index} user={user} />
             ))}
           </tbody>
@@ -92,4 +112,3 @@ const Myteam = () => {
 };
 
 export default Myteam;
-        

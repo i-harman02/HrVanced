@@ -70,6 +70,19 @@ export const updateProject = createAsyncThunk(
   }
 );
 
+
+export const deleteProject = createAsyncThunk(
+  "project/delete",
+  async (id, { rejectWithValue }) => {
+    try {
+      await API.delete(`/project/delete-project/${id}`);
+      return id;
+    } catch (err) {
+      return rejectWithValue(err.response?.data);
+    }
+  }
+);
+
 /* =======================
    SLICE
 ======================= */
@@ -160,6 +173,11 @@ const projectSlice = createSlice({
       .addCase(updateProject.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+
+      /* DELETE PROJECT */
+      .addCase(deleteProject.fulfilled, (state, action) => {
+        state.projects = state.projects.filter((p) => p._id !== action.payload);
       });
   },
 });

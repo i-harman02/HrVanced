@@ -6,12 +6,12 @@ import { GoEye } from "react-icons/go";
 import { LuPencilLine } from "react-icons/lu";
 import { RiDeleteBin6Line } from "react-icons/ri";
 
-/* Reuse components */
-const AvatarWithName = ({ avatar, name }) => (
+
+const AvatarWithName = ({ avatar, name, profileImage }) => (
   <div className="flex items-center gap-2.5">
     <img
-      className="w-7.5 h-7.5 rounded-md"
-      src={`https://i.pravatar.cc/150?img=${avatar || 1}`}
+      className="w-7.5 h-7.5 rounded-md object-cover"
+      src={profileImage || avatar || `https://i.pravatar.cc/150?u=${name}`}
       alt={name}
     />
     <span>{name}</span>
@@ -21,18 +21,29 @@ const AvatarWithName = ({ avatar, name }) => (
 const TeamRow = ({ user }) => (
   <tr className="hover:bg-gray-50 border-b border-gray-200">
     <td className="py-3 text-sm text-textgray">
-      <AvatarWithName avatar={user.avatar} name={user.name} />
+      <AvatarWithName profileImage={user.profileImage} avatar={user.avatar} name={user.name} />
     </td>
     <td className="py-3 text-sm text-textgray">{user.email}</td>
-    <td className="py-3 text-sm text-textgray">{user.personalInformation?.telephones}</td>
+    <td className="py-3 text-sm text-textgray">{user.personalInformation?.telephones?.[0]}</td>
     <td className="py-3 text-sm text-textgray">
-      <AvatarWithName avatar={user.tl?.avatar} name={user.tl?.name} />
+      {user.assignRole === "TL" ? (
+        <span className="font-medium text-blue-600">Team Leader</span>
+      ) : user.assignRole === "Manager" || user.assignRole === "HR Manager" ? (
+        "---"
+      ) : (
+        <AvatarWithName profileImage={user.tl?.profileImage} avatar={user.tl?.avatar} name={user.tl?.name} />
+      )}
     </td>
     <td className="py-3 text-sm text-textgray">
-      <AvatarWithName
-        avatar={user.manager?.avatar}
-        name={user.manager?.name}
-      />
+      {user.assignRole === "Manager" || user.assignRole === "HR Manager" ? (
+        <span className="font-medium text-green-600">Manager</span>
+      ) : (
+        <AvatarWithName
+          profileImage={user.manager?.profileImage}
+          avatar={user.manager?.avatar}
+          name={user.manager?.name}
+        />
+      )}
     </td>
     <td className="py-3 text-sm text-textgray">
       <div className="flex items-center gap-3">
@@ -65,7 +76,7 @@ const AdminAllEmployee = () => {
   return (
     <>
       <div className="bg-white border border-bordergray rounded-lg p-6 overflow-x-auto">
-        <h4 className="text-base text-black font-semibold mb-6">All Employess</h4>
+        <h4 className="text-base text-black font-semibold mb-6">All Employees</h4>
         <table className="w-full min-w-250 mb-6">
           <thead>
             <tr className="border-b border-bordergray">
@@ -81,9 +92,22 @@ const AdminAllEmployee = () => {
           </thead>
 
           <tbody>
-            {teamData?.map((user, index) => (
-              <TeamRow key={index} user={user} />
-            ))}
+            {(teamData || [])
+              .filter(emp => emp.role?.toLowerCase() !== "admin")
+              .sort((a, b) => {
+                const rolePriority = {
+                  "Manager": 1,
+                  "HR Manager": 1,
+                  "TL": 2,
+                  "Employee": 3
+                };
+                const priorityA = rolePriority[a.assignRole] || 4;
+                const priorityB = rolePriority[b.assignRole] || 4;
+                return priorityA - priorityB;
+              })
+              .map((user, index) => (
+                <TeamRow key={index} user={user} />
+              ))}
           </tbody>
         </table>
         <Pagination />

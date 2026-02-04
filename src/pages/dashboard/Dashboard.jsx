@@ -33,12 +33,12 @@ const Dashboard = () => {
               <Upcomingholidays />
             </div>
             <Celebrationtable />
-            <AdminAllEmployee />
+            {isAdmin && <AdminAllEmployee />}
           </div>
           <div className="flex flex-col gap-6 lg:gap-8">
             <TodayLeave />
             <Leavechart />
-            <AdminAllClients />
+            {isAdmin && <AdminAllClients />}
           </div>
         </div>
         <div>

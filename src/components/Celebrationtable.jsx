@@ -13,6 +13,7 @@ import { fetchWorkAnniversary } from "../slices/anniversarySlice";
 import WishModal from "./WishModal";
 import BirthdayPost from "./BirthdayPost";
 import AnnouncementComposer from "./AnnouncementComposer";
+import { fetchPosts, createPost } from "../slices/announcementSlice";
 
 const Celebrationtable = () => {
   const dispatch = useDispatch();
@@ -29,6 +30,10 @@ const { todayWorkAnniversary, upcomingWorkAnniversary } = useSelector(
   const todayNewJoinees = todayWorkAnniversary?.filter(emp => emp.yearsCompleted === 0) || [];
   const upcomingNewJoinees = upcomingWorkAnniversary?.filter(emp => emp.yearsCompleted === 0) || [];
 
+  const { user } = useSelector((state) => state.user);
+  const role = user?.role?.toLowerCase();
+  const isAdmin = role === "admin" || role === "superadmin";
+
   const tabs = [
     { id: "announcements", label: "Announcements" },
     { id: "birthdays", label: "Birthdays" },
@@ -39,39 +44,43 @@ const { todayWorkAnniversary, upcomingWorkAnniversary } = useSelector(
   const [activeTab, setActiveTab] = useState("announcements");
   const [isWishModalOpen, setIsWishModalOpen] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
-const [birthdayPosts, setBirthdayPosts] = useState([]);
-const [anniversaryPosts, setAnniversaryPosts] = useState([]);
-const [announcements, setAnnouncements] = useState([]);
-const [wishType, setWishType] = useState(null); 
+  const [wishType, setWishType] = useState(null); 
+
+  const { announcements, birthdayPosts, anniversaryPosts } = useSelector(
+    (state) => state.announcement
+  );
 
   useEffect(() => {
     dispatch(fetchBirthdayDetails());
     dispatch(fetchWorkAnniversary());
-  }, [dispatch]);
+    dispatch(fetchPosts(1)); // Announcements
+    dispatch(fetchPosts(2)); // Birthdays
+    dispatch(fetchPosts(3)); // Anniversaries
+  }, [dispatch, activeTab]);
 
  const handleWishSent = (wishData) => {
-  const newPost = {
-    id: Date.now(),
-    author: "You",
-    authorAvatar: User1,
-    date: new Date().toDateString(),
-    message: wishData.message,
-    image: wishData.image,
-    employeeId: selectedEmployee?._id,
-    comments: []
+    const postData = {
+      employee: user._id,
+      description: wishData.message,
+      image: wishData.image,
+      postType: wishType === "birthday" ? 2 : 3,
+      title: wishType === "birthday" ? `Birthday Wish for ${selectedEmployee?.name}` : `Work Anniversary Wish for ${selectedEmployee?.name}`,
+      targetEmployee: selectedEmployee?._id
+    };
+
+    dispatch(createPost(postData));
   };
 
-  if (wishType === "birthday") {
-    setBirthdayPosts((prev) => [newPost, ...prev]);
-  }
+  const handleAnnouncementCreate = (announcementData) => {
+    const postData = {
+      employee: user._id,
+      description: announcementData.message,
+      image: announcementData.image,
+      postType: 1,
+      title: "General Announcement"
+    };
 
-  if (wishType === "anniversary") {
-    setAnniversaryPosts((prev) => [newPost, ...prev]);
-  }
-};
-
-const handleAnnouncementCreate = (announcement) => {
-    setAnnouncements((prev) => [announcement, ...prev]);
+    dispatch(createPost(postData));
   };
 
   return (
@@ -101,14 +110,33 @@ const handleAnnouncementCreate = (announcement) => {
               <img className="m-auto mb-2" src={Announcement} alt="No announcements" />
           ) : (
             <div className="pt-8 space-y-6">
-              {announcements.map((announcement) => (
-                <BirthdayPost key={announcement.id} post={announcement} />
+              {announcements.map((post) => (
+                <BirthdayPost 
+                  key={post._id} 
+                  post={{
+                    ...post,
+                    id: post._id,
+                    author: post.employee?.name || "Member",
+                    authorAvatar: post.employee?.profileImage || User1,
+                    date: new Date(post.date).toLocaleDateString(),
+                    message: post.description,
+                    comments: (post.comment || []).map(c => ({
+                      id: c._id,
+                      author: c.employee?.name || "Member",
+                      text: c.text,
+                      avatar: c.employee?.profileImage || User1,
+                      time: new Date(c.date).toLocaleTimeString()
+                    }))
+                  }} 
+                />
               ))}
             </div>
           )}
 
-          {/* Announcement Composer */}
-          <AnnouncementComposer onAnnouncementCreate={handleAnnouncementCreate} />
+         
+          {isAdmin && (
+            <AnnouncementComposer onAnnouncementCreate={handleAnnouncementCreate} />
+          )}
         </div>
       )}
 
@@ -133,24 +161,43 @@ const handleAnnouncementCreate = (announcement) => {
                   </div>
                 </div>
 
-            <button
-  onClick={() => {
-    setSelectedEmployee(emp);
-    setWishType("birthday");
-    setIsWishModalOpen(true);
-  }}
-  className="text-sm text-[#2C3EA1] underline"
->
-  Send Wishes
-</button>
+            {isAdmin && !birthdayPosts.some(p => p.targetEmployee === emp._id) && (
+              <button
+                onClick={() => {
+                  setSelectedEmployee(emp);
+                  setWishType("birthday");
+                  setIsWishModalOpen(true);
+                }}
+                className="text-sm text-[#2C3EA1] underline"
+              >
+                Send Wishes
+              </button>
+            )}
 
               </div>
 
              
-              {birthdayPosts
-                .filter((p) => p.employeeId === emp._id)
+               {birthdayPosts
+                .filter((p) => p.targetEmployee === emp._id)
                 .map((post) => (
-                  <BirthdayPost key={post.id} post={post} />
+                  <BirthdayPost 
+                    key={post._id} 
+                    post={{
+                      ...post,
+                      id: post._id,
+                      author: post.employee?.name || "Member",
+                      authorAvatar: post.employee?.profileImage || User1,
+                      date: new Date(post.date).toLocaleDateString(),
+                      message: post.description,
+                      comments: (post.comment || []).map(c => ({
+                        id: c._id,
+                        author: c.employee?.name || "Member",
+                        text: c.text,
+                        avatar: c.employee?.profileImage || User1,
+                        time: new Date(c.date).toLocaleTimeString()
+                      }))
+                    }} 
+                  />
                 ))}
             </div>
           ))}
@@ -210,23 +257,42 @@ const handleAnnouncementCreate = (announcement) => {
         </div>
       </div>
 
-      <button
-        onClick={() => {
-          setSelectedEmployee(emp);
-          setWishType("anniversary");
-          setIsWishModalOpen(true);
-        }}
-        className="text-sm text-[#2C3EA1] underline"
-      >
-        Send Wishes
-      </button>
+      {isAdmin && !anniversaryPosts.some(p => p.targetEmployee === emp._id) && (
+        <button
+          onClick={() => {
+            setSelectedEmployee(emp);
+            setWishType("anniversary");
+            setIsWishModalOpen(true);
+          }}
+          className="text-sm text-[#2C3EA1] underline"
+        >
+          Send Wishes
+        </button>
+      )}
     </div>
 
     {/* Anniversary Posts */}
     {anniversaryPosts
-      .filter((p) => p.employeeId === emp._id)
+      .filter((p) => p.targetEmployee === emp._id)
       .map((post) => (
-        <BirthdayPost key={post.id} post={post} />
+        <BirthdayPost 
+          key={post._id} 
+          post={{
+            ...post,
+            id: post._id,
+            author: post.employee?.name || "Member",
+            authorAvatar: post.employee?.profileImage || User1,
+            date: new Date(post.date).toLocaleDateString(),
+            message: post.description,
+            comments: (post.comment || []).map(c => ({
+              id: c._id,
+              author: c.employee?.name || "Member",
+              text: c.text,
+              avatar: c.employee?.profileImage || User1,
+              time: new Date(c.date).toLocaleTimeString()
+            }))
+          }} 
+        />
       ))}
   </div>
 ))}

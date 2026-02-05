@@ -27,13 +27,13 @@ const AttendanceRecordsTable = ({ records }) => {
         Employee Attendance Records
       </h3>
 
-      <table className="w-full min-w-250">
+      <table className="w-full min-w-150">
         <thead>
           <tr className="border-b border-gray-200">
             {headers.map((header) => (
               <th
                 key={header}
-                className="pb-4 text-left text-sm font-bold text-heading"
+                className="pb-4 pe-3 text-left text-sm font-bold text-heading"
               >
                 {header}
               </th>
@@ -47,23 +47,23 @@ const AttendanceRecordsTable = ({ records }) => {
               key={record.id}
               className="hover:bg-gray-50 border-b border-gray-200"
             >
-              <td className="py-3">
+              <td className="py-3 pe-3">
                 <AvatarWithName avatar={record.avatar} name={record.name} />
               </td>
-              <td className="py-3 text-sm text-textgray">
+              <td className="py-3 pe-3 text-sm text-textgray">
                 {record.department}
               </td>
-              <td className="py-3 text-sm text-textgray">
+              <td className="py-3 pe-3 text-sm text-textgray">
                 {record.checkInTime}
               </td>
-              <td className="py-3 text-sm text-textgray">
+              <td className="py-3 pe-3 text-sm text-textgray">
                 {record.checkOutTime}
               </td>
-              <td className="py-3 text-sm text-textgray">
+              <td className="py-3 pe-3 text-sm text-textgray">
                 {record.workingHours}
               </td>
               <td className="py-3">
-                <span className="inline-block px-3 py-1 text-xs font-medium text-green-700 bg-green-100 rounded-full">
+                <span className="inline-block px-2 py-1 text-xs font-medium text-[#75B51D] leading-none bg-[#75B51D0D] border-[0.5px] border-[#75B51D] rounded">
                   {record.status}
                 </span>
               </td>

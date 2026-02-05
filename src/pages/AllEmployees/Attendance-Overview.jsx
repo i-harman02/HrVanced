@@ -1,25 +1,15 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-// import TodayAttendanceChart from "../../components/TodayAttendanceChart";
-// import AttendanceStatsCard from "../../components/AttendanceStatsCard";
-// import AttendanceRecordsTable from "../../components/AttendanceRecordsTable";
-// import { fetchAttendanceData } from "../slices/attendanceSlice"; // Uncomment when slice is ready
-
-// Import images
-// import WorkingHoursImg from "../assets/working-hours.png"; // Add your working hours image
-// import PunctualityImg from "../assets/punctuality.png"; // Add your punctuality image
-// import DepartmentImg from "../assets/department.png"; // Add your department image
-// import LateArrivalsImg from "../assets/late-arrivals.png"; // Add your late arrivals image
+import TodayAttendanceChart from "../../components/TodayAttendanceChart";
+import AttendanceStatsCard from "../../components/AttendanceStatsCard";
+import AttendanceRecordsTable from "../../components/AttendanceRecordsTable";
+import WorkingHoursImg from "../../assets/clock-in.png";
+import PunctualityImg from "../../assets/working-hours.png";
+import DepartmentImg from "../../assets/clock-in2.png"; 
+import LateArrivalsImg from "../../assets/working-hours2.png"; 
 
 const AttendanceOverview = () => {
   const dispatch = useDispatch();
-
-  // Uncomment when your attendance slice is ready
-  // const { attendanceData, loading } = useSelector((state) => state.attendance);
-
-  // useEffect(() => {
-  //   dispatch(fetchAttendanceData());
-  // }, [dispatch]);
 
   // Mock data for demonstration (replace with actual data from Redux)
   const attendanceStats = {
@@ -92,52 +82,42 @@ const AttendanceOverview = () => {
 
   return (
     <div className="p-4 md:p-6 lg:p-8 bg-white border border-gray-200 lg:rounded-xl">
-      {/* Page Title */}
       <h1 className="text-2xl font-bold text-heading leading-tight mb-8">
         Attendance Overview
       </h1>
 
-      {/* Stats Grid - Top Section */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        {/* Today's Attendance Status */}
-        {/* <TodayAttendanceChart data={attendanceStats.todayStatus} /> */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 mb-8">
+        <div className="md:row-span-2 sm:col-span-2 md:col-span-1">
+          <TodayAttendanceChart data={attendanceStats.todayStatus} />
+        </div>
 
-        {/* Average Working Hours */}
-        {/* <AttendanceStatsCard
+        <AttendanceStatsCard
           title="Average Working Hours Today"
           value={attendanceStats.averageWorkingHours}
           image={WorkingHoursImg}
-        /> */}
+        />
 
-        {/* Punctuality Percentage */}
-        {/* <AttendanceStatsCard
+        <AttendanceStatsCard
           title="Punctuality Percentage"
           value={attendanceStats.punctualityPercentage}
-        //   image={PunctualityImg}
-        /> */}
+          image={PunctualityImg}
+        />
 
-        {/* Most Punctual Department - Spans 2 columns on large screens */}
-        <div className="md:col-span-2 lg:col-span-1">
-          {/* <AttendanceStatsCard
+          <AttendanceStatsCard
             title="Most Punctual Department"
             value={attendanceStats.mostPunctualDepartment}
-            // image={DepartmentImg}
-          /> */}
-        </div>
+            image={DepartmentImg}
+          />
 
-        {/* Employees With Frequent Late Arrivals - Spans 2 columns on large screens */}
-        <div className="md:col-span-2 lg:col-span-1">
-          {/* <AttendanceStatsCard
+          <AttendanceStatsCard
             title="Employees With Frequent Late Arrivals"
             value={attendanceStats.frequentLateArrivals}
-            // image={LateArrivalsImg}
+            image={LateArrivalsImg}
             isList
-          /> */}
-        </div>
+          />
       </div>
 
-      {/* Attendance Records Table */}
-      {/* <AttendanceRecordsTable records={attendanceRecords} /> */}
+      <AttendanceRecordsTable records={attendanceRecords} />
     </div>
   );
 };

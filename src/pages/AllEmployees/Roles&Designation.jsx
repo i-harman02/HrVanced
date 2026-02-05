@@ -2,11 +2,17 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import RolesStatsCard from "../../components/RolesStatsCard";
 import DataTable, { TableActions, StatusBadge } from "../../components/DataTable";
+import EditModal from "../../components/EditModal";
 
 const RolesDesignation = () => {
   const dispatch = useDispatch();
   const [searchRole, setSearchRole] = useState("");
   const [searchDesignation, setSearchDesignation] = useState("");
+  
+  // Modal states
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalType, setModalType] = useState(null); // 'role' or 'designation'
+  const [selectedData, setSelectedData] = useState(null);
 
   // Mock data - replace with Redux data
   const rolesStats = {
@@ -22,7 +28,7 @@ const RolesDesignation = () => {
       roleName: "Admin",
       description: "Full system access",
       permissions: "All",
-      createdDate: "Jan 15, 2024",
+      createdDate: "2024-01-15",
       status: "Active",
     },
     {
@@ -30,7 +36,7 @@ const RolesDesignation = () => {
       roleName: "Manager",
       description: "Team management access",
       permissions: "Read, Write, Update",
-      createdDate: "Jan 20, 2024",
+      createdDate: "2024-01-20",
       status: "Active",
     },
     {
@@ -38,7 +44,7 @@ const RolesDesignation = () => {
       roleName: "Employee",
       description: "Basic user access",
       permissions: "Read",
-      createdDate: "Feb 01, 2024",
+      createdDate: "2024-02-01",
       status: "Active",
     },
   ];
@@ -78,6 +84,40 @@ const RolesDesignation = () => {
     },
   ];
 
+  // Fields configuration for System Role modal
+  const roleFields = [
+    { name: "roleName", label: "Role Name", type: "text" },
+    { name: "description", label: "Description", type: "text" },
+    { name: "permissions", label: "Permissions", type: "text" },
+    { name: "createdDate", label: "Created Date", type: "date" },
+    {
+      name: "status",
+      label: "Status",
+      type: "select",
+      options: [
+        { value: "Active", label: "Active" },
+        { value: "Inactive", label: "Inactive" },
+      ],
+    },
+  ];
+
+  // Fields configuration for Employee Designation modal
+  const designationFields = [
+    { name: "designationName", label: "Designation Name", type: "text" },
+    { name: "department", label: "Department", type: "text" },
+    { name: "assigned", label: "Assigned", type: "number" },
+    { name: "reportedTo", label: "Reported To", type: "text" },
+    {
+      name: "status",
+      label: "Status",
+      type: "select",
+      options: [
+        { value: "Active", label: "Active" },
+        { value: "Inactive", label: "Inactive" },
+      ],
+    },
+  ];
+
   // Headers for System Roles Table
   const rolesHeaders = [
     "Role Name",
@@ -103,12 +143,15 @@ const RolesDesignation = () => {
     console.log("View role:", id);
   };
 
-  const handleRoleEdit = (id) => {
-    console.log("Edit role:", id);
+  const handleRoleEdit = (role) => {
+    setSelectedData(role);
+    setModalType("role");
+    setIsModalOpen(true);
   };
 
   const handleRoleDelete = (id) => {
     console.log("Delete role:", id);
+    // Add delete confirmation logic here
   };
 
   // Handle actions for designations
@@ -116,12 +159,24 @@ const RolesDesignation = () => {
     console.log("View designation:", id);
   };
 
-  const handleDesignationEdit = (id) => {
-    console.log("Edit designation:", id);
+  const handleDesignationEdit = (designation) => {
+    setSelectedData(designation);
+    setModalType("designation");
+    setIsModalOpen(true);
   };
 
   const handleDesignationDelete = (id) => {
     console.log("Delete designation:", id);
+    // Add delete confirmation logic here
+  };
+
+  // Handle form submission
+  const handleModalSubmit = (formData) => {
+    console.log("Form submitted:", formData);
+    console.log("Modal type:", modalType);
+    // Add your update logic here
+    // If role: dispatch(updateRole(formData))
+    // If designation: dispatch(updateDesignation(formData))
   };
 
   // Render row for System Roles
@@ -130,14 +185,20 @@ const RolesDesignation = () => {
       <td className="py-3 pe-3 text-sm text-textgray">{role.roleName}</td>
       <td className="py-3 pe-3 text-sm text-textgray">{role.description}</td>
       <td className="py-3 pe-3 text-sm text-textgray">{role.permissions}</td>
-      <td className="py-3 pe-3 text-sm text-textgray">{role.createdDate}</td>
+      <td className="py-3 pe-3 text-sm text-textgray">
+        {new Date(role.createdDate).toLocaleDateString("en-US", {
+          month: "short",
+          day: "2-digit",
+          year: "numeric",
+        })}
+      </td>
       <td className="py-3 pe-3">
         <StatusBadge status={role.status} />
       </td>
       <td className="py-3">
         <TableActions
           onView={() => handleRoleView(role.id)}
-          onEdit={() => handleRoleEdit(role.id)}
+          onEdit={() => handleRoleEdit(role)}
           onDelete={() => handleRoleDelete(role.id)}
         />
       </td>
@@ -162,7 +223,7 @@ const RolesDesignation = () => {
       <td className="py-3">
         <TableActions
           onView={() => handleDesignationView(designation.id)}
-          onEdit={() => handleDesignationEdit(designation.id)}
+          onEdit={() => handleDesignationEdit(designation)}
           onDelete={() => handleDesignationDelete(designation.id)}
         />
       </td>
@@ -199,10 +260,29 @@ const RolesDesignation = () => {
           data={designations}
           searchValue={searchDesignation}
           onSearchChange={setSearchDesignation}
-          renderRow={renderDesignationRow}       
-          />
+          renderRow={renderDesignationRow}
+        />
       </div>
+
+      {/* Single Reusable Modal */}
+      <EditModal
+        isOpen={isModalOpen}
+        onClose={() => {
+          setIsModalOpen(false);
+          setSelectedData(null);
+          setModalType(null);
+        }}
+        title={
+          modalType === "role"
+            ? "Edit System Role"
+            : "Edit Employee Designation"
+        }
+        fields={modalType === "role" ? roleFields : designationFields}
+        initialData={selectedData}
+        onSubmit={handleModalSubmit}
+      />
     </div>
   );
 };
+
 export default RolesDesignation;

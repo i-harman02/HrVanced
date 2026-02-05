@@ -61,7 +61,7 @@ export default function MyLeaveStats() {
       </div>
 
       <div className="h-64">
-        <ResponsiveContainer width="100%" height="100%" minHeight={330}>
+        <ResponsiveContainer width="100%" height="100%">
           <ComposedChart
             data={chartData}
             margin={{ top: 20, right: 10, left: -30, bottom: 8 }}

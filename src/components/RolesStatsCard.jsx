@@ -26,7 +26,7 @@ const RolesStatsCard = ({ stats }) => {
         {statItems.map((stat, index) => (
           <div
             key={index}
-            className="px-6 py-8 md:px-8 md:py-11.5 flex flex-col items-start justify-cente"
+            className="px-6 py-8 md:px-8 md:py-11.5 flex flex-col items-center sm:items-start"
           >
             <p className="text-sm text-textgray mb-3.5 font-medium">
               {stat.label}

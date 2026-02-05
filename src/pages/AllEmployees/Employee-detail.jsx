@@ -119,14 +119,14 @@ const EmployeeDetail = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2 space-y-8">
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
+          <div className="xl:col-span-2 space-y-8">
             <div className="bg-white rounded-xl border border-gray-200 p-6">
               <h3 className="text-base font-medium text-black mb-6">
                 Basic Information
               </h3>
 
-              <div className="grid grid-cols-2 gap-x-10 gap-y-4">
+              <div className="grid grid-cols-1 xl:grid-cols-2 gap-x-10 gap-y-4">
                 <InfoField
                   label="Employee Name"
                   value={`${employee.name} ${employee.lastName}`}
@@ -190,7 +190,7 @@ const EmployeeDetail = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
               <div className="bg-white rounded-xl border border-gray-200 p-6">
                 <h3 className="text-base font-medium text-black mb-6">
                   Emergency Contacts
@@ -319,7 +319,7 @@ const EmployeeDetail = () => {
 };
 
 const InfoField = ({ label, value, fullWidth }) => (
-  <div className="flex gap-2.5">
+  <div className="flex flex-wrap sm:flex-nowrap gap-2.5">
     <p className="text-sm font-bold text-black whitespace-nowrap">{label} :</p>
     <p className="text-sm text-textgray">{value}</p>
   </div>

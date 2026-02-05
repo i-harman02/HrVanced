@@ -35,19 +35,8 @@ const ProjectRow = ({ project, onEdit, onDelete }) => {
         {project.endDate ? new Date(project.endDate).toLocaleDateString() : "-"}
       </td>
 
-      <td className="py-3">
-        <div className="flex">
-          {project.teamMembers?.map((id, index) => (
-            <img
-              key={index}
-              className={`w-7.5 h-7.5 rounded-md ${
-                index !== 0 ? "-ms-2.5" : ""
-              }`}
-              src={`https://i.pravatar.cc/40?u=${id}`}
-              alt="Team Member"
-            />
-          ))}
-        </div>
+      <td className="py-3 text-sm text-textgray font-medium">
+        {project.team || "-"}
       </td>
 
       <td className="py-3 pe-4 min-w-30">
@@ -172,7 +161,7 @@ const Project = () => {
     "Project Name",
     "Start Date",
     "End Date",
-    "Team Members",
+    "Team",
     "Progress",
     "Links",
     "Reason (if project going late)",

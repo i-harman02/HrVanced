@@ -22,7 +22,7 @@ const LeaveManagement = () => {
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 mt-6">
           <LeaveStats />
           <LeaveHistory />
-        </div>
+        </div>  
 
         <div className="mt-6">
           <LeaveTable />

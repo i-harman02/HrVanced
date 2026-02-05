@@ -310,7 +310,7 @@ const Signup = ({ onClose, editingEmployee, forcedAssignRole }) => { // Accept o
                       >
                         <option value="">Select Role</option>
                         <option value="Employee">Employee</option>
-                        <option value="HR Manager">HR Manager</option>
+                        <option value="HR">HR</option>
                         <option value="Manager">Manager</option>
                         <option value="TL">TL</option>
                         <option value="Intern">Intern</option>
@@ -596,7 +596,7 @@ const Signup = ({ onClose, editingEmployee, forcedAssignRole }) => { // Accept o
                   >
                     <option value="">Select Role</option>
                     <option value="Employee">Employee</option>
-                    <option value="HR Manager">HR Manager</option>
+                    <option value="HR">HR</option>
                     <option value="Manager">Manager</option>
                     <option value="TL">TL</option>
                     <option value="Intern">Intern</option>

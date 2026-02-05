@@ -3,7 +3,8 @@ import {
   applyLeaveApi,
   getMyLeavesApi,
   getLeaveHistoryApi,
-  getLeaveStatsApi,     // ✅ FIX 1: IMPORT THIS
+  getLeaveStatsApi,
+  getLeaveBalanceApi,
 } from "../api/leave.api";
 
 /* ================= APPLY LEAVE ================= */
@@ -58,12 +59,26 @@ export const fetchLeaveStats = createAsyncThunk(
   }
 );
 
+/* ================= BALANCE ================= */
+export const fetchLeaveBalance = createAsyncThunk(
+  "leave/fetchBalance",
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await getLeaveBalanceApi();
+      return res.data;
+    } catch (err) {
+      return rejectWithValue("Failed to load leave balance");
+    }
+  }
+);
+
 const leaveSlice = createSlice({
   name: "leave",
   initialState: {
     list: [],
     history: [],
     stats: [],
+    balance: null,
     loading: false,
     error: null,
   },
@@ -100,6 +115,11 @@ const leaveSlice = createSlice({
       .addCase(fetchLeaveStats.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+
+      /* ================= BALANCE ================= */
+      .addCase(fetchLeaveBalance.fulfilled, (state, action) => {
+        state.balance = action.payload;
       })
 
       /* ================= APPLY LEAVE ================= */

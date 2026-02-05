@@ -11,9 +11,8 @@ const AddClientModal = ({ onClose, client }) => {
     clientName: "",
     mail: "",
     contactNumber: "",
-    projectName: "",
-    projectDescription: "",
-    status: "Pending",
+    nationality: "",
+    clientStatus: "Active",
   });
 
   useEffect(() => {
@@ -22,9 +21,8 @@ const AddClientModal = ({ onClose, client }) => {
         clientName: client.clientName || "",
         mail: client.mail || "",
         contactNumber: client.contactNumber || "",
-        projectName: client.projectName || "",
-        projectDescription: client.projectDescription || "",
-        status: client.status || "Pending",
+        nationality: client.nationality || "",
+        clientStatus: client.clientStatus || "Active",
       });
     }
   }, [client]);
@@ -113,42 +111,28 @@ const AddClientModal = ({ onClose, client }) => {
           </div>
 
           <div>
-            <label className="block text-sm font-bold text-gray-700 mb-2">Project Name</label>
+            <label className="block text-sm font-bold text-gray-700 mb-2">Nationality</label>
             <input
               type="text"
-              name="projectName"
-              value={formData.projectName}
+              name="nationality"
+              value={formData.nationality}
               onChange={handleChange}
-              placeholder=""
+              placeholder="Enter nationality"
               className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-all"
-              required
             />
           </div>
 
           <div>
-            <label className="block text-sm font-bold text-gray-700 mb-2">Project Description</label>
-            <textarea
-              name="projectDescription"
-              value={formData.projectDescription}
-              onChange={handleChange}
-              rows="4"
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-all resize-none"
-              placeholder="Enter project description"
-              required
-            ></textarea>
-          </div>
-
-          <div>
-            <label className="block text-sm font-bold text-gray-700 mb-2">Status</label>
+            <label className="block text-sm font-bold text-gray-700 mb-2">Client Status</label>
             <select
-              name="status"
-              value={formData.status}
+              name="clientStatus"
+              value={formData.clientStatus}
               onChange={handleChange}
               className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-all bg-white"
             >
+              <option value="Active">Active</option>
+              <option value="Inactive">Inactive</option>
               <option value="Pending">Pending</option>
-              <option value="In Progress">In Progress</option>
-              <option value="Completed">Completed</option>
             </select>
           </div>
 

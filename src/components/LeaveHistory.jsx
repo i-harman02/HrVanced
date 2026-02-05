@@ -13,7 +13,7 @@ export default function LeaveHistory() {
 
   if (!history.length) {
     return (
-      <div className="bg-white border rounded-xl p-5">
+      <div className="bg-white border border-bordergray rounded-xl p-5">
         <h3 className="text-sm font-semibold mb-4">Leave History</h3>
         <p className="text-sm text-gray-400">No leave history found</p>
       </div>
@@ -21,14 +21,14 @@ export default function LeaveHistory() {
   }
 
   return (
-    <div className="bg-white border rounded-xl p-5">
-      <h3 className="text-sm font-semibold mb-4">Leave History</h3>
+    <div className="bg-white border border-bordergray rounded-xl max-h-[420px] overflow-y-auto">
+      <h3 className="text-sm font-semibold mb-4 sticky top-0 z-10 bg-white px-5 pt-5 pb-3">Leave History</h3>
 
-      <div className="relative">
+      <div className="relative px-5 pb-5">
         {history.map((item, i) => (
           <div key={item._id} className="flex gap-3 pb-6 last:pb-0">
             {i !== history.length - 1 && (
-              <span className="absolute left-[5px] top-4 h-full w-px bg-gray-200" />
+              <span className="absolute left-[25px] top-4 h-full w-px bg-gray-200" />
             )}
 
             <span className="mt-1.5 h-3 w-3 rounded-full border bg-white" />
@@ -39,7 +39,10 @@ export default function LeaveHistory() {
                   {item.leaveType.replaceAll("_", " ")}
                 </p>
                 <span className="text-xs text-gray-400">
-                  {dayjs(item.startDate).format("DD MMM, YYYY")}
+                  {dayjs(item.startDate).format("DD MMM")}
+                  {item.endDate && !dayjs(item.startDate).isSame(dayjs(item.endDate), 'day')
+                    ? ` - ${dayjs(item.endDate).format("DD MMM, YYYY")}`
+                    : `, ${dayjs(item.startDate).format("YYYY")}`}
                 </span>
               </div>
 

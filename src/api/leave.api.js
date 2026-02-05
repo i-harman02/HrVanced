@@ -16,4 +16,6 @@ export const getLeaveStatsApi = () => {
   return api.get("/leave/stats/me");
 };
 
-
+export const getLeaveBalanceApi = () => {
+  return api.get("/leave/balance/me");
+};

@@ -4,9 +4,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { addProject, updateProject } from "../../slices/projectSlice";
 import API from "../../api/axios";
 
-const AddProjectModal = ({ onClose, project }) => {
+const AddProjectModal = ({ onClose, project, preselectedClient }) => {
   const dispatch = useDispatch();
-  const [teams, setTeams] = useState([]);
+
   const [clients, setClients] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -28,14 +28,10 @@ const AddProjectModal = ({ onClose, project }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [teamsRes, clientsRes] = await Promise.all([
-          API.get("/team/all-team"),
-          API.get("/client/detail")
-        ]);
-        setTeams(teamsRes.data);
+        const clientsRes = await API.get("/client/detail");
         setClients(clientsRes.data);
       } catch (err) {
-        console.error("Failed to fetch teams or clients", err);
+        console.error("Failed to fetch clients", err);
       }
     };
     fetchData();
@@ -50,8 +46,14 @@ const AddProjectModal = ({ onClose, project }) => {
         startDate: project.startDate ? new Date(project.startDate).toISOString().split('T')[0] : "",
         endDate: project.endDate ? new Date(project.endDate).toISOString().split('T')[0] : "",
       });
+    } else if (preselectedClient) {
+      // If a client is preselected (from client page), set it automatically
+      setFormData(prev => ({
+        ...prev,
+        client: preselectedClient._id
+      }));
     }
-  }, [project]);
+  }, [project, preselectedClient]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -162,9 +164,9 @@ const AddProjectModal = ({ onClose, project }) => {
             </select>
           </div>
 
-          {/* Assigned Team */}
+          {/* Designation */}
           <div>
-            <label className="block text-sm font-bold text-gray-700 mb-2">Assigned Team</label>
+            <label className="block text-sm font-bold text-gray-700 mb-2">Designation</label>
             <select
               name="team"
               value={formData.team}
@@ -172,12 +174,16 @@ const AddProjectModal = ({ onClose, project }) => {
               className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-all bg-white"
               required
             >
-              <option value="">Select Team</option>
-              {teams.map((t) => (
-                <option key={t._id} value={t._id}>
-                  {t.teamName}
-                </option>
-              ))}
+              <option value="">Select Designation</option>
+              <option value="UI/UX Designer">UI/UX Designer</option>
+              <option value="BDE">BDE</option>
+              <option value="Angular Developer">Angular Developer</option>
+              <option value="Full Stack Developer">Full Stack Developer</option>
+              <option value=".NET">.NET</option>
+              <option value="Frontend Developer (React)">Frontend Developer (React)</option>
+              <option value="Web Designer">Web Designer</option>
+              <option value="HR">HR</option>
+              <option value="MERN Stack">MERN Stack</option>
             </select>
           </div>
 

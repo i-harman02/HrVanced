@@ -1,21 +1,27 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PieChart, Pie, Cell } from "recharts";
+import { useDispatch, useSelector } from "react-redux";
 import LeaveForm from "../components/LeaveForm";
+import { fetchLeaveBalance } from "../slices/leaveSlice";
 
 const LeaveBalances = () => {
-
-  const [leaves, setLeaves] = useState({
-    total: 12,
-    remaining: 0,
-    paid: 3,
-    unpaid: 1,
-    monthly: 5,
-    shortRemaining: 2,
-    floater: 1,
-  });
-
+  const dispatch = useDispatch();
+  const { balance } = useSelector((state) => state.leave);
   const [openLeaveForm, setOpenLeaveForm] = useState(false);
 
+  useEffect(() => {
+    dispatch(fetchLeaveBalance());
+  }, [dispatch]);
+
+  const leaves = {
+    total: balance?.totalLeave ?? 12,
+    remaining: balance?.remainingLeave || 0,
+    paid: balance?.paidLeave || 0,
+    unpaid: balance?.unPaidLeave || 0,
+    monthly: balance?.remainingPaidLeaveInCurrentMonth || 0,
+    shortRemaining: balance?.shortLeave || 0,
+    floater: balance?.floaterLeave || 0,
+  };
 
   const leaveTypes = [
     {
@@ -69,16 +75,10 @@ const LeaveBalances = () => {
     },
   ];
 
-  
   const chartData = leaveTypes.filter((item) => item.value > 0);
 
-
-  const handleApplyLeave = (days) => {
-    setLeaves((prev) => ({
-      ...prev,
-      remaining: Math.max(prev.remaining - days, 0),
-      paid: prev.paid + days,
-    }));
+  const handleApplyLeave = () => {
+    dispatch(fetchLeaveBalance());
   };
 
   return (

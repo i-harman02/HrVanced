@@ -26,23 +26,23 @@ const ClientRow = ({ client, onEdit, onDelete, onView }) => {
       <td className="py-3 text-sm text-textgray">
         {client?.contactNumber || "-"}
       </td>
-      <td className="py-3 text-sm text-textgray font-medium">
-        {client?.projectName || "-"}
+      <td className="py-3 text-sm text-textgray">
+        {client?.nationality || "-"}
       </td>
-      <td className="py-3 text-sm text-textgray max-w-xs truncate">
-        {client?.projectDescription || "-"}
+      <td className="py-3 text-sm text-heading font-medium pl-4">
+        {client?.projectCount || 0}
       </td>
       <td className="py-3">
         <span
           className={`text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded border ${
-            client.status === "Completed"
+            client.clientStatus === "Active"
               ? "bg-green-50 text-green-600 border-green-200"
-              : client.status === "In Progress"
-              ? "bg-blue-50 text-blue-600 border-blue-200"
+              : client.clientStatus === "Inactive"
+              ? "bg-red-50 text-red-600 border-red-200"
               : "bg-orange-50 text-orange-600 border-orange-200"
           }`}
         >
-          {client.status || "Pending"}
+          {client.clientStatus || "Active"}
         </span>
       </td>
       <td className="py-3">
@@ -107,9 +107,9 @@ const AllClient = () => {
     "Client Name",
     "Mail",
     "Mobile No.",
-    "Project Name",
-    "Project Descriptions",
-    "Status",
+    "Nationality",
+    "No. of Projects",
+    "Client Status",
     "Actions",
   ];
 

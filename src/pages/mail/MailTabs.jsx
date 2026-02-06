@@ -1,112 +1,52 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import MailList from "./MailList";
 import MailView from "./MailView";
-import SearchFilter from "../../components/Search";
+import ComposeModal from "./ComposeModal";
+import api from "../../api/axios";
+import socket from "../../socket";
 
 const MailTabs = () => {
-  const [activeTab, setActiveTab] = useState("all");
+  const [mails, setMails] = useState([]);
+  const [selectedMail, setSelectedMail] = useState(null);
+  const [openCompose, setOpenCompose] = useState(false);
+
+  useEffect(() => {
+  api.get("/message/inbox")
+    .then(res => setMails(res.data))
+    .catch(() => setMails([]));
+
+  socket.on("newMail", mail => {
+    setMails(prev => [mail, ...prev]);
+  });
+
+  return () => socket.off("newMail");
+}, []);
+
+
   return (
     <>
-      <div className="flex items-center gap-8 border-t border-b border-bordergray whitespace-nowrap -mx-4 md:-mx-6 lg:-mx-8 px-4 md:px-6 lg:px-8 overflow-auto">
+      <div className="flex gap-3 mb-6">
         <button
-          onClick={() => setActiveTab("all")}
-          className={`text-sm font-medium py-5 border-b-2 flex items-center gap-2 cursor-pointer ${
-            activeTab === "all"
-              ? "color-primary border-[#2C3EA1]"
-              : "text-heading border-transparent"
-          }`}
+          onClick={() => setOpenCompose(true)}
+          className="bg-primary text-white px-5 py-3 rounded-sm text-sm"
         >
-          All Mails
-          <span
-            className={`bg-[#4F39F6]/8 w-5 h-5 rounded-sm flex items-center justify-center text-xs font-medium ${
-              activeTab === "all" ? "bg-[#4F39F6]/8" : "bg-gray-200"
-            }`}
-          >
-            4
-          </span>
-        </button>
-        <button
-          onClick={() => setActiveTab("unread")}
-          className={`text-sm font-medium py-5 flex items-center gap-2 border-b-2 cursor-pointer ${
-            activeTab === "unread"
-              ? "color-primary border-[#2C3EA1]"
-              : "text-heading border-transparent"
-          }`}
-        >
-          Unread
-          <span
-            className={`bg-[#4F39F6]/8 w-5 h-5 rounded-sm flex items-center justify-center text-xs font-medium ${
-              activeTab === "unread" ? "bg-[#4F39F6]/8" : "bg-gray-200"
-            }`}
-          >
-            3
-          </span>
-        </button>
-        <button
-          onClick={() => setActiveTab("starred")}
-          className={`text-sm font-medium py-5 flex items-center gap-2 border-b-2 cursor-pointer ${
-            activeTab === "starred"
-              ? "color-primary border-[#2C3EA1]"
-              : "text-heading border-transparent"
-          }`}
-        >
-          Starred
-          <span
-            className={`bg-[#4F39F6]/8 w-5 h-5 rounded-sm flex items-center justify-center text-xs font-medium ${
-              activeTab === "starred" ? "bg-[#4F39F6]/8" : "bg-gray-200"
-            }`}
-          >
-            4
-          </span>
-        </button>
-        <button
-          onClick={() => setActiveTab("replied")}
-          className={`text-sm font-medium py-5 flex items-center gap-2 border-b-2 cursor-pointer ${
-            activeTab === "replied"
-              ? "color-primary border-[#2C3EA1]"
-              : "text-heading border-transparent"
-          }`}
-        >
-          Replied
-          <span
-            className={`bg-[#4F39F6]/8 w-5 h-5 rounded-sm flex items-center justify-center text-xs font-medium ${
-              activeTab === "replied" ? "bg-[#4F39F6]/8" : "bg-gray-200"
-            }`}
-          >
-            1
-          </span>
+          Compose
         </button>
       </div>
 
-      <div className="pt-8">
-        <div className="flex flex-wrap gap-3 mb-8">
-          <SearchFilter />
-          <button
-            type="button"
-            className="bg-primary text-white text-sm font-medium cursor-pointer px-5 py-3 rounded-sm leading-[0.86]"
-          >
-            Compose
-          </button>
-        </div>
-
-        {activeTab === "all" && (
-          <div className="grid md:grid-cols-[1fr_2fr] items-start gap-8">
-            <MailList/>
-            <MailView/>
-          </div>
-        )}
-        {activeTab === "unread" && (
-          <p className="text-sm text-textgray">Unread mails content</p>
-        )}
-
-        {activeTab === "starred" && (
-          <p className="text-sm text-textgray">Starred mails</p>
-        )}
-
-        {activeTab === "replied" && (
-          <p className="text-sm text-textgray">Replied mails</p>
-        )}
+      <div className="grid md:grid-cols-[1fr_2fr] gap-8">
+        <MailList mails={mails} onSelect={setSelectedMail} />
+        <MailView mail={selectedMail} />
       </div>
+
+      {openCompose && (
+        <ComposeModal
+          onClose={() => setOpenCompose(false)}
+          onSent={(newMail) =>
+            setMails((prev) => [newMail, ...prev])
+          }
+        />
+      )}
     </>
   );
 };

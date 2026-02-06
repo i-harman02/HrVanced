@@ -1,19 +1,47 @@
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { addResignation, fetchResignations } from "../../slices/resignationSlice";
 
 const ResignationModal = ({ onClose }) => {
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.user);
   const [resignationDate, setResignationDate] = useState("");
   const [reason, setReason] = useState("");
+  const [noticePeriod, setNoticePeriod] = useState(45);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form submitted:", { resignationDate, reason });
-    alert("Resignation submitted successfully!");
+    if (!resignationDate || !reason) {
+      alert("Please fill all fields");
+      return;
+    }
+
+    try {
+      const resultAction = await dispatch(addResignation({
+        resignationEmployee: user._id,
+        reason,
+        resignedDate: resignationDate,
+        noticePeriod: parseInt(noticePeriod) || 45
+      }));
+
+      if (addResignation.fulfilled.match(resultAction)) {
+        alert("Resignation submitted successfully!");
+        dispatch(fetchResignations(user.role === "admin" || user.assignRole === "Manager" || user.assignRole === "HR" ? null : user._id));
+        onClose();
+      } else {
+        alert(resultAction.payload?.message || "Failed to submit resignation");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("An error occurred");
+    }
   };
 
   const handleCancel = (e) => {
     e.preventDefault();
     setResignationDate("");
     setReason("");
+    setNoticePeriod(45);
   };
   return (
     <>
@@ -42,6 +70,20 @@ const ResignationModal = ({ onClose }) => {
                 type="date"
                 placeholder="Dec 1, 2025"
                 onChange={(e) => setResignationDate(e.target.value)}
+                className="w-full px-2.5 py-2 border border-bordergray rounded-sm focus:outline-none focus:ring-2 focus:ring-[#2C3EA1]/15 text-sm leading-none"
+              />
+            </div>
+          </div>
+
+          <div className="mb-8">
+            <label className="block text-sm text-heading font-medium mb-2.5">
+              Notice Period (Days)
+            </label>
+            <div className="relative">
+              <input
+                type="number"
+                value={noticePeriod}
+                onChange={(e) => setNoticePeriod(e.target.value)}
                 className="w-full px-2.5 py-2 border border-bordergray rounded-sm focus:outline-none focus:ring-2 focus:ring-[#2C3EA1]/15 text-sm leading-none"
               />
             </div>

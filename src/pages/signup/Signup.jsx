@@ -40,7 +40,6 @@ const Signup = ({ onClose, editingEmployee, forcedAssignRole }) => { // Accept o
     profileImage: "",
     status: "Active",
     acceptPolicies: false,
-    appraisalDate: "",
     personalInformation: {
       telephones: [""],
       nationality: "",
@@ -105,7 +104,6 @@ const Signup = ({ onClose, editingEmployee, forcedAssignRole }) => { // Accept o
         
         dateOfJoining: formatDate(editingEmployee.dateOfJoining),
         birthday: formatDate(editingEmployee.birthday),
-        appraisalDate: formatDate(editingEmployee.appraisalDate),
         personalInformation: {
           telephones: editingEmployee.personalInformation?.telephones || [""],
           nationality: editingEmployee.personalInformation?.nationality || "",
@@ -440,7 +438,6 @@ const Signup = ({ onClose, editingEmployee, forcedAssignRole }) => { // Accept o
                 <h3 className="text-lg font-semibold text-blue-600 mb-4 border-b pb-2">Employment Details</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <InputGroup label="Date of Joining" type="date" name="dateOfJoining" value={formdata.dateOfJoining} onChange={handleChange} />
-                  <InputGroup label="Appraisal Date" type="date" name="appraisalDate" value={formdata.appraisalDate} onChange={handleChange} />
                   <InputGroup label="Salary" type="number" name="employeeSalary" value={formdata.employeeSalary} onChange={handleChange} />
                 </div>
               </div>
@@ -666,7 +663,6 @@ const Signup = ({ onClose, editingEmployee, forcedAssignRole }) => { // Accept o
             <h3 className="text-lg font-semibold text-blue-600 mb-4 border-b pb-2">Employment Details</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                <InputGroup label="Date of Joining" type="date" name="dateOfJoining" value={formdata.dateOfJoining} onChange={handleChange} />
-               <InputGroup label="Appraisal Date" type="date" name="appraisalDate" value={formdata.appraisalDate} onChange={handleChange} />
                <InputGroup label="Salary" type="number" name="employeeSalary" value={formdata.employeeSalary} onChange={handleChange} />
             </div>
           </div>

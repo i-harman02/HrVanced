@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import Tabs from "../../components/Tabs";
 import LeaveStats from "../../components/LeaveStats";
 import LeaveHistory from "../../components/LeaveHistory";
@@ -10,12 +11,17 @@ import LeaveApproval from "../../components/LeaveApproval";
 const LeaveManagement = () => {
   const [activeTab, setActiveTab] = useState("leaves");
 
+  const user = useSelector((state) => state.user.user);
+  const isAdmin = user?.role === "admin" || user?.role === "superadmin";
+  const isTL = user?.assignRole === "TL" || user?.assignRole === "Manager";
+  const isHR = user?.assignRole === "HR" || user?.assignRole === "HR Manager";
+
   const tabs = [
     { key: "leaves", label: "Leaves" },
     { key: "performance", label: "Performance" },
-      { key: "holidays", label: "Holidays" },
+    { key: "holidays", label: "Holidays" },
     { key: "attendance", label: "Attendance" },
-    {key: "leaveApproval", label: "Leave Approval"},
+    ...(isAdmin || isTL || isHR ? [{ key: "leaveApproval", label: "Leave Approval" }] : []),
   ];
 
   const tabContent = {
@@ -43,10 +49,10 @@ const LeaveManagement = () => {
         <Holidaydetails />
       </div>
     ),
-    attendance:(
-        <div className="mt-6 ">
-        
+    attendance: (
+      <div className="mt-6 ">
         <EmployeeAttendance />
+        {(isTL || isAdmin || isHR) && <LeaveApproval />}
       </div>
     ),
     leaveApproval:(

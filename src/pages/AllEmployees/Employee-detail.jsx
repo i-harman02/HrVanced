@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchAllProjects } from "../../slices/projectSlice";
 import { FiEdit3 } from "react-icons/fi";
 import { RiDeleteBin6Line } from "react-icons/ri";
 
@@ -8,7 +9,9 @@ const EmployeeDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { employees } = useSelector((state) => state.employee);
+  const { projects: allProjects } = useSelector((state) => state.project);
   const [employee, setEmployee] = useState(null);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const foundEmployee = employees.find((emp) => emp._id === id);
@@ -16,6 +19,10 @@ const EmployeeDetail = () => {
       setEmployee(foundEmployee);
     }
   }, [id, employees]);
+
+  useEffect(() => {
+    dispatch(fetchAllProjects());
+  }, [dispatch]);
 
   if (!employee) {
     return (
@@ -25,53 +32,15 @@ const EmployeeDetail = () => {
     );
   }
 
-  const projects = [
-    {
-      name: "Nineyard",
-      team: "Angular Team",
-      startDate: "Jan 01, 2023",
-      endDate: "Jan 01, 2025",
-      progress: 90,
-      color: "bg-[#75B51D]",
-    },
-    {
-      name: "Hatzalah",
-      team: "Angular Team",
-      startDate: "Jan 01, 2023",
-      endDate: "Jan 01, 2025",
-      progress: 80,
-      color: "bg-[#75B51D]",
-    },
-    {
-      name: "Pitch Playlist",
-      team: "Angular Team",
-      startDate: "Jan 01, 2023",
-      endDate: "Jan 01, 2025",
-      progress: 40,
-      color: "bg-[#E8685B]",
-    },
-    {
-      name: "Benson",
-      team: "Angular Team",
-      startDate: "Jan 01, 2023",
-      endDate: "Jan 01, 2025",
-      progress: 60,
-      color: "bg-[#F18F2F]",
-    },
-  ];
+  const experience = employee?.experience || [];
+  const projects = allProjects?.filter((p) => p.team === employee?.designation) || [];
 
-  const experience = [
-    {
-      company: "Vanced Solutions",
-      duration: "03 Years",
-      period: "Jan 01, 2023 - Present",
-    },
-    {
-      company: "Info Tech",
-      duration: "01 Years",
-      period: "Jan 01, 2022 - Jan 01, 2023",
-    },
-  ];
+  const statusColorMap = {
+    Completed: "bg-[#75B51D]",
+    Pending: "bg-[#FBA300]",
+    "In Progress": "bg-[#2196F3]",
+    "At Risk": "bg-[#F44336]",
+  };
 
   return (
     <div className="p-4 md:p-6 lg:p-8 border-0 lg:border bg-white border-gray-200 lg:rounded-xl">
@@ -133,7 +102,7 @@ const EmployeeDetail = () => {
                 />
                 <InfoField
                   label="Employee Department"
-                  value={employee.department || "Angular Team"}
+                  value={employee.designation || "N/A"}
                 />
                 <InfoField
                   label="Joining Date"
@@ -147,43 +116,32 @@ const EmployeeDetail = () => {
                   }
                 />
                 <InfoField
-                  label="Appraisal Date"
-                  value={
-                    employee.appraisalDate
-                      ? new Date(employee.appraisalDate).toLocaleDateString(
-                          "en-US",
-                          { month: "short", day: "2-digit", year: "numeric" },
-                        )
-                      : "Dec 21, 2024"
-                  }
-                />
-                <InfoField
                   label="Primary Contact"
                   value={
                     employee.personalInformation?.telephones?.[0] ||
-                    "7836373933"
+                    "N/A"
                   }
                 />
                 <InfoField
                   label="Secondary Contact"
                   value={
                     employee.personalInformation?.telephones?.[1] ||
-                    "7836373933"
+                    "N/A"
                   }
                 />
                 <InfoField
                   label="Permanent Address"
                   value={
-                    employee.personalInformation?.permanentAddress ||
-                    "123 Maple Street, Apt 4B, Anytown, CA 90210, USA"
+                    employee.address ||
+                    "N/A"
                   }
                   fullWidth
                 />
                 <InfoField
                   label="Temporary Address"
                   value={
-                    employee.personalInformation?.temporaryAddress ||
-                    "123 Maple Street, Apt 4B, Anytown, CA 90210, USA"
+                    employee.address ||
+                    "N/A"
                   }
                   fullWidth
                 />
@@ -202,14 +160,14 @@ const EmployeeDetail = () => {
                       label="Primary Contact"
                       value={
                         employee.emergencyContact?.primary?.phone?.[0] ||
-                        "7836373933"
+                        "N/A"
                       }
                     />
                     <InfoField
                       label="Relationship"
                       value={
                         employee.emergencyContact?.primary?.relationship ||
-                        "Father"
+                        "N/A"
                       }
                     />
                   </div>
@@ -219,14 +177,14 @@ const EmployeeDetail = () => {
                       label="Secondary Contact"
                       value={
                         employee.emergencyContact?.secondary?.phone?.[0] ||
-                        "7836373933"
+                        "N/A"
                       }
                     />
                     <InfoField
                       label="Relationship"
                       value={
                         employee.emergencyContact?.secondary?.relationship ||
-                        "Mother"
+                        "N/A"
                       }
                     />
                   </div>
@@ -251,14 +209,14 @@ const EmployeeDetail = () => {
                       <div className="flex-1 mb-8">
                         <div className="flex items-start justify-between mb-2">
                           <p className="text-sm font-bold text-black leading-none">
-                            {exp.company}
+                            {exp.companyName}
                           </p>
                           <span className="text-sm text-textgray leading-none">
-                            {exp.duration}
+                            {exp.jobTitle}
                           </span>
                         </div>
                         <p className="text-sm text-textgray leading-none">
-                          {exp.period}
+                          {new Date(exp.startDate).toLocaleDateString()} - {exp.endDate ? new Date(exp.endDate).toLocaleDateString() : 'Present'}
                         </p>
                       </div>
                     </div>
@@ -275,7 +233,7 @@ const EmployeeDetail = () => {
               </h3>
 
               <div>
-                {projects.map((project, index) => (
+                {projects.length > 0 ? projects.map((project, index) => (
                   <div key={index} className="flex gap-3.5 relative">
                     <div className="flex flex-col items-center shrink-0">
                       <div className="w-3.5 h-3.5 bg-white rounded-full border-4 border-[#71717B] flex items-center justify-center shrink-0"></div>
@@ -285,30 +243,32 @@ const EmployeeDetail = () => {
                     <div className="flex-1 mb-7">
                       <div className="flex items-start justify-between mb-2">
                         <p className="text-sm font-bold text-black leading-none">
-                          {project.name}
+                          {project.projectName}
                         </p>
                         <span className="text-sm text-textgray leading-none">
                           {project.team}
                         </span>
                       </div>
                       <p className="text-sm text-textgray leading-none mb-5">
-                        {project.startDate} - {project.endDate}
+                        {new Date(project.startDate).toLocaleDateString()} - {project.endDate ? new Date(project.endDate).toLocaleDateString() : 'Present'}
                       </p>
 
                       <div className="flex items-center gap-3">
                         <div className="flex-1 h-2 bg-[#E5E7EB] rounded-full overflow-hidden">
                           <div
-                            className={`h-full ${project.color} transition-all duration-300`}
-                            style={{ width: `${project.progress}%` }}
+                            className={`h-full ${statusColorMap[project.currentStatus] || "bg-blue-500"} transition-all duration-300`}
+                            style={{ width: `${project.progress || 0}%` }}
                           ></div>
                         </div>
                         <span className="text-sm text-textgray text-right leading-none">
-                          {project.progress}%
+                          {project.progress || 0}%
                         </span>
                       </div>
                     </div>
                   </div>
-                ))}
+                )) : (
+                  <p className="text-sm text-textgray italic">No projects assigned.</p>
+                )}
               </div>
             </div>
           </div>

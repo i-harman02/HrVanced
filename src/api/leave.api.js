@@ -19,3 +19,18 @@ export const getLeaveStatsApi = () => {
 export const getLeaveBalanceApi = () => {
   return api.get("/leave/balance/me");
 };
+
+export const getRequestedLeavesApi = (id, params = {}) => {
+  if (id === "all") {
+    return api.get("/leave/all-requested-leaves", { params });
+  }
+  return api.get(`/leave/requested/${id}`, { params });
+};
+
+export const updateLeaveStatusApi = (payload) => {
+  return api.put("/leave/status-update", payload);
+};
+
+export const getTodayLeavesApi = () => {
+  return api.get("/leave/on-leave");
+};

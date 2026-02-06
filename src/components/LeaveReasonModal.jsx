@@ -1,32 +1,32 @@
 import React from "react";
 import { RxCross2 } from "react-icons/rx";
 
-const LeaveReasonModal = ({ onClose }) => {
+const LeaveReasonModal = ({ onClose, reason }) => {
   return (
     <>
           <div
-            className="fixed inset-0 bg-black/20 z-50"
+            className="fixed inset-0 bg-black/20 z-[60]"
             onClick={onClose}
           />
     
-          <div className="fixed inset-0 z-60 flex items-center justify-center px-4">
-            <div className="bg-white w-full max-w-173.5">
+          <div className="fixed inset-0 z-[70] flex items-center justify-center px-4">
+            <div className="bg-white w-full max-w-140 rounded-xl overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-200">
               {/* Header */}
-              <div className="flex items-center justify-between p-4 border-b border-bordergray">
-                <h2 className="text-sm font-bold text-black leading-tight">
-                  Employee Reason
+              <div className="flex items-center justify-between p-5 border-b border-gray-100 bg-gray-50/30">
+                <h2 className="text-base font-bold text-gray-900 leading-tight">
+                  Leave Reason
                 </h2>
     
                 <button
                   onClick={onClose}
-                  className="text-black cursor-pointer"
+                  className="text-gray-400 hover:text-gray-600 transition-colors p-1 rounded-full hover:bg-gray-100"
                 >
-                  <RxCross2 size={22} />
+                  <RxCross2 size={20} />
                 </button>
               </div>
     
-              <div className="p-4 text-sm text-textgray space-y-6">
-                <p className="text-textgray text-sm">I will be going home to attend my brother’s wedding function. Kindly grant me leave for this period.</p>
+              <div className="p-8 text-sm text-gray-700 leading-relaxed bg-white">
+                <p className="whitespace-pre-wrap">{reason || "No reason provided."}</p>
               </div>
             </div>
           </div>

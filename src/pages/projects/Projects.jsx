@@ -20,7 +20,7 @@ const statusColorMap = {
   "At Risk": "#F44336",
 };
 
-const ProjectRow = ({ project, onEdit, onDelete }) => {
+const ProjectRow = ({ project, onEdit, onDelete, isPrivileged }) => {
   return (
     <tr className="hover:bg-gray-50">
       <td className="py-3 text-sm text-heading font-medium">
@@ -81,17 +81,18 @@ const ProjectRow = ({ project, onEdit, onDelete }) => {
           {project.currentStatus}
         </span>
       </td>
-
-      <td className="py-3">
-        <div className="flex items-center gap-3">
-          <button onClick={() => onEdit(project)} className="text-textgray hover:text-blue-600 transition-colors">
-            <LuPencilLine size={18} />
-          </button>
-          <button onClick={() => onDelete(project._id)} className="text-textgray hover:text-red-600 transition-colors">
-            <RiDeleteBin6Line size={18} />
-          </button>
-        </div>
-      </td>
+      {isPrivileged && (
+        <td className="py-3">
+          <div className="flex items-center gap-3">
+            <button onClick={() => onEdit(project)} className="text-textgray hover:text-blue-600 transition-colors">
+              <LuPencilLine size={18} />
+            </button>
+            <button onClick={() => onDelete(project._id)} className="text-textgray hover:text-red-600 transition-colors">
+              <RiDeleteBin6Line size={18} />
+            </button>
+          </div>
+        </td>
+      )}
     </tr>
   );
 };
@@ -130,10 +131,15 @@ const Project = () => {
 
   const role = user?.role?.toLowerCase();
   const isAdmin = role === "admin" || role === "superadmin";
+  const isHR = user?.assignRole === "HR" || user?.assignRole === "HR Manager" || user?.assignRole === "Manager";
+  const isPrivileged = isAdmin || isHR;
 
   const filteredProjects = useMemo(() => {
     if (!projects) return [];
     let result = [...projects];
+    if (!isPrivileged && user?.designation) {
+      result = result.filter(p => p.team === user.designation);
+    }
 
     if (searchTerm) {
       const lowerSearch = searchTerm.toLowerCase();
@@ -166,7 +172,7 @@ const Project = () => {
     "Links",
     "Reason (if project going late)",
     "Status",
-    "Action"
+    ...(isPrivileged ? ["Action"] : [])
   ];
 
   return (
@@ -194,7 +200,7 @@ const Project = () => {
         )}
       </div>
 
-      { isAdmin && <AdminAllProject/>}
+      { isPrivileged && <AdminAllProject/>}
      
       {loading ? (
         <div className="flex-1 flex items-center justify-center text-textgray">
@@ -224,6 +230,7 @@ const Project = () => {
                     project={project}
                     onEdit={handleEdit}
                     onDelete={handleDelete}
+                    isPrivileged={isPrivileged}
                   />
                 ))}
               </tbody>

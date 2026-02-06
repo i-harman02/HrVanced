@@ -5,6 +5,9 @@ import {
   getLeaveHistoryApi,
   getLeaveStatsApi,
   getLeaveBalanceApi,
+  getRequestedLeavesApi,
+  updateLeaveStatusApi,
+  getTodayLeavesApi,
 } from "../api/leave.api";
 
 /* ================= APPLY LEAVE ================= */
@@ -72,13 +75,54 @@ export const fetchLeaveBalance = createAsyncThunk(
   }
 );
 
+/* ================= REQUESTED LEAVES ================= */
+export const fetchRequestedLeaves = createAsyncThunk(
+  "leave/fetchRequested",
+  async ({ id, params }, { rejectWithValue }) => {
+    try {
+      const res = await getRequestedLeavesApi(id, params);
+      return res.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.message || "Failed to load requested leaves");
+    }
+  }
+);
+
+/* ================= UPDATE LEAVE STATUS ================= */
+export const updateLeaveStatus = createAsyncThunk(
+  "leave/updateStatus",
+  async (payload, { rejectWithValue }) => {
+    try {
+      const res = await updateLeaveStatusApi(payload);
+      return res.data.leave;
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.message || "Failed to update leave status");
+    }
+  }
+);
+
+/* ================= TODAY LEAVES ================= */
+export const fetchTodayLeaves = createAsyncThunk(
+  "leave/fetchToday",
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await getTodayLeavesApi();
+      return res.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.message || "Failed to load today's leaves");
+    }
+  }
+);
+
 const leaveSlice = createSlice({
   name: "leave",
   initialState: {
     list: [],
+    requestedLeaves: [],
     history: [],
     stats: [],
     balance: null,
+    todayLeaves: [],
     loading: false,
     error: null,
   },
@@ -127,6 +171,29 @@ const leaveSlice = createSlice({
         state.list.unshift(action.payload);      // table
         state.history.unshift(action.payload);   // history
         // stats will auto-update after refetch
+      })
+      /* ================= REQUESTED LEAVES ================= */
+      .addCase(fetchRequestedLeaves.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchRequestedLeaves.fulfilled, (state, action) => {
+        state.loading = false;
+        state.requestedLeaves = action.payload.leaveData;
+      })
+      .addCase(fetchRequestedLeaves.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      /* ================= UPDATE LEAVE STATUS ================= */
+      .addCase(updateLeaveStatus.fulfilled, (state, action) => {
+        const index = state.requestedLeaves.findIndex(l => l._id === action.payload._id);
+        if (index !== -1) {
+          state.requestedLeaves[index] = action.payload;
+        }
+      })
+      /* ================= TODAY LEAVES ================= */
+      .addCase(fetchTodayLeaves.fulfilled, (state, action) => {
+        state.todayLeaves = action.payload;
       });
   },
 });

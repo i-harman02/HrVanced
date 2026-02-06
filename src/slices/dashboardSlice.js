@@ -21,6 +21,7 @@ const dashboardSlice = createSlice({
       totalProjects: 0,
       totalClients: 0,
       activeTask: 0,
+      totalEmployeesOnLeave: 0,
     },
     loading: false,
     error: null,

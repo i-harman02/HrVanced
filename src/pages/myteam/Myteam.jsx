@@ -19,22 +19,9 @@ const TeamRow = ({ user }) => (
     <td className="py-3 text-sm text-textgray">
       <AvatarWithName profileImage={user.profileImage} avatar={user.avatar} name={user.name} />
     </td>
+    <td className="py-3 text-sm text-textgray font-medium">{user.employeeId || "---"}</td>
     <td className="py-3 text-sm text-textgray">{user.email}</td>
     <td className="py-3 text-sm text-textgray">{user.designation}</td>
-    <td className="py-3 text-sm text-textgray">
-      {user.tl ? (
-        <AvatarWithName profileImage={user.tl.profileImage} avatar={user.tl.avatar} name={user.tl.name} />
-      ) : "-"}
-    </td>
-    <td className="py-3 text-sm text-textgray">
-       {user.manager ? (
-        <AvatarWithName
-          profileImage={user.manager.profileImage}
-          avatar={user.manager.avatar}
-          name={user.manager.name}
-        />
-      ) : "-"}
-    </td>
     <td className="py-3 text-sm text-textgray">
       {user?.dateOfJoining
     ? new Date(user.dateOfJoining).toLocaleDateString()
@@ -53,14 +40,28 @@ const Myteam = () => {
   }, [dispatch]);
 
  
-  const filteredData = currentUser?.role?.toLowerCase() === "admin" 
+  const isPrivileged = currentUser?.role === "admin" || 
+                       currentUser?.role === "superadmin" || 
+                       currentUser?.assignRole === "HR" || 
+                       currentUser?.assignRole === "HR Manager";
+
+  const filteredData = isPrivileged 
     ? teamData 
     : teamData.filter(emp => {
+        // Exclude the current user from the list
+        if (emp._id === currentUser?._id) return false;
+
+        // Managers see employees with the same designation
+        if (currentUser?.assignRole === "Manager") {
+          return emp.designation === currentUser?.designation;
+        }
       
+        // TLs see their subordinates
         if (currentUser?.assignRole === "TL") {
-          return emp.tl?._id === currentUser._id || emp.tl === currentUser._id;
+          return emp.tl?._id === currentUser._id || emp.tl === currentUser._id || emp.manager?._id === currentUser._id || emp.manager === currentUser._id;
         }
      
+        // Regular employees see their teammates (those under the same TL)
         const myTlId = currentUser?.tl?._id || currentUser?.tl;
         const empTlId = emp.tl?._id || emp.tl;
         return empTlId === myTlId && myTlId !== null && myTlId !== undefined;
@@ -68,10 +69,9 @@ const Myteam = () => {
 
   const headers = [
     "Employee Name",
+    "Employee ID",
     "Mail",
     "Designation",
-    "Employee TL",
-    "Employee Manager",
     "Date Of Joining",
   ];
 

@@ -13,7 +13,9 @@ import { useState } from "react";
 import logo from "../assets/vanced-logo.png";
 import Userinfo from "../components/Userinfo"
 import { MdArrowDropUp } from "react-icons/md";
-import { useSelector } from "react-redux";
+import { useSelector , useDispatch} from "react-redux";
+// import { } from "react-redux";
+import { clearNotification } from "../slices/notification";
 
 const menuItems = [
   { to: "/dashboard", label: "Dashboard", icon: IoMdHome },
@@ -26,6 +28,13 @@ const menuItems = [
   { to: "/mail", label: "Mail", icon: IoIosMail },
   { to: "/message", label: "Message", icon: BiSolidMessageRounded },
 ];
+const notificationMap = {
+  "/mail": "mail",
+  "/message": "message",
+  "/projects": "projects",
+  "/my-team": "team",
+  "/my-finances": "finance",
+};
 
 const Sidebar = () => {
    const user = useSelector((state) => state.user.user);
@@ -33,6 +42,9 @@ const Sidebar = () => {
   const location = useLocation();
   const [userinfo, setUserinfo ] =useState(false);
   const [isAllEmployeesOpen, setIsAllEmployeesOpen] = useState(false);
+const notifications = useSelector((state) => state.notification);
+const dispatch = useDispatch();
+// const hasAnyNotification = Object.values(notifications).some(Boolean);
 
   return (
     <>
@@ -78,7 +90,6 @@ const Sidebar = () => {
               const { to, label, icon: Icon } = item;
               const isAdmin = user?.role === "admin" || user?.role === "superadmin";
 
-              // Special handling for "All Employees" dropdown for Admins
               if (label === "My Team" && isAdmin) {
                 const subItems = [
                   { label: "All Employees", to: "/all-employees/list" },
@@ -114,7 +125,8 @@ const Sidebar = () => {
                       />
                     </button>
 
-                    {/* Submenu */}
+
+                 
                     {isAllEmployeesOpen && (
                       <div className="pl-9 mt-1 space-y-1">
                         {subItems.map((sub) => (
@@ -137,23 +149,29 @@ const Sidebar = () => {
                 );
               }
 
-              // Standard Menu Item
+             
               const active = location.pathname === to;
               return (
-                <Link
-                  key={to}
-                  to={to}
-                  onClick={() => setOpen(false)}
-                  className={`flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium
-                    ${active
-                      ? "bg-[#F9FAFB] text-primary"
-                      : "text-heading hover:bg-[#F9FAFB]"
-                    }
-                  `}
-                >
-                  <Icon className="text-base" />
-                  <span className="lg:block">{label}</span>
-                </Link>
+               <Link
+  key={to}
+  to={to}
+  onClick={() => {
+    setOpen(false);
+    const notifKey = notificationMap[to];
+    if (notifKey) dispatch(clearNotification(notifKey));
+  }}
+  className={`relative flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium
+    ${active ? "bg-[#F9FAFB] text-primary" : "text-heading hover:bg-[#F9FAFB]"}
+  `}
+>
+  <Icon className="text-base" />
+  <span className="lg:block">{label}</span>
+
+  {notificationMap[to] && notifications[notificationMap[to]] && (
+      <span className="absolute right-4 w-2.5 h-2.5 bg-red-500 rounded-full" />
+  )}
+</Link>
+
               );
             })}
           </nav>

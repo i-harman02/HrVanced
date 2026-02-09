@@ -14,7 +14,7 @@ const HrStatsCard = () => {
   const statItems = [
     {
       label: 'Total Employees',
-      value: (stats?.totalEmployees || 0).toString().padStart(2, '0'),
+      value: (stats?.totalEmployees|| 0).toString().padStart(2, '0'),
     },
     {
       label: 'Scheduled Interviews',
@@ -32,7 +32,7 @@ const HrStatsCard = () => {
 
   return (
     <div className="w-full bg-white rounded-xl border border-gray-200 ">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-gray-200">
+      <div className="grid grid-cols-1 sm:grid- cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-gray-200">
         {statItems.map((stat, index) => (
           <div
             key={index}

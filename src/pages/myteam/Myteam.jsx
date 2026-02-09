@@ -45,27 +45,36 @@ const Myteam = () => {
                        currentUser?.assignRole === "HR" || 
                        currentUser?.assignRole === "HR Manager";
 
-  const filteredData = isPrivileged 
-    ? teamData 
-    : teamData.filter(emp => {
-        // Exclude the current user from the list
-        if (emp._id === currentUser?._id) return false;
+  // const filteredData = isPrivileged 
+  //   ? teamData 
+  //   : teamData.filter(emp => {
+  //       // Exclude the current user from the list
+  //       if (emp._id === currentUser?._id) return false;
 
-        // Managers see employees with the same designation
-        if (currentUser?.assignRole === "Manager") {
-          return emp.designation === currentUser?.designation;
-        }
+  //       // Managers see employees with the same designation
+  //       if (currentUser?.assignRole === "Manager") {
+  //         return emp.designation === currentUser?.designation;
+  //       }
       
-        // TLs see their subordinates
-        if (currentUser?.assignRole === "TL") {
-          return emp.tl?._id === currentUser._id || emp.tl === currentUser._id || emp.manager?._id === currentUser._id || emp.manager === currentUser._id;
-        }
+  //       if (currentUser?.assignRole === "TL") {
+  //         return emp.tl?._id === currentUser._id || emp.tl === currentUser._id || emp.manager?._id === currentUser._id || emp.manager === currentUser._id;
+  //       }
      
-        // Regular employees see their teammates (those under the same TL)
-        const myTlId = currentUser?.tl?._id || currentUser?.tl;
-        const empTlId = emp.tl?._id || emp.tl;
-        return empTlId === myTlId && myTlId !== null && myTlId !== undefined;
-      });
+  //       // Regular employees see their teammates (those under the same TL)
+  //       const myTlId = currentUser?.tl?._id || currentUser?.tl;
+  //       const empTlId = emp.tl?._id || emp.tl;
+  //       return empTlId === myTlId && myTlId !== null && myTlId !== undefined;
+  //     });
+
+  const filteredData = isPrivileged
+  ? teamData
+  : teamData.filter(emp => {
+      // Exclude self
+      if (emp._id === currentUser?._id) return false;
+
+      // Show only same designation
+      return emp.designation === currentUser?.designation;
+    });
 
   const headers = [
     "Employee Name",

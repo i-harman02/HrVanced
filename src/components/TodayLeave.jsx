@@ -29,7 +29,7 @@ const TodayLeave = () => {
         On Leave Today
       </h3>
       
-      <div className="space-y-6 overflow-y-auto max-h-[400px] pr-2 custom-scrollbar">
+      <div className="space-y-6 overflow-y-auto max-h-[400px] pr-2 ">
         {todayLeaves.length === 0 ? (
           <div className="py-10 text-center text-gray-500 bg-gray-50 rounded-2xl border border-dashed border-gray-200">
             <p className="text-sm font-medium ">No one is on leave today</p>

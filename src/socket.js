@@ -8,7 +8,9 @@ const payload = token
 
 const socket = io(import.meta.env.VITE_API_URL.replace("/api", ""), {
   auth: {
-    userId: payload?.userId
+    userId: payload?.id,
+    designation: payload?.designation,
+    tlId: payload?.tl
   }
 });
 

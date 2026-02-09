@@ -1,16 +1,27 @@
 import Approutes from "./routes";
-// import "./agGridSetup";
-
-// import "ag-grid-community/styles/ag-grid.css";
-// import "ag-grid-community/styles/ag-theme-alpine.css";
-
-
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
+import SocketListener from "./components/SocketListener";
 
 const App = () => {
   return (
     <div>
+          <SocketListener />
       <Approutes />
+      <ToastContainer 
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
+  
     </div>
   );
 };

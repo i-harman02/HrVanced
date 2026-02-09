@@ -21,7 +21,7 @@ export default function LeaveHistory() {
   }
 
   return (
-    <div className="bg-white border border-bordergray rounded-xl max-h-[420px] overflow-y-auto">
+    <div className="bg-white border border-bordergray rounded-xl max-h-[420px] overflow-y-auto vscode-scroll">
       <h3 className="text-sm font-semibold mb-4 sticky top-0 z-10 bg-white px-5 pt-5 pb-3">Leave History</h3>
 
       <div className="relative px-5 pb-5">

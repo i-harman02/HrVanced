@@ -12,6 +12,7 @@ import leaveReducer from "../slices/leaveSlice.js"
 import resignationReducer from "../slices/resignationSlice.js"
 import shiftReducer from "../slices/shiftSlice.js"
 import appraisalReducer from "../slices/appraisalSlice.js"
+import notificationReducer from "../slices/notification.js"
 
 const store = configureStore({
   reducer: {
@@ -28,6 +29,7 @@ const store = configureStore({
      resignation: resignationReducer,
      shift: shiftReducer,
      appraisal: appraisalReducer,
+     notification:notificationReducer,
   },
 });
 

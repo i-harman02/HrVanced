@@ -40,6 +40,12 @@ const userSlice = createSlice({
       state.token = null;
       localStorage.clear();
     },
+    setPoliciesAccepted: (state) => {
+      if (state.user) {
+        state.user.acceptPolicies = true;
+        localStorage.setItem("user", JSON.stringify(state.user));
+      }
+    },
   },
 
   extraReducers: (builder) => {
@@ -74,5 +80,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { logout } = userSlice.actions;
+export const { logout, setPoliciesAccepted } = userSlice.actions;
 export default userSlice.reducer;

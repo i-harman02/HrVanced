@@ -140,21 +140,21 @@ export default function LeaveForm({ open, onClose }) {
     <>
       <div className="fixed inset-0 bg-black/40 z-40" onClick={onClose} />
 
-      <div className="fixed top-0 right-0 h-screen w-[440px] bg-white z-50 p-6 overflow-y-auto shadow-2xl transition-all">
-        <div className="flex justify-between items-center mb-6">
+      <div className="fixed top-0 right-0 h-screen w-[440px] bg-white z-50 p-6 ">
+        <div className="flex justify-between items-center mb-4">
           <h3 className="text-xl font-bold text-gray-900 tracking-tight">Request Leave</h3>
-          <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-full transition-colors"><RxCross2 size={20} /></button>
+          <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded transition-colors"><RxCross2 size={20} /></button>
         </div>
 
         <form className="space-y-5" onSubmit={handleSubmit}>
           {/* Leave Type Select */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">Select Type of leave you want to apply</label>
+            <label className="block text-sm  text-gray-700 mb-2">Select Type of leave you want to apply</label>
             <div className="relative">
               <select
                 value={leaveType}
                 onChange={(e) => setLeaveType(e.target.value)}
-                className="w-full border border-gray-200 p-3 rounded-xl text-sm appearance-none bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-medium"
+                className="w-full border border-gray-200 p-3 rounded text-sm appearance-none bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-medium"
               >
                 {/* <option value="">Select</option> */}
                 <option value="SHORT_LEAVE">Short Leave</option>
@@ -179,7 +179,7 @@ export default function LeaveForm({ open, onClose }) {
                   min={today}
                   value={fromDate}
                   onChange={(e) => setFromDate(e.target.value)}
-                  className="w-full border border-gray-200 p-3 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all"
+                  className="w-full border border-gray-200 p-3 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all"
                 />
               </div>
               
@@ -191,7 +191,7 @@ export default function LeaveForm({ open, onClose }) {
                     min={fromDate || today}
                     value={toDate}
                     onChange={(e) => setToDate(e.target.value)}
-                    className="w-full border border-gray-200 p-3 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all"
+                    className="w-full border border-gray-200 p-3 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all"
                   />
                 </div>
               )}
@@ -207,9 +207,9 @@ export default function LeaveForm({ open, onClose }) {
                       key={period}
                       type="button"
                       onClick={() => setHalfDayPeriod(period)}
-                      className={`py-2.5 rounded-xl border text-sm font-medium transition-all ${
+                      className={`py-2.5 rounded border text-sm font-medium transition-all ${
                         halfDayPeriod === period 
-                        ? "bg-indigo-600 text-white border-indigo-600 shadow-sm" 
+                        ? "bg-[#2C3EA1] text-white border-[#2C3EA1] shadow-sm" 
                         : "bg-white text-gray-600 border-gray-200 hover:border-indigo-200"
                       }`}
                     >
@@ -220,7 +220,7 @@ export default function LeaveForm({ open, onClose }) {
               </div>
             )}
 
-            {/* Conditional Fields for Short Leave */}
+         
             {leaveType === "SHORT_LEAVE" && (
               <div className="flex gap-4 animate-in fade-in slide-in-from-top-2 duration-200">
                 <div className="flex-1">
@@ -229,7 +229,7 @@ export default function LeaveForm({ open, onClose }) {
                     type="time"
                     value={startTime}
                     onChange={(e) => setStartTime(e.target.value)}
-                    className="w-full border border-gray-200 p-3 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all"
+                    className="w-full border border-gray-200 p-3 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all"
                   />
                 </div>
                 <div className="flex-1">
@@ -238,7 +238,7 @@ export default function LeaveForm({ open, onClose }) {
                     type="time"
                     readOnly
                     value={endTime}
-                    className="w-full border border-gray-200 p-3 bg-gray-50 rounded-xl text-sm text-gray-500 font-medium"
+                    className="w-full border border-gray-200 p-3 bg-gray-50 rounded text-sm text-gray-500 font-medium"
                   />
                   <p className="text-[10px] text-gray-400 mt-1 font-medium ml-1">Fixed 2-hour window</p>
                 </div>
@@ -249,7 +249,7 @@ export default function LeaveForm({ open, onClose }) {
           {/* Days Display */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">Total Days</label>
-            <div className="w-full border border-gray-200 p-3 bg-gray-50 rounded-xl text-sm text-gray-900 font-bold flex items-center">
+            <div className="w-full border border-gray-200 p-3 bg-gray-50 rounded text-sm text-gray-900 font-bold flex items-center">
               <span className="bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded mr-2 text-xs">
                 {numberOfDays}
               </span> 
@@ -259,9 +259,9 @@ export default function LeaveForm({ open, onClose }) {
 
           {/* Supervisors Group */}
           <div className="grid grid-cols-2 gap-4">
-            <div className="p-4 bg-indigo-50/40 border border-indigo-100 rounded-2xl relative overflow-hidden group">
+            <div className="p-4 bg-indigo-50/40 border border-indigo-100 rounded relative overflow-hidden group">
               <div className="absolute top-0 right-0 p-1">
-                <div className="w-8 h-8 bg-indigo-100 rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                <div className="w-8 h-8 bg-indigo-100 rounded opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                   <svg className="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
                 </div>
               </div>
@@ -269,7 +269,7 @@ export default function LeaveForm({ open, onClose }) {
                 {isUserTL ? "MANAGER" : "TEAM LEADER"}
               </label>
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center text-sm font-bold text-white shadow-sm">
+                <div className="w-9 h-9 rounded bg-[#2C3EA1] flex items-center justify-center text-sm font-bold text-white shadow-sm">
                   {getSuperiorName()?.[0] || "?"}
                 </div>
                 <p className="text-sm font-bold text-gray-900 truncate pr-4">
@@ -278,10 +278,10 @@ export default function LeaveForm({ open, onClose }) {
               </div>
             </div>
 
-            <div className="p-4 bg-indigo-50/40 border border-indigo-100 rounded-2xl relative overflow-hidden group">
+            <div className="p-4 bg-indigo-50/40 border border-indigo-100 rounded relative overflow-hidden group">
               <label className="block text-[10px] font-bold text-indigo-600 uppercase tracking-widest mb-2">HR MANAGER</label>
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center text-sm font-bold text-white shadow-sm">
+                <div className="w-9 h-9 rounded bg-[#2C3EA1]  flex items-center justify-center text-sm font-bold text-white shadow-sm">
                   {getHRName()?.[0] || "?"}
                 </div>
                 <p className="text-sm font-bold text-gray-900 truncate pr-4">
@@ -291,7 +291,6 @@ export default function LeaveForm({ open, onClose }) {
             </div>
           </div>
 
-          {/* Reason Field */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">Reason</label>
             <textarea
@@ -299,22 +298,22 @@ export default function LeaveForm({ open, onClose }) {
               rows={4}
               value={reason}
               onChange={(e) => setReason(e.target.value)}
-              className="w-full border border-gray-200 p-3 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-medium resize-none min-h-[100px]"
+              className="w-full border border-gray-200 p-3 rounded text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all font-medium resize-none min-h-[100px]"
             />
           </div>
 
-          {/* Action Buttons */}
-          <div className="flex gap-4 pt-4">
+          
+          <div className="flex gap-4 justify-between pt-4">
             <button 
               type="button" 
               onClick={onClose} 
-              className="flex-1 bg-white text-gray-600 px-6 py-3.5 rounded-xl text-sm font-bold hover:bg-gray-50 transition-all border border-gray-200"
+              className=" bg-white text-gray-600 px-4 py-2 rounded text-sm font-bold hover:bg-gray-50 border border-gray-200"
             >
               Cancel
             </button>
             <button 
               type="submit" 
-              className="flex-[1.5] bg-[#3f51b5] text-white px-8 py-3.5 rounded-xl text-sm font-bold hover:bg-[#303f9f] transition-all shadow-md shadow-indigo-500/20 active:scale-95"
+              className="bg-[#2C3EA1] rounded px-4 py-2 text-sm text-white hover:bg-[#24338a]"
             >
               Send Request
             </button>

@@ -2,6 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   mail: false,
+  mailInbox: false,
+  mailGroups: false,
   message: false,
   projects: false,
   team: false,

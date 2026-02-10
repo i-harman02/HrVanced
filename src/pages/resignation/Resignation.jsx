@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+  import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Pagination from "../../components/Pagination";
 import ResignationModal from "./AddResignationModal";
@@ -32,14 +32,32 @@ const Resignation = () => {
     }
   };
 
-  const calculateRemainingDays = (approvedDate, totalNoticePeriod = 45) => {
-    if (!approvedDate) return totalNoticePeriod;
-    const start = new Date(approvedDate);
+  const calculateRemainingDays = (startDate, totalNoticePeriod = 45) => {
+    if (!startDate) return totalNoticePeriod;
+    const start = new Date(startDate);
     const today = new Date();
+    
+    // Reset time to midnight to calculate difference in calendar days
+    start.setHours(0, 0, 0, 0);
+    today.setHours(0, 0, 0, 0);
+
     const diffTime = today - start;
     const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    
+    // If resignation date is in the future, return total notice period (don't show > 45)
+    if (diffDays < 0) return totalNoticePeriod;
+
     const remaining = totalNoticePeriod - diffDays;
+    
     return remaining > 0 ? remaining : 0;
+  };
+
+  const getLastWorkingDay = (startDate, noticePeriod) => {
+    if (!startDate) return "---";
+    const date = new Date(startDate);
+    // Notice period starts on the resignation date, so we add the period and subtract 1 day to get the last working day inclusive.
+    date.setDate(date.getDate() + parseInt(noticePeriod || 45) - 1);
+    return date.toLocaleDateString();
   };
 
   const getStatusColor = (status) => {
@@ -125,7 +143,7 @@ const Resignation = () => {
                         <td className="py-4 text-sm text-textgray">
                           {res.status === "Approved" ? (
                             <div className="flex flex-col">
-                              <span className="font-bold text-primary">{calculateRemainingDays(res.approvedDate, res.noticePeriod)} Days</span>
+                              <span className="font-bold text-primary">{calculateRemainingDays(res.resignedDate, res.noticePeriod)} Days</span>
                               <span className="text-[10px] text-textgray">Remaining of {res.noticePeriod || 45}</span>
                             </div>
                           ) : (
@@ -189,19 +207,26 @@ const Resignation = () => {
                         {resignations[0].status}
                       </span>
                     </div>
+
                     <div className="flex justify-between items-center pb-3 border-b border-gray-50">
-                      <span className="text-sm text-textgray">Resigned Date</span>
-                      <span className="text-sm font-medium text-heading">
-                        {new Date(resignations[0].resignedDate).toLocaleDateString()}
-                      </span>
+                       <span className="text-sm text-textgray">Notice Period Duration</span>
+                       <span className="text-sm font-medium text-heading">
+                         {resignations[0].noticePeriod || 45} Days
+                       </span>
                     </div>
                     <div className="flex justify-between items-center pb-3 border-b border-gray-50">
-                      <span className="text-sm text-textgray">Notice Period</span>
+                       <span className="text-sm text-textgray">Last Working Day</span>
+                       <span className="text-sm font-medium text-heading">
+                          {getLastWorkingDay(resignations[0].resignedDate, resignations[0].noticePeriod)}
+                       </span>
+                    </div>
+                    <div className="flex justify-between items-center pb-3 border-b border-gray-50">
+                      <span className="text-sm text-textgray">Days Remaining</span>
                       <span className="text-sm font-medium text-heading">
                         {resignations[0].status === "Approved" ? (
-                          <span className="text-primary font-bold">{calculateRemainingDays(resignations[0].approvedDate, resignations[0].noticePeriod)} Days Left</span>
+                          <span className="text-primary font-bold">{calculateRemainingDays(resignations[0].resignedDate, resignations[0].noticePeriod)} Days</span>
                         ) : (
-                          <span>{resignations[0].noticePeriod || 45} Days</span>
+                           <span className="text-textgray">Pending Approval</span>
                         )}
                       </span>
                     </div>

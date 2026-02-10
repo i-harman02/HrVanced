@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import MailList from "./MailList";
 import MailView from "./MailView";
 import GroupChat from "./GroupChat";
@@ -7,8 +7,11 @@ import ComposeModal from "./ComposeModal";
 import api from "../../api/axios";
 import socket from "../../socket";
 import { FiPlus, FiSearch, FiInbox, FiRotateCw, FiUser, FiUsers, FiSend, FiStar, FiArchive, FiMail } from "react-icons/fi";
+import { clearNotification } from "../../slices/notification";
 
 const MailTabs = () => {
+  const dispatch = useDispatch();
+  const notifications = useSelector((state) => state.notification);
   const currentUser = useSelector((state) => state.user.user);
   const [mails, setMails] = useState([]);
   const [employees, setEmployees] = useState([]);
@@ -71,15 +74,147 @@ const MailTabs = () => {
   );
 
 
-  const userId = currentUser?._id || currentUser?.id;
-  const isTL = userId && employees.length > 0 && employees.some(e => String(e.tl) === String(userId));
-  const teamId = currentUser?.tl || (isTL ? userId : null);
-  const teamLabel = isTL ? "My Team (Lead)" : (currentUser?.tl ? "My Team (Associate)" : null);
+  // Helper to normalize designation for grouping (synced with MyTeam.jsx)
+  const getNormalizedDesignation = (des, tlName = "") => {
+    if (!des) return "Staff";
+    const d = des.trim();
+    
+    // Custom rule for Malkeet's team
+    if (tlName && tlName.toLowerCase().includes("malkeet")) {
+      if (
+        d === "Angular Developer" || 
+        d.toLowerCase().includes(".net") || 
+        d.toLowerCase().includes(">net") ||
+        d === "Full Stack Developer"
+      ) {
+        return "Full Stack Team";
+      }
+    }
 
-  const availableGroups = [
-    { id: "GROUP_ALL", name: "All Members", icon: FiUsers },
-    ...(teamId ? [{ id: `TEAM_${teamId}`, name: teamLabel, icon: FiUser }] : [])
-  ];
+    if (d === "UI/UX Designer" || d === "Web Designer") {
+      return "Design Team";
+    }
+
+    if (d === "BDE" || d === "Business Development Associate" || d === "Business Development Executive") {
+      return "BDE Team";
+    }
+
+    if (d === "HR" || d === "HR Manager" || d === "Hr") {
+      return "HR Team";
+    }
+
+    if (
+      d === "Frontend Developer (React)" || 
+      d === "MERN Stack" || 
+      d === "MERN Stack Developer"
+    ) {
+      return "MERN / React Team";
+    }
+
+    if (d === "Full Stack Developer") {
+      return "Full Stack Team";
+    }
+    
+    return d;
+  };
+
+  const userId = currentUser?._id || currentUser?.id;
+
+  const availableGroups = React.useMemo(() => {
+    if (!currentUser || !employees.length) return [{ id: "GROUP_ALL", name: "All Members", icon: FiUsers }];
+
+    // Group logic: Team = Same TL + Same Designation
+    const groupedTeams = employees.reduce((acc, emp) => {
+      const tlObj = emp.tl;
+      const tlId = typeof tlObj === "object" ? tlObj?._id : tlObj;
+      const tlName = (tlObj && typeof tlObj === "object" && tlObj.name) ? tlObj.name : "Company";
+      
+      const rawDesignation = emp.designation || "Staff";
+      const designation = getNormalizedDesignation(rawDesignation, tlName);
+  
+      const key = `${tlId || "general"}_${designation}`;
+      // Sanitize key for room ID (remove spaces, special chars if needed, but socket.io handles strings fine usually)
+      // Let's keep it simple string like in MyTeam.jsx logic logic but we need a specific ID format
+      // We'll use the key itself as the suffix
+      
+      if (!acc[key]) {
+        acc[key] = {
+          id: `TEAM_${key}`, // e.g. TEAM_12345_Design Team
+          name: designation, // Display Name
+          tlId: tlId,
+          designation: designation,
+          members: [],
+          tlName: tlName
+        };
+      }
+      acc[key].members.push(emp);
+      return acc;
+    }, {});
+  
+    const teamsList = Object.values(groupedTeams);
+  
+    // Filter teams visible to the user
+    const visibleTeams = teamsList.filter((team) => {
+      // 1. Admin/HR/SuperAdmin/Manager see ALL (Excluding teams with no TL potentially, or maybe all?)
+      // User said "from tl id their are no group", implies TLs want to see their groups.
+      // User said "from normal employee id their are two group".
+      
+      if (
+        currentUser?.role === "admin" ||
+        currentUser?.role === "superadmin" ||
+        currentUser?.assignRole === "HR" ||
+        currentUser?.assignRole === "HR Manager" ||
+        currentUser?.assignRole === "Manager"
+      ) {
+         // Show all teams that have a TL (exclude generic Company teams if desired, per MyTeam logic)
+         return team.tlId; 
+      }
+  
+      // 2. TLs see teams they lead
+      if (currentUser?.assignRole === "TL") {
+        return String(team.tlId) === String(currentUser._id);
+      }
+  
+      // 3. Regular Employees see their own team
+      const myTlId = currentUser?.tl?._id || currentUser?.tl;
+      
+       // Determine my TL name
+       let myTlName = "";
+       if (currentUser?.tl && typeof currentUser.tl === 'object' && currentUser.tl.name) {
+         myTlName = currentUser.tl.name;
+       } else if (myTlId) {
+          const tlUser = employees.find(u => String(u._id) === String(myTlId));
+          if (tlUser) myTlName = tlUser.name;
+       }
+ 
+       const myDesignation = getNormalizedDesignation(currentUser?.designation, myTlName);
+ 
+      return (
+        String(team.tlId) === String(myTlId) &&
+        team.designation === myDesignation
+      );
+    });
+
+    const groups = visibleTeams.map(t => ({
+      id: t.id,
+      name: t.name, // Just the designation name
+      icon: FiUser
+    }));
+
+    return [{ id: "GROUP_ALL", name: "All Members", icon: FiUsers }, ...groups];
+
+  }, [employees, currentUser]);
+
+  // Join rooms for available groups
+  useEffect(() => {
+    if (socket && availableGroups.length > 0) {
+      availableGroups.forEach(group => {
+        if (group.id !== "GROUP_ALL") {
+          socket.emit("joinRoom", group.id);
+        }
+      });
+    }
+  }, [availableGroups]);
 
   return (
     <div className="">
@@ -90,12 +225,24 @@ const MailTabs = () => {
           {["inbox", "groups"].map((tab) => (
             <button
               key={tab}
-              onClick={() => { setMainTab(tab); setBox(tab === "inbox" ? "all" : "group"); setSubTab("all"); setSelectedMail(null); }}
+              onClick={() => { 
+                setMainTab(tab); 
+                setBox(tab === "inbox" ? "all" : "group"); 
+                setSubTab("all"); 
+                setSelectedMail(null); 
+                dispatch(clearNotification(tab === "inbox" ? "mailInbox" : "mailGroups"));
+              }}
               className={`pb-4 px-2 text-[13px] font-black uppercase tracking-widest transition-all relative ${
                 mainTab === tab ? "color-primary" : " hover:text-gray-500"
               }`}
             >
               {tab === "inbox" ? "Inbox" : "Groups"}
+              {tab === "inbox" && notifications.mailInbox && (
+                <span className="absolute top-0 -right-1 w-2 h-2 bg-red-500 rounded-full" />
+              )}
+              {tab === "groups" && notifications.mailGroups && (
+                <span className="absolute top-0 -right-1 w-2 h-2 bg-red-500 rounded-full" />
+              )}
               {mainTab === tab && <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#2C3EA1] rounded-full" />}
             </button>
           ))}
@@ -176,7 +323,7 @@ const MailTabs = () => {
           </div>
         </div>
       ) : (
-        <div className="flex-1 flex overflow-hidden">
+        <div className="flex-1 flex overflow-auto h-[600px]">
           <div className="w-[300px] border-r border-gray-200 flex flex-col p-4 md:p-6 lg:p-8">
           
             <div className="space-y-1">

@@ -93,7 +93,7 @@ const LeaveBalances = () => {
 
         <button
           onClick={() => setOpenLeaveForm(true)}
-          className="bg-[#2C3EA1] text-white font-bold text-sm px-6 py-3 rounded-lg hover:bg-[#172677] transition-all transform hover:scale-105"
+          className="bg-[#2C3EA1] rounded px-4 py-2 text-sm text-white hover:bg-[#24338a]"
         >
           Request Leaves
         </button>

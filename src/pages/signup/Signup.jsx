@@ -256,6 +256,7 @@ const Signup = ({ onClose, editingEmployee, forcedAssignRole }) => { // Accept o
 
     if (res.meta.requestStatus === "fulfilled") {
       alert(editingEmployee ? "Employee Updated Successfully 🎉" : "Employee Added Successfully 🎉");
+      dispatch(fetchEmployees()); 
       if (onClose) {
         onClose(); 
       } else {
@@ -272,7 +273,7 @@ const Signup = ({ onClose, editingEmployee, forcedAssignRole }) => { // Accept o
     }
   };
 
-  // If used as a modal (onClose is present), render simpler layout
+  
   if (onClose) {
      return (
         <form onSubmit={handleSubmit} className="p-6">
@@ -296,7 +297,7 @@ const Signup = ({ onClose, editingEmployee, forcedAssignRole }) => { // Accept o
                         <option value="admin">Admin</option>
                         <option value="employee">Employee</option>
                       </select>
-                    </div>
+                    </div>  
                     
                     <div className="flex flex-col">
                       <label className="mb-1 font-medium text-gray-700 text-sm">{`Assign Role ${editingEmployee ? '' : '*'}`}</label>

@@ -44,15 +44,18 @@ const Sidebar = () => {
   const [isAllEmployeesOpen, setIsAllEmployeesOpen] = useState(false);
 const notifications = useSelector((state) => state.notification);
 const dispatch = useDispatch();
-// const hasAnyNotification = Object.values(notifications).some(Boolean);
+const hasAnyNotification = Object.values(notifications).some(Boolean);
 
   return (
     <>
       {/* Mobile Top Bar */}
       <div className="lg:hidden fixed top-0 left-0 right-0 z-40 bg-white border-b border-gray-200 px-4 h-14 flex items-center justify-between">
         <img src={logo} alt="logo" className="h-7" />
-        <button onClick={() => setOpen(true)}>
+        <button onClick={() => setOpen(true)} className="relative">
           <FiMenu size={22} />
+          {hasAnyNotification && (
+            <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full border border-white" />
+          )}
         </button>
       </div>
 
@@ -110,8 +113,11 @@ const dispatch = useDispatch();
                 return (
                   <div key="all-employees-menu">
                     <button
-                      onClick={() => setIsAllEmployeesOpen(!isAllEmployeesOpen)}
-                      className={`w-full flex items-center justify-between px-3 py-2 rounded-md text-sm font-medium transition-colors
+                      onClick={() => {
+                        setIsAllEmployeesOpen(!isAllEmployeesOpen);
+                        if (notifications.team) dispatch(clearNotification("team"));
+                      }}
+                      className={`relative w-full flex items-center justify-between px-3 py-2 rounded-md text-sm font-medium transition-colors
                         ${isActiveParent || isAllEmployeesOpen ? "bg-[#F9FAFB] text-primary" : "text-heading hover:bg-[#F9FAFB]"}
                       `}
                     >
@@ -119,10 +125,15 @@ const dispatch = useDispatch();
                         <Icon className="text-base" />
                         <span className="lg:block">All Employees</span>
                       </div>
-                      <MdArrowDropUp 
-                        size={20} 
-                        className={`transition-transform duration-200 ${isAllEmployeesOpen ? "rotate-180" : ""}`} 
-                      />
+                      <div className="flex items-center gap-2">
+                        {notifications.team && (
+                          <span className="w-2 h-2 bg-red-600 rounded-full border border-white shadow-sm" />
+                        )}
+                        <MdArrowDropUp 
+                          size={20} 
+                          className={`transition-transform duration-200 ${isAllEmployeesOpen ? "rotate-180" : ""}`} 
+                        />
+                      </div>
                     </button>
 
 
@@ -152,13 +163,19 @@ const dispatch = useDispatch();
              
               const active = location.pathname === to;
               return (
-               <Link
+   <Link
   key={to}
   to={to}
   onClick={() => {
     setOpen(false);
     const notifKey = notificationMap[to];
-    if (notifKey) dispatch(clearNotification(notifKey));
+    if (notifKey) {
+      dispatch(clearNotification(notifKey));
+      if (notifKey === "mail") {
+        dispatch(clearNotification("mailInbox"));
+        dispatch(clearNotification("mailGroups"));
+      }
+    }
   }}
   className={`relative flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium
     ${active ? "bg-[#F9FAFB] text-primary" : "text-heading hover:bg-[#F9FAFB]"}
@@ -168,7 +185,7 @@ const dispatch = useDispatch();
   <span className="lg:block">{label}</span>
 
   {notificationMap[to] && notifications[notificationMap[to]] && (
-      <span className="absolute right-4 w-2.5 h-2.5 bg-red-500 rounded-full" />
+    <span className="absolute right-3 w-2.5 h-2.5 bg-red-600 rounded-full border-2 border-white shadow-sm" />
   )}
 </Link>
 

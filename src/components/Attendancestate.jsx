@@ -37,7 +37,7 @@ const AttendanceStats = () => {
         <h2 className="text-base font-medium text-black">Attendance Stats</h2>
 
         <div className="relative w-38">
-          <select className="w-full appearance-none border border-bordergray rounded px-2.5 py-1.75 text-sm text-textgray font-medium bg-[#F9FAFB] focus:outline-none focus:ring-0">
+          <select className="w-full appearance-none border border-bordergray rounded px-2.5 py-1.75 text-sm text-textgray font-medium bg-[#F9FAFB]">
             <option>Last Week</option>
             <option>This Week</option>
             <option>Last Month</option>

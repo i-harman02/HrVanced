@@ -37,12 +37,6 @@ const ChatModal = ({ onClose }) => {
             Logout
           </Link>
 
-          <p
-            onClick={onClose}
-            className="p-2 cursor-pointer hover:bg-gray-100 font-semibold"
-          >
-            Login screen
-          </p>
         </div>
       </div>
     </>

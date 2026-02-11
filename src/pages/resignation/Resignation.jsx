@@ -198,7 +198,7 @@ const Resignation = () => {
         ) : (
           <div className="flex-1 flex flex-col items-center justify-center bg-gray-50 rounded-xl border border-dashed border-gray-200 p-12 text-center">
              {resignations && resignations.length > 0 ? (
-               <div className="max-w-md w-full bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+               <div className="max-w-md w-full bg-white p-6 rounded-lg  border border-gray-100">
                   <h2 className="text-lg font-bold text-heading mb-4 text-left">My Resignation Status</h2>
                   <div className="space-y-4 text-left">
                     <div className="flex justify-between items-center pb-3 border-b border-gray-50">

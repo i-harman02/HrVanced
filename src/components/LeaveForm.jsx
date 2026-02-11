@@ -209,7 +209,7 @@ export default function LeaveForm({ open, onClose }) {
                       onClick={() => setHalfDayPeriod(period)}
                       className={`py-2.5 rounded border text-sm font-medium transition-all ${
                         halfDayPeriod === period 
-                        ? "bg-[#2C3EA1] text-white border-[#2C3EA1] shadow-sm" 
+                        ? "bg-[#2C3EA1] text-white border-[#2C3EA1] " 
                         : "bg-white text-gray-600 border-gray-200 hover:border-indigo-200"
                       }`}
                     >
@@ -269,7 +269,7 @@ export default function LeaveForm({ open, onClose }) {
                 {isUserTL ? "MANAGER" : "TEAM LEADER"}
               </label>
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded bg-[#2C3EA1] flex items-center justify-center text-sm font-bold text-white shadow-sm">
+                <div className="w-9 h-9 rounded bg-[#2C3EA1] flex items-center justify-center text-sm font-bold text-white ">
                   {getSuperiorName()?.[0] || "?"}
                 </div>
                 <p className="text-sm font-bold text-gray-900 truncate pr-4">
@@ -281,7 +281,7 @@ export default function LeaveForm({ open, onClose }) {
             <div className="p-4 bg-indigo-50/40 border border-indigo-100 rounded relative overflow-hidden group">
               <label className="block text-[10px] font-bold text-indigo-600 uppercase tracking-widest mb-2">HR MANAGER</label>
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded bg-[#2C3EA1]  flex items-center justify-center text-sm font-bold text-white shadow-sm">
+                <div className="w-9 h-9 rounded bg-[#2C3EA1]  flex items-center justify-center text-sm font-bold text-white ">
                   {getHRName()?.[0] || "?"}
                 </div>
                 <p className="text-sm font-bold text-gray-900 truncate pr-4">

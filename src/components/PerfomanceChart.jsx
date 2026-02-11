@@ -1,35 +1,45 @@
 import { PieChart, Pie, Cell } from "recharts";
 
-const OverallPerformance = () => {
+const OverallPerformanceChart = ({ isEmbedded, employeeId }) => {
+  // Generate semi-random but consistent values based on employeeId
+  const getVal = (base, salt) => {
+    if (!employeeId) return base;
+    const hash = employeeId.split('').reduce((a, b) => {
+      a = ((a << 5) - a) + b.charCodeAt(0);
+      return a & a;
+    }, 0);
+    return Math.min(100, Math.max(70, base + (Math.abs(hash + salt) % 15) - 5));
+  };
+
   const data = [
     {
       label: "Task Completed",
-      value: 96,
+      value: getVal(90, 1),
       color: "#2E3A9F", // dark blue
       bg: "bg-indigo-800"
     },
     {
       label: "On Time Delivery",
-      value: 90,
+      value: getVal(85, 2),
       color: "#4F63D2",
       bg: "bg-indigo-600"
     },
     {
       label: "Attendance Rate",
-      value: 98,
+      value: getVal(95, 3),
       color: "#6E7FE6",
       bg: "bg-indigo-400"
     },
     {
       label: "Improvement Rate",
-      value: 98,
+      value: getVal(88, 4),
       color: "#8FA0FF",
       bg: "bg-indigo-300"
     }
   ];
 
   return (
-    <div className="bg-white border border-gray-200 rounded-2xl p-4 md:p-6 ">
+    <div className={`${isEmbedded ? "" : "bg-white border border-gray-200 rounded-2xl p-4 md:p-6"} h-full flex flex-col`}>
       
       {/* Title */}
       <h3 className="text-sm font-semibold text-gray-800 mb-4">
@@ -81,4 +91,4 @@ const OverallPerformance = () => {
   );
 };
 
-export default OverallPerformance;
+export default OverallPerformanceChart;

@@ -101,8 +101,6 @@ const hasAnyNotification = Object.values(notifications).some(Boolean);
                   { label: "Shift Management", to: "/all-employees/shift" },
                   { label: "Performance", to: "/all-employees/performance" },
                   { label: "Appraisal Cycles", to: "/all-employees/appraisal" },
-                  { label: "Review Forms", to: "/all-employees/review-forms" },
-                  { label: "Manager Feedback", to: "/all-employees/feedback" },
                   { label: "All Team Leaders", to: "/all-employees/team-leaders" },
                   { label: "All Managers", to: "/all-employees/managers" },
                   { label: "All Clients", to: "/all-employees/clients" },
@@ -127,7 +125,7 @@ const hasAnyNotification = Object.values(notifications).some(Boolean);
                       </div>
                       <div className="flex items-center gap-2">
                         {notifications.team && (
-                          <span className="w-2 h-2 bg-red-600 rounded-full border border-white shadow-sm" />
+                          <span className="w-2 h-2 bg-red-600 rounded-full border border-white " />
                         )}
                         <MdArrowDropUp 
                           size={20} 
@@ -185,7 +183,7 @@ const hasAnyNotification = Object.values(notifications).some(Boolean);
   <span className="lg:block">{label}</span>
 
   {notificationMap[to] && notifications[notificationMap[to]] && (
-    <span className="absolute right-3 w-2.5 h-2.5 bg-red-600 rounded-full border-2 border-white shadow-sm" />
+    <span className="absolute right-3 w-2.5 h-2.5 bg-red-600 rounded-full border-2 border-white " />
   )}
 </Link>
 

@@ -19,8 +19,7 @@ import RolesDesignation from "./pages/AllEmployees/Roles&Designation";
 import ShiftManagement from "./pages/AllEmployees/Shift-Management";
 import Performance from "./pages/AllEmployees/Performance";
 import AppraisalCycles from "./pages/AllEmployees/Appraisal-Cycles";
-import ReviewForms from "./pages/AllEmployees/Review-Forms";
-import ManagerFeedback from "./pages/AllEmployees/Manager-Feedback";
+// import ReviewForms from "./pages/AllEmployees/Review-Forms";
 import AllTeamLeaders from "./pages/AllEmployees/All-Team-Leaders";
 import AllManagers from "./pages/AllEmployees/All-Managers";
 import AllEmployee from "./pages/AllEmployees/All-Employee";
@@ -65,8 +64,7 @@ const Approutes = () => {
             <Route path="/all-employees/shift" element={<ShiftManagement />} />
             <Route path="/all-employees/performance" element={<Performance />} />
             <Route path="/all-employees/appraisal" element={<AppraisalCycles />} />
-            <Route path="/all-employees/review-forms" element={<ReviewForms />} />
-            <Route path="/all-employees/feedback" element={<ManagerFeedback />} />
+            {/* <Route path="/all-employees/review-forms" element={<ReviewForms />} /> */}
             <Route path="/all-employees/team-leaders" element={<AllTeamLeaders />} />
             <Route path="/all-employees/managers" element={<AllManagers />} />
             <Route path="/all-employees/list" element={<AllEmployee />} />

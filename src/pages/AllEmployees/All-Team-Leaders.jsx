@@ -137,9 +137,9 @@ const AllTeamLeaders = () => {
         </h1>
         <button 
           onClick={() => setShowAddModal(true)}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-all shadow-md hover:shadow-lg active:scale-95"
+          className="px-4 py-2 bg-[#2C3EA1] text-white text-sm font-semibold rounded hover:bg-[#1a2b88] transition-colors "
         >
-          <FaPlus size={14} />
+          {/* <FaPlus size={14} /> */}
           <span>Add Team Leader</span>
         </button>
       </div>

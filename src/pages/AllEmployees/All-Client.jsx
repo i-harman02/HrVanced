@@ -128,7 +128,7 @@ const AllClient = () => {
             setEditingClient(null);
             setShowModal(true);
           }}
-          className="px-5 py-2.5 bg-[#2C3EA1] text-white text-sm font-bold rounded-lg hover:bg-[#1a2b88] transition-all shadow-md active:scale-95"
+          className="px-4 py-2 bg-[#2C3EA1] text-white text-sm font-semibold rounded hover:bg-[#1a2b88] transition-colors "
         >
           Add New Client
         </button>
@@ -140,7 +140,7 @@ const AllClient = () => {
         </div>
       ) : (
         <>
-          <div className="bg-white border border-bordergray rounded-xl p-6 overflow-x-auto mb-6 shadow-sm">
+          <div className="bg-white border border-bordergray rounded-xl p-6 overflow-x-auto mb-6 ">
             <table className="w-full min-w-[1000px]">
               <thead>
                 <tr className="border-b border-bordergray">

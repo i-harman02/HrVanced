@@ -60,7 +60,6 @@ const Layout = () => {
 
   useEffect(() => {
     const handleNewMail = (mail) => {
-      // Only show toast if not already on the mail page
       if (location.pathname !== "/mail") {
         toast.info(`New message from ${mail.senderName}: ${mail.subject}`, {
           icon: "✉️",
@@ -105,7 +104,6 @@ const Layout = () => {
               </div>
             </div>
 
-            {/* Content (PDF) */}
             <div className="flex-1 bg-gray-100 p-1 overflow-hidden relative">
                <embed 
                  src={`${getFullFileUrl(policyData.policyUrl)}#toolbar=0&navpanes=0&scrollbar=0&view=FitH`}
@@ -123,7 +121,7 @@ const Layout = () => {
               <button
                 onClick={handleAccept}
                 disabled={accepting}
-                className={`px-8 py-3 rounded-xl font-bold border border-gray-200 shadow-sm flex items-center gap-2 transform transition-all active:scale-95 ${
+                className={`px-8 py-3 rounded-xl font-bold border border-gray-200 flex items-center gap-2 transform transition-all active:scale-95 ${
                    accepting 
                      ? "bg-[#2C3EA1] text-white cursor-not-allowed" 
                      : "bg-[#2C3EA1] text-white hover:bg-[#2C3EA1]"

@@ -34,7 +34,7 @@ const ShiftManagement = () => {
         <h1 className="text-2xl font-bold text-heading">Shift Management</h1>
         <button
           onClick={handleAdd}
-          className="bg-primary text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-primary-dark transition-colors shadow-sm"
+          className="px-4 py-2 bg-[#2C3EA1] text-white text-sm font-semibold rounded hover:bg-[#1a2b88] transition-colors  "
         >
           Add / Edit Shift
         </button>

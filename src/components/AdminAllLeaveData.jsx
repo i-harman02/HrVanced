@@ -142,7 +142,7 @@ const AdminAllLeaveData = () => {
   ];
 
   return (
-    <div className="bg-white border border-bordergray rounded-lg p-6 overflow-x-auto shadow-sm">
+    <div className="bg-white border border-bordergray rounded-lg p-6 overflow-x-auto ">
       <div className="flex items-center justify-between mb-6">
         <h4 className="text-base text-black font-semibold">Leave Requests</h4>
         {loading && <span className="text-sm text-gray-400">Loading...</span>}

@@ -13,6 +13,9 @@ import resignationReducer from "../slices/resignationSlice.js"
 import shiftReducer from "../slices/shiftSlice.js"
 import appraisalReducer from "../slices/appraisalSlice.js"
 import notificationReducer from "../slices/notification.js"
+import designationReducer from "../slices/designationSlice.js"
+import roleReducer from "../slices/roleSlice.js"
+import performanceReducer from "../slices/performanceSlice"
 
 const store = configureStore({
   reducer: {
@@ -30,6 +33,9 @@ const store = configureStore({
      shift: shiftReducer,
      appraisal: appraisalReducer,
      notification:notificationReducer,
+     designation: designationReducer,
+     role: roleReducer,
+     performance: performanceReducer,
   },
 });
 

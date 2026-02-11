@@ -191,7 +191,7 @@ const Project = () => {
             {isAdmin && (
               <button
                 onClick={() => setShowAddProjectModal(true)}
-                className="px-4 py-2 bg-[#2C3EA1] text-white text-sm font-semibold rounded-lg hover:bg-[#1a2b88] transition-colors shadow-sm whitespace-nowrap"
+                className="px-4 py-2 bg-[#2C3EA1] text-white text-sm font-semibold rounded-lg hover:bg-[#1a2b88] transition-colors whitespace-nowrap"
               >
                 + Add Project
               </button>

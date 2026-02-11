@@ -1,59 +1,97 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAppraisals, deleteAppraisal } from "../../slices/appraisalSlice";
 import { fetchEmployees } from "../../slices/employeeSlice";
-import AddAppraisalModal from "./AddAppraisalModal";
 import Pagination from "../../components/Pagination";
-import { FiEdit3, FiEye } from "react-icons/fi";
-import { RiDeleteBin6Line } from "react-icons/ri";
+import { FiEye, FiSearch } from "react-icons/fi";
+import dayjs from "dayjs";
 
 const AppraisalCycles = () => {
   const dispatch = useDispatch();
-  const { appraisals, loading } = useSelector((state) => state.appraisal);
-  const { employees } = useSelector((state) => state.employee);
-  const [showModal, setShowModal] = useState(false);
-  const [editingAppraisal, setEditingAppraisal] = useState(null);
+  const { employees, loading } = useSelector((state) => state.employee);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
-    dispatch(fetchAppraisals());
     dispatch(fetchEmployees());
   }, [dispatch]);
 
-  const handleDelete = (id) => {
-    if (window.confirm("Are you sure you want to delete this appraisal cycle?")) {
-      dispatch(deleteAppraisal(id));
+  const calculateAppraisal = (joiningDate, designation) => {
+    if (!joiningDate) return { next: "-", period: "-" };
+    
+    const join = dayjs(joiningDate);
+    const today = dayjs();
+    const isIntern = designation?.toLowerCase().includes("intern");
+    
+    let nextDate;
+    if (isIntern) {
+      // 1st after 6 months, then every 1 year
+      const firstAppraisal = join.add(6, 'month');
+      if (today.isBefore(firstAppraisal)) {
+        nextDate = firstAppraisal;
+      } else {
+        // Find the next yearly anniversary after the 6-month mark
+        let years = 0;
+        nextDate = firstAppraisal.add(years, 'year');
+        while (nextDate.isBefore(today)) {
+          years++;
+          nextDate = firstAppraisal.add(years, 'year');
+        }
+      }
+    } else {
+      // Every 1 year
+      let years = 1;
+      nextDate = join.add(years, 'year');
+      while (nextDate.isBefore(today)) {
+        years++;
+        nextDate = join.add(years, 'year');
+      }
     }
+
+    return {
+      next: nextDate.format("MMM DD, YYYY"),
+      period: `${nextDate.subtract(1, 'year').format("YYYY")} - ${nextDate.format("YYYY")}`,
+      type: isIntern ? "Internship Review" : "Annual Appraisal"
+    };
   };
 
-  const handleEdit = (appraisal) => {
-    setEditingAppraisal(appraisal);
-    setShowModal(true);
-  };
+  // Combined Filtering and Appraisal Logic
+  const viewableAppraisals = employees?.map(emp => {
+    const appraisal = calculateAppraisal(emp.dateOfJoining, emp.designation);
+    return { ...emp, appraisal };
+  }).filter(emp => {
+    // 1. Must have a valid next date
+    if (!emp.appraisal.next || emp.appraisal.next === "-") return false;
+    
+    // 2. Check if within 3 months (90 days)
+    const nextDate = dayjs(emp.appraisal.next, "MMM DD, YYYY");
+    const today = dayjs();
+    const diffInMonths = nextDate.diff(today, 'month', true);
+    
+    return diffInMonths >= 0 && diffInMonths <= 3;
+  }) || [];
 
-  const handleAdd = () => {
-    setEditingAppraisal(null);
-    setShowModal(true);
-  };
-
-  const formatDate = (date) => {
-    if (!date) return "-";
-    return new Date(date).toLocaleDateString("en-US", {
-      month: "short",
-      day: "2-digit",
-      year: "numeric",
-    });
-  };
+  const filteredEmployees = viewableAppraisals.filter(emp => {
+    const searchLow = searchTerm.toLowerCase();
+    const fullName = `${emp.name || ""} ${emp.lastName || ""}`.toLowerCase();
+    return fullName.includes(searchLow) || (emp.designation || "").toLowerCase().includes(searchLow);
+  });
 
   return (
     <div className="p-4 md:p-6 lg:p-8 bg-white border-0 lg:border border-gray-200 lg:rounded-xl min-h-full flex flex-col">
       <div className="flex justify-between items-center mb-8 flex-wrap gap-4">
         <h1 className="text-2xl font-bold text-heading">Appraisal Cycles</h1>
-        <button
-          onClick={handleAdd}
-          className="bg-primary text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-primary-dark transition-colors shadow-sm"
-        >
-          Add / Edit Appraisal
-        </button>
+        
+        <div className="flex items-center gap-3">
+          <div className="relative">
+            <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+            <input 
+              type="text"
+              placeholder="Search employee..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:ring-1 focus:ring-[#2C3EA1] outline-none w-full sm:w-64"
+            />
+          </div>
+        </div>
       </div>
 
       <div className="bg-white border border-bordergray rounded-lg overflow-x-auto mb-6">
@@ -63,61 +101,50 @@ const AppraisalCycles = () => {
               <th className="p-4 text-left text-sm font-bold text-heading">Cycle Name</th>
               <th className="p-4 text-left text-sm font-bold text-heading">Review Period</th>
               <th className="p-4 text-left text-sm font-bold text-heading">Employees Name</th>
-              <th className="p-4 text-left text-sm font-bold text-heading">Start Date</th>
-              <th className="p-4 text-left text-sm font-bold text-heading">End Date</th>
+              <th className="p-4 text-left text-sm font-bold text-heading">Designation</th>
+              <th className="p-4 text-left text-sm font-bold text-heading">Next Appraisal</th>
               <th className="p-4 text-left text-sm font-bold text-heading">Status</th>
-              <th className="p-4 text-left text-sm font-bold text-heading text-center">Actions</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
             {loading ? (
               <tr>
-                <td colSpan="7" className="p-8 text-center text-gray-500">Loading appraisals...</td>
+                <td colSpan="6" className="p-8 text-center text-gray-500">Loading appraisals...</td>
               </tr>
-            ) : appraisals.length === 0 ? (
+            ) : filteredEmployees.length === 0 ? (
               <tr>
-                <td colSpan="7" className="p-8 text-center text-gray-500">No appraisal cycles found</td>
+                <td colSpan="6" className="p-8 text-center text-gray-500">No appraisal cycles found</td>
               </tr>
             ) : (
-              appraisals.map((item) => (
-                <tr key={item._id} className="hover:bg-gray-50/80 transition-colors group">
-                  <td className="p-4 text-sm text-heading font-medium">
-                    {item.cycleName}
-                  </td>
-                  <td className="p-4 text-sm text-textgray">
-                    {item.reviewPeriod}
-                  </td>
-                  <td className="p-4 text-sm text-heading font-medium">
-                    {item.employee?.name} {item.employee?.lastName}
-                  </td>
-                  <td className="p-4 text-sm text-textgray">
-                    {formatDate(item.startDate)}
-                  </td>
-                  <td className="p-4 text-sm text-textgray">
-                    {formatDate(item.endDate)}
-                  </td>
-                  <td className="p-4">
-                    <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${
-                      item.status === "Active" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
-                    }`}>
-                      {item.status}
-                    </span>
-                  </td>
-                  <td className="p-4">
-                    <div className="flex items-center justify-center gap-3">
-                      <button className="text-gray-400 hover:text-blue-600 transition-colors">
-                        <FiEye size={18} />
-                      </button>
-                      <button onClick={() => handleEdit(item)} className="text-gray-400 hover:text-blue-600 transition-colors">
-                        <FiEdit3 size={18} />
-                      </button>
-                      <button onClick={() => handleDelete(item._id)} className="text-gray-400 hover:text-red-600 transition-colors">
-                        <RiDeleteBin6Line size={18} />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))
+              filteredEmployees.map((emp) => {
+                const appraisal = emp.appraisal;
+                return (
+                  <tr key={emp._id} className="hover:bg-gray-50/80 transition-colors group">
+                    <td className="p-4 text-sm text-heading font-medium">
+                      {appraisal.type}
+                    </td>
+                    <td className="p-4 text-sm text-textgray">
+                      {appraisal.period}
+                    </td>
+                    <td className="p-4 text-sm text-heading font-medium">
+                      {emp.name} {emp.lastName}
+                    </td>
+                    <td className="p-4 text-sm text-textgray">
+                      {emp.designation || "-"}
+                    </td>
+                    <td className="p-4 text-sm text-textgray">
+                      {appraisal.next}
+                    </td>
+                    <td className="p-4">
+                      <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${
+                        emp.status === "Active" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
+                      }`}>
+                        {emp.status || "Active"}
+                      </span>
+                    </td>
+                  </tr>
+                );
+              })
             )}
           </tbody>
         </table>
@@ -126,14 +153,6 @@ const AppraisalCycles = () => {
       <div className="mt-auto">
         <Pagination />
       </div>
-
-      {showModal && (
-        <AddAppraisalModal
-          onClose={() => setShowModal(false)}
-          editingAppraisal={editingAppraisal}
-          employees={employees}
-        />
-      )}
     </div>
   );
 };

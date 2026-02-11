@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { signupUser } from "../../slices/userSlice";
 import { updateEmployee, fetchEmployees } from "../../slices/employeeSlice";
+import { fetchDesignations } from "../../slices/designationSlice";
+import { fetchRoles } from "../../slices/roleSlice";
 import HomeImg from "../../assets/Group 3475 (1).png";
 import logo from "../../assets/vanced-logo.png";
 import { FaPlus, FaTrash, FaEye, FaEyeSlash } from "react-icons/fa";
@@ -14,10 +16,14 @@ const Signup = ({ onClose, editingEmployee, forcedAssignRole }) => { // Accept o
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
   const { employees } = useSelector((state) => state.employee);
+  const { designations } = useSelector((state) => state.designation);
+  const { roles } = useSelector((state) => state.role);
   const [showAdvanced, setShowAdvanced] = useState(false);
 
   useEffect(() => {
     dispatch(fetchEmployees());
+    dispatch(fetchDesignations());
+    dispatch(fetchRoles());
   }, [dispatch]);
 
   const [formdata, setFormdata] = useState({
@@ -308,11 +314,11 @@ const Signup = ({ onClose, editingEmployee, forcedAssignRole }) => { // Accept o
                         className="p-2.5 border rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all bg-white"
                       >
                         <option value="">Select Role</option>
-                        <option value="Employee">Employee</option>
-                        <option value="HR">HR</option>
-                        <option value="Manager">Manager</option>
-                        <option value="TL">TL</option>
-                        <option value="Intern">Intern</option>
+                        {(roles || []).map((r) => (
+                          <option key={r._id} value={r.roleName}>
+                            {r.roleName}
+                          </option>
+                        ))}
                       </select>
                     </div>
                   </>
@@ -370,16 +376,12 @@ const Signup = ({ onClose, editingEmployee, forcedAssignRole }) => { // Accept o
                     onChange={handleChange}
                     className="p-2.5 border rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all bg-white"
                   >
-                    <option value="">Select Designation</option>
-                    <option value="UI/UX Designer">UI/UX Designer</option>
-                    <option value="BDE">BDE</option>
-                    <option value="Angular Developer">Angular Developer</option>
-                    <option value="Full Stack Developer">Full Stack Developer</option>
-                    <option value=".NET">.NET</option>
-                    <option value="Frontend Developer (React)">Frontend Developer (React)</option>
-                    <option value="Web Designer">Web Designer</option>
-                    <option value="HR">HR</option>
-                    <option value="MERN Stack">MERN Stack</option>
+                  <option value="">Select Designation</option>
+                  {(designations || []).map((des) => (
+                    <option key={des._id} value={des.designationName}>
+                      {des.designationName}
+                    </option>
+                  ))}
                   </select>
                  </div>
                  <InputGroup label={`Employee ID ${editingEmployee ? '' : '*'}`} name="employeeId" value={formdata.employeeId} onChange={handleChange} disabled={true} />

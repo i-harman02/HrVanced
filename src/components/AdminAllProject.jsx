@@ -46,7 +46,7 @@ const AdminAllProject = () => {
   ];
 
   return (
-    <div className="w-full bg-white rounded-xl border border-gray-200 shadow-sm mb-8">
+    <div className="w-full bg-white rounded-xl border border-gray-200  mb-8">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-gray-200">
         {statItems.map((stat, index) => (
           <div

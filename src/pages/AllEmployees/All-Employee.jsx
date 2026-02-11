@@ -152,7 +152,7 @@ const AllEmployee = () => {
         </h1>
         <button
           onClick={() => setShowAddEmployeeModal(true)}
-          className="px-4 py-2 bg-[#2C3EA1] text-white text-sm font-semibold rounded hover:bg-[#1a2b88] transition-colors shadow-sm"
+          className="px-4 py-2 bg-[#2C3EA1] text-white text-sm font-semibold rounded hover:bg-[#1a2b88] transition-colors "
         >
           + Add Employee
         </button>
